@@ -69,6 +69,14 @@ fi
 #
 # Make an alias for invoking commands you use constantly
 # alias p='python'
+alias cl="clear"
+alias zll="zellij"
+alias zla="zellij a"
+alias ..="cd ../"
+alias ...="cd ../../"
+alias cx="codex"
+alias cc="claude"
+alias ccd="claude --dangerously-skip-permissions"
 
 # Prefer user-installed scripts in ~/bin
 export PATH="$HOME/bin:$PATH"
