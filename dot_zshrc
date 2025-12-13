@@ -1,0 +1,74 @@
+# If not running interactively, don't do anything (leave this at the top of this file)
+[[ $- != *i* ]] && return
+
+# Lines configured by zsh-newuser-install
+HISTFILE=~/.histfile
+HISTSIZE=1000
+SAVEHIST=1000
+bindkey -e
+# End of lines configured by zsh-newuser-install
+# The following lines were added by compinstall
+zstyle :compinstall filename '/home/wh3at/.zshrc'
+# End of lines added by compinstall
+
+# Zinit
+if [[ ! -f ${ZDOTDIR:-$HOME}/.zinit/bin/zinit.zsh ]]; then
+  command mkdir -p ${ZDOTDIR:-$HOME}/.zinit
+  command git clone https://github.com/zdharma-continuum/zinit.git ${ZDOTDIR:-$HOME}/.zinit/bin
+fi
+source ${ZDOTDIR:-$HOME}/.zinit/bin/zinit.zsh
+
+autoload -Uz compinit
+zicompinit
+zicdreplay
+
+# Zinit's config
+zi ice pick"async.zsh" src"pure.zsh"
+zi light sindresorhus/pure
+zinit light zsh-users/zsh-autosuggestions
+zinit light zdharma-continuum/fast-syntax-highlighting
+# End of Zinit's config
+
+# Omarchy defaults (zsh-friendly)
+HISTSIZE=32768
+SAVEHIST=$HISTSIZE
+setopt APPEND_HISTORY HIST_IGNORE_DUPS HIST_IGNORE_SPACE
+unsetopt HASH_CMDS HASH_LIST_ALL
+
+# Shared aliases/functions/env vars
+for _omarchy_file in ~/.local/share/omarchy/default/bash/{aliases,functions,envs}; do
+  [[ -f "$_omarchy_file" ]] && source "$_omarchy_file"
+done
+unset _omarchy_file
+
+# Tool initialization (zsh variants)
+if command -v mise &> /dev/null; then
+  eval "$(mise activate zsh)"
+fi
+
+if command -v starship &> /dev/null; then
+  eval "$(starship init zsh)"
+fi
+
+if command -v zoxide &> /dev/null; then
+  eval "$(zoxide init zsh)"
+fi
+
+if command -v try &> /dev/null; then
+  eval "$(try init ~/Work/tries)"
+fi
+
+if command -v fzf &> /dev/null; then
+  if [[ -o interactive && -t 0 && -o zle ]]; then
+    [[ -f /usr/share/fzf/completion.zsh ]] && source /usr/share/fzf/completion.zsh
+    [[ -f /usr/share/fzf/key-bindings.zsh ]] && source /usr/share/fzf/key-bindings.zsh
+  fi
+fi
+
+# Add your own exports, aliases, and functions here.
+#
+# Make an alias for invoking commands you use constantly
+# alias p='python'
+
+# Prefer user-installed scripts in ~/bin
+export PATH="$HOME/bin:$PATH"
