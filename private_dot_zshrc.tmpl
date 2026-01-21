@@ -49,15 +49,21 @@ export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 export PNPM_HOME="$HOME/.local/share/pnpm"
 [[ ":$PATH:" != *":$PNPM_HOME:"* ]] && export PATH="$PATH:$PNPM_HOME"
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+if [ -f /home/linuxbrew/.linuxbrew/bin/brew ]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
 export PATH="$PATH:$HOME/apps"
 export PATH="$PATH:$HOME/.remote-code/bin"
 
 # Cargo
-. "$HOME/.cargo/env"
+if [ -f "$HOME/.cargo/env" ]; then
+  . "$HOME/.cargo/env"
+fi
 
 # Phantom
-eval "$(phantom completion zsh)"
+if command -v phantom &> /dev/null; then
+  eval "$(phantom completion zsh)"
+fi
 
 # Functions
 function google() {
@@ -84,7 +90,9 @@ alias python="python3"
 [ -s "/home/ubuntu/.bun/_bun" ] && source "/home/ubuntu/.bun/_bun"
 
 # neovim
-alias nvim="$HOME/apps/nvim-linux-arm64.appimage"
+if [ -f "$HOME/apps/nvim-linux-arm64.appimage" ]; then
+  alias nvim="$HOME/apps/nvim-linux-arm64.appimage"
+fi
 
 # Zellij custom
 zll_new_git_wt() {
