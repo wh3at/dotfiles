@@ -17,7 +17,7 @@ skills = true
 shell_snapshot = true
 steer = true
 rmcp_client = true
-colab = true
+collab = true
 
 [mcp_servers.context7]
 command = "bunx"
