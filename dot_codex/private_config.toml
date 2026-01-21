@@ -1,0 +1,31 @@
+approval_policy = "never"
+sandbox_mode = "danger-full-access"
+
+notify = ["node", "/home/ubuntu/.codex/notify.js"]
+
+model = "gpt-5.2-codex"
+model_reasoning_effort = "high"
+tool_output_token_limit = 25000
+exec_timeout_ms = 600000
+
+[features]
+view_image_tool = true
+web_search_request = true
+apply_patch_freeform = true
+unified_exec = true
+skills = true
+shell_snapshot = true
+steer = true
+rmcp_client = true
+
+[mcp_servers.context7]
+command = "bunx"
+args = ["mcp-remote", "https://mcp.context7.com/mcp", "--transport", "http-only"]
+
+[mcp_servers.deepwiki]
+command = "bunx"
+args = ["mcp-remote", "https://mcp.deepwiki.com/sse", "--transport", "sse-only"]
+
+[notice]
+hide_rate_limit_model_nudge = true
+"hide_gpt-5.1-codex-max_migration_prompt" = true
