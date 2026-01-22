@@ -1,0 +1,153 @@
+---
+title: "Multiple batches of calls | fast-check"
+source_url: "https://fast-check.dev/docs/tutorials/detect-race-conditions/multiple-batches-of-calls/index"
+fetched_at: "2025-12-29T00:50:44.267866+00:00"
+---
+
+
+
+* * [Tutorials](https://fast-check.dev/docs/tutorials/index.html)* [Detect race conditions](https://fast-check.dev/docs/tutorials/detect-race-conditions/index.html)* Multiple batches of calls
+
+On this page
+
+## Zoom on previous test[​](https://fast-check.dev/docs/tutorials/detect-race-conditions/multiple-batches-of-calls/index.html#zoom-on-previous-test "Direct link to Zoom on previous test")
+
+### The choice of integer[​](https://fast-check.dev/docs/tutorials/detect-race-conditions/multiple-batches-of-calls/index.html#the-choice-of-integer "Direct link to The choice of integer")
+
+In the previous part, we suggested to run the test against an arbitrary number of calls to `call`. The option we recommend and implemented is based on `integer` arbitrary. We use it to give us the number of calls we should do.
+
+```
+const queued = queue(s.scheduleFunction(call));
+for (let id = 0; id !== numCalls; ++id) {
+  expectedAnswers.push(id);
+  pendingQueries.push(queued(id).then((v) => seenAnswers.push(v)));
+}
+await s.waitFor(Promise.all(pendingQueries));
+```
+
+We based our choice on the fact that the `queue` helper is designed to accept any input, regardless of its value. Thus, there was no particular reason to generate values for the inputs themselves, as they are never consumed by the logic of `queue`. Using integers from 0 onwards allows for simpler debugging, as opposed to arbitrary inputs like 123 or 45.
+
+### The array version[​](https://fast-check.dev/docs/tutorials/detect-race-conditions/multiple-batches-of-calls/index.html#the-array-version "Direct link to The array version")
+
+Here is how we could have written the array alternative:
+
+```
+// ids being the result of fc.array(fc.nat(), {minLength: 1})
+const queued = queue(s.scheduleFunction(call));
+for (const id of ids) {
+  expectedAnswers.push(id);
+  pendingQueries.push(queued(id).then((v) => seenAnswers.push(v)));
+}
+await s.waitFor(Promise.all(pendingQueries));
+```
+
+## Towards next test[​](https://fast-check.dev/docs/tutorials/detect-race-conditions/multiple-batches-of-calls/index.html#towards-next-test "Direct link to Towards next test")
+
+Our current test doesn't fully capture all possible issues that could arise. In fact, the previous implementation sent all requests at the same time in a synchronous way, without firing some, waiting a bit, and then firing others.
+
+In the next iteration, we aim to declare and run multiple batches of calls: firing them in order will simplify our expectations.
+
+To run things in an ordered way in fast-check, we need to use what we call scheduled sequences. Scheduled sequences can be declared by using the helper [`scheduleSequence`](https://fast-check.dev/docs/advanced/race-conditions/#schedulesequence). When running scheduled tasks, fast-check interleaves parts coming from sequences in-between and ensures that items in a sequence are run and waited for in order. This means that an item in the sequence will never start before the one before it has stopped. To declare and use a sequence, you can follow the example below:
+
+```
+const { task } = s.scheduleSequence([
+  async () => {
+    // 1st item:
+    // Runnning something for the 1st item.
+  },
+  async () => {
+    // 2nd item:
+    // Runnning something for the 2nd item.
+    // Will never start before the end of `await firstItem()`.
+    // Will have to be scheduled by the runner to run, in other words, it may start
+    // very long after the 1st item.
+  },
+]);
+
+// The sequence also provides a `task` that can be awaited in order to know when all items
+// of the sequence have been fully executed. It also provides other values such as done or
+// faulty if you want to know bugs that may have occurred during the sechduling of it.
+```
+
+Non-batched alternative?
+
+We will discuss about a non-batched alternative in the next page. The batch option we suggest here has the benefit to make you use the [`scheduleSequence`](https://fast-check.dev/docs/advanced/race-conditions/#schedulesequence) helper coming with fast-check.
+
+## Your turn![​](https://fast-check.dev/docs/tutorials/detect-race-conditions/multiple-batches-of-calls/index.html#your-turn "Direct link to Your turn!")
+
+queue.js
+
+queue.spec.js
+
+```
+import {queue} from './queue.js';
+import fc from 'fast-check';
+
+test('should resolve in call order', async () => {
+  await fc.assert(fc.asyncProperty(fc.scheduler(), fc.integer({min: 1, max: 10}), async (s, numCalls) => {
+    // Arrange
+    const pendingQueries = [];
+    const seenAnswers = [];
+    const expectedAnswers = [];
+    const call = jest.fn()
+      .mockImplementation(v => Promise.resolve(v));
+
+    // Act
+    const queued = queue(s.scheduleFunction(call));
+    for (let id = 0 ; id !== numCalls ; ++id) {
+      expectedAnswers.push(id);
+      pendingQueries.push(queued(id).then(v => (seenAnswers.push(v))));
+    }
+    await s.waitFor(Promise.all(pendingQueries));
+
+    // Assert
+    expect(seenAnswers).toEqual(expectedAnswers);
+  }))
+})
+```
+
+Tests
+
+VerboseWatch
+
+[Open in CodeSandbox](https://codesandbox.io/api/v1/sandboxes/define?undefined&environment=undefined "Open in CodeSandbox")
+
+What to expect?
+
+Your test should help us to detect a bug in our current implementation of `queue`.
+
+Hint #1
+
+Previous test can be considered as a single batch.
+
+```
+for (let id = 0; id !== numCalls; ++id) {
+  expectedAnswers.push(id);
+  pendingQueries.push(queued(id).then((v) => seenAnswers.push(v)));
+}
+```
+
+Hint #2
+
+In order to achieve our goal of running multiple batches of calls in an ordered way, we need to generate multiple values of `numCalls`. Instead of generating a single batch with `numCalls` calls using the following code:
+
+```
+fc.integer({ min: 1, max: 10 });
+```
+
+we can generate multiple batches by using the following code:
+
+```
+fc.array(fc.integer({ min: 1, max: 10 }), { minLength: 1 });
+```
+
+This will allow us to generate multiple batches of calls, each containing a random number of calls.
+
+[Previous
+
+One step closer to real usages](https://fast-check.dev/docs/tutorials/detect-race-conditions/one-step-closer-to-real-usages/index.html)[Next
+
+The missing part](https://fast-check.dev/docs/tutorials/detect-race-conditions/the-missing-part/index.html)
+
+* [Zoom on previous test](https://fast-check.dev/docs/tutorials/detect-race-conditions/multiple-batches-of-calls/index.html#zoom-on-previous-test)
+  + [The choice of integer](https://fast-check.dev/docs/tutorials/detect-race-conditions/multiple-batches-of-calls/index.html#the-choice-of-integer)+ [The array version](https://fast-check.dev/docs/tutorials/detect-race-conditions/multiple-batches-of-calls/index.html#the-array-version)* [Towards next test](https://fast-check.dev/docs/tutorials/detect-race-conditions/multiple-batches-of-calls/index.html#towards-next-test)* [Your turn!](https://fast-check.dev/docs/tutorials/detect-race-conditions/multiple-batches-of-calls/index.html#your-turn)

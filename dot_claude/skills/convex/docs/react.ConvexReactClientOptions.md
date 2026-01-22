@@ -1,0 +1,272 @@
+---
+title: "Interface: ConvexReactClientOptions | Convex Developer Hub"
+source_url: "https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions"
+fetched_at: "2025-12-11T01:38:42.220821+00:00"
+---
+
+
+
+* [Home](https://docs.convex.dev/index.html)
+* [Convex API](https://docs.convex.dev/api/index.html)
+* [convex/react](https://docs.convex.dev/api/modules/react.html)
+* ConvexReactClientOptions
+
+Copy as Markdown
+
+Copied!
+
+On this page
+
+[react](https://docs.convex.dev/api/modules/react.html).ConvexReactClientOptions
+
+Options for [ConvexReactClient](https://docs.convex.dev/api/classes/react.ConvexReactClient.html).
+
+## Hierarchy[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#hierarchy "Direct link to Hierarchy")
+
+* [`BaseConvexClientOptions`](https://docs.convex.dev/api/interfaces/browser.BaseConvexClientOptions.html)
+
+  ↳ **`ConvexReactClientOptions`**
+
+## Properties[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#properties "Direct link to Properties")
+
+### unsavedChangesWarning[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#unsavedchangeswarning "Direct link to unsavedChangesWarning")
+
+• `Optional` **unsavedChangesWarning**: `boolean`
+
+Whether to prompt the user if they have unsaved changes pending
+when navigating away or closing a web page.
+
+This is only possible when the `window` object exists, i.e. in a browser.
+
+The default value is `true` in browsers.
+
+#### Inherited from[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#inherited-from "Direct link to Inherited from")
+
+[BaseConvexClientOptions](https://docs.convex.dev/api/interfaces/browser.BaseConvexClientOptions.html).[unsavedChangesWarning](https://docs.convex.dev/api/interfaces/browser.BaseConvexClientOptions.html#unsavedchangeswarning)
+
+#### Defined in[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#defined-in "Direct link to Defined in")
+
+[browser/sync/client.ts:69](https://github.com/get-convex/convex-js/blob/main/src/browser/sync/client.ts#L69)
+
+---
+
+### webSocketConstructor[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#websocketconstructor "Direct link to webSocketConstructor")
+
+• `Optional` **webSocketConstructor**: `Object`
+
+#### Call signature[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#call-signature "Direct link to Call signature")
+
+• **new webSocketConstructor**(`url`, `protocols?`): `WebSocket`
+
+Specifies an alternate
+[WebSocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket)
+constructor to use for client communication with the Convex cloud.
+The default behavior is to use `WebSocket` from the global environment.
+
+##### Parameters[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#parameters "Direct link to Parameters")
+
+| Name | Type |
+| --- | --- |
+| `url` | `string` | `URL` |
+| `protocols?` | `string` | `string`[] |
+
+##### Returns[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#returns "Direct link to Returns")
+
+`WebSocket`
+
+#### Type declaration[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#type-declaration "Direct link to Type declaration")
+
+| Name | Type |
+| --- | --- |
+| `prototype` | `WebSocket` |
+| `CONNECTING` | `0` |
+| `OPEN` | `1` |
+| `CLOSING` | `2` |
+| `CLOSED` | `3` |
+
+#### Inherited from[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#inherited-from-1 "Direct link to Inherited from")
+
+[BaseConvexClientOptions](https://docs.convex.dev/api/interfaces/browser.BaseConvexClientOptions.html).[webSocketConstructor](https://docs.convex.dev/api/interfaces/browser.BaseConvexClientOptions.html#websocketconstructor)
+
+#### Defined in[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#defined-in-1 "Direct link to Defined in")
+
+[browser/sync/client.ts:76](https://github.com/get-convex/convex-js/blob/main/src/browser/sync/client.ts#L76)
+
+---
+
+### verbose[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#verbose "Direct link to verbose")
+
+• `Optional` **verbose**: `boolean`
+
+Adds additional logging for debugging purposes.
+
+The default value is `false`.
+
+#### Inherited from[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#inherited-from-2 "Direct link to Inherited from")
+
+[BaseConvexClientOptions](https://docs.convex.dev/api/interfaces/browser.BaseConvexClientOptions.html).[verbose](https://docs.convex.dev/api/interfaces/browser.BaseConvexClientOptions.html#verbose)
+
+#### Defined in[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#defined-in-2 "Direct link to Defined in")
+
+[browser/sync/client.ts:82](https://github.com/get-convex/convex-js/blob/main/src/browser/sync/client.ts#L82)
+
+---
+
+### logger[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#logger "Direct link to logger")
+
+• `Optional` **logger**: `boolean` | `Logger`
+
+A logger, `true`, or `false`. If not provided or `true`, logs to the console.
+If `false`, logs are not printed anywhere.
+
+You can construct your own logger to customize logging to log elsewhere.
+A logger is an object with 4 methods: log(), warn(), error(), and logVerbose().
+These methods can receive multiple arguments of any types, like console.log().
+
+#### Inherited from[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#inherited-from-3 "Direct link to Inherited from")
+
+[BaseConvexClientOptions](https://docs.convex.dev/api/interfaces/browser.BaseConvexClientOptions.html).[logger](https://docs.convex.dev/api/interfaces/browser.BaseConvexClientOptions.html#logger)
+
+#### Defined in[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#defined-in-3 "Direct link to Defined in")
+
+[browser/sync/client.ts:91](https://github.com/get-convex/convex-js/blob/main/src/browser/sync/client.ts#L91)
+
+---
+
+### reportDebugInfoToConvex[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#reportdebuginfotoconvex "Direct link to reportDebugInfoToConvex")
+
+• `Optional` **reportDebugInfoToConvex**: `boolean`
+
+Sends additional metrics to Convex for debugging purposes.
+
+The default value is `false`.
+
+#### Inherited from[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#inherited-from-4 "Direct link to Inherited from")
+
+[BaseConvexClientOptions](https://docs.convex.dev/api/interfaces/browser.BaseConvexClientOptions.html).[reportDebugInfoToConvex](https://docs.convex.dev/api/interfaces/browser.BaseConvexClientOptions.html#reportdebuginfotoconvex)
+
+#### Defined in[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#defined-in-4 "Direct link to Defined in")
+
+[browser/sync/client.ts:97](https://github.com/get-convex/convex-js/blob/main/src/browser/sync/client.ts#L97)
+
+---
+
+### onServerDisconnectError[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#onserverdisconnecterror "Direct link to onServerDisconnectError")
+
+• `Optional` **onServerDisconnectError**: (`message`: `string`) => `void`
+
+#### Type declaration[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#type-declaration-1 "Direct link to Type declaration")
+
+▸ (`message`): `void`
+
+This API is experimental: it may change or disappear.
+
+A function to call on receiving abnormal WebSocket close messages from the
+connected Convex deployment. The content of these messages is not stable,
+it is an implementation detail that may change.
+
+Consider this API an observability stopgap until higher level codes with
+recommendations on what to do are available, which could be a more stable
+interface instead of `string`.
+
+Check `connectionState` for more quantitative metrics about connection status.
+
+##### Parameters[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#parameters-1 "Direct link to Parameters")
+
+| Name | Type |
+| --- | --- |
+| `message` | `string` |
+
+##### Returns[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#returns-1 "Direct link to Returns")
+
+`void`
+
+#### Inherited from[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#inherited-from-5 "Direct link to Inherited from")
+
+[BaseConvexClientOptions](https://docs.convex.dev/api/interfaces/browser.BaseConvexClientOptions.html).[onServerDisconnectError](https://docs.convex.dev/api/interfaces/browser.BaseConvexClientOptions.html#onserverdisconnecterror)
+
+#### Defined in[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#defined-in-5 "Direct link to Defined in")
+
+[browser/sync/client.ts:111](https://github.com/get-convex/convex-js/blob/main/src/browser/sync/client.ts#L111)
+
+---
+
+### skipConvexDeploymentUrlCheck[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#skipconvexdeploymenturlcheck "Direct link to skipConvexDeploymentUrlCheck")
+
+• `Optional` **skipConvexDeploymentUrlCheck**: `boolean`
+
+Skip validating that the Convex deployment URL looks like
+`https://happy-animal-123.convex.cloud` or localhost.
+
+This can be useful if running a self-hosted Convex backend that uses a different
+URL.
+
+The default value is `false`
+
+#### Inherited from[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#inherited-from-6 "Direct link to Inherited from")
+
+[BaseConvexClientOptions](https://docs.convex.dev/api/interfaces/browser.BaseConvexClientOptions.html).[skipConvexDeploymentUrlCheck](https://docs.convex.dev/api/interfaces/browser.BaseConvexClientOptions.html#skipconvexdeploymenturlcheck)
+
+#### Defined in[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#defined-in-6 "Direct link to Defined in")
+
+[browser/sync/client.ts:121](https://github.com/get-convex/convex-js/blob/main/src/browser/sync/client.ts#L121)
+
+---
+
+### authRefreshTokenLeewaySeconds[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#authrefreshtokenleewayseconds "Direct link to authRefreshTokenLeewaySeconds")
+
+• `Optional` **authRefreshTokenLeewaySeconds**: `number`
+
+If using auth, the number of seconds before a token expires that we should refresh it.
+
+The default value is `2`.
+
+#### Inherited from[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#inherited-from-7 "Direct link to Inherited from")
+
+[BaseConvexClientOptions](https://docs.convex.dev/api/interfaces/browser.BaseConvexClientOptions.html).[authRefreshTokenLeewaySeconds](https://docs.convex.dev/api/interfaces/browser.BaseConvexClientOptions.html#authrefreshtokenleewayseconds)
+
+#### Defined in[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#defined-in-7 "Direct link to Defined in")
+
+[browser/sync/client.ts:127](https://github.com/get-convex/convex-js/blob/main/src/browser/sync/client.ts#L127)
+
+---
+
+### expectAuth[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#expectauth "Direct link to expectAuth")
+
+• `Optional` **expectAuth**: `boolean`
+
+This API is experimental: it may change or disappear.
+
+Whether query, mutation, and action requests should be held back
+until the first auth token can be sent.
+
+Opting into this behavior works well for pages that should
+only be viewed by authenticated clients.
+
+Defaults to false, not waiting for an auth token.
+
+#### Inherited from[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#inherited-from-8 "Direct link to Inherited from")
+
+[BaseConvexClientOptions](https://docs.convex.dev/api/interfaces/browser.BaseConvexClientOptions.html).[expectAuth](https://docs.convex.dev/api/interfaces/browser.BaseConvexClientOptions.html#expectauth)
+
+#### Defined in[​](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#defined-in-8 "Direct link to Defined in")
+
+[browser/sync/client.ts:139](https://github.com/get-convex/convex-js/blob/main/src/browser/sync/client.ts#L139)
+
+[Previous
+
+ConvexReactClient](https://docs.convex.dev/api/classes/react.ConvexReactClient.html)[Next
+
+MutationOptions](https://docs.convex.dev/api/interfaces/react.MutationOptions.html)
+
+* [Hierarchy](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#hierarchy)
+* [Properties](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#properties)
+  + [unsavedChangesWarning](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#unsavedchangeswarning)
+  + [webSocketConstructor](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#websocketconstructor)
+  + [verbose](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#verbose)
+  + [logger](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#logger)
+  + [reportDebugInfoToConvex](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#reportdebuginfotoconvex)
+  + [onServerDisconnectError](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#onserverdisconnecterror)
+  + [skipConvexDeploymentUrlCheck](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#skipconvexdeploymenturlcheck)
+  + [authRefreshTokenLeewaySeconds](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#authrefreshtokenleewayseconds)
+  + [expectAuth](https://docs.convex.dev/api/interfaces/react.ConvexReactClientOptions.html#expectauth)
