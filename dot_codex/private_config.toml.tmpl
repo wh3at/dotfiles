@@ -1,7 +1,7 @@
 approval_policy = "never"
 sandbox_mode = "danger-full-access"
 
-notify = ["node", "/home/ubuntu/.codex/notify.js"]
+notify = ["node", "{{ .chezmoi.homeDir }}/.codex/notify.js"]
 
 model = "gpt-5.2-codex"
 model_reasoning_effort = "high"
