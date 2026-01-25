@@ -55,6 +55,11 @@ fi
 export PATH="$PATH:$HOME/apps"
 export PATH="$PATH:$HOME/.remote-code/bin"
 
+# 1Password
+if command -v op &> /dev/null; then
+  eval "$(op completion zsh)"; compdef _op op
+if
+
 # Cargo
 if [ -f "$HOME/.cargo/env" ]; then
   . "$HOME/.cargo/env"
