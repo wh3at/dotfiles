@@ -48,6 +48,7 @@ export PATH="$HOME/.local/share/mise/shims:$PATH"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 export PNPM_HOME="$HOME/.local/share/pnpm"
+export PATH="$PNPM_HOME:$PATH"
 [[ ":$PATH:" != *":$PNPM_HOME:"* ]] && export PATH="$PATH:$PNPM_HOME"
 if [ -f /home/linuxbrew/.linuxbrew/bin/brew ]; then
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
