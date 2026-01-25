@@ -100,6 +100,11 @@ alias python="python3"
 # bun completions
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
+# pnpm completions
+f command -v pnpm &> /dev/null; then
+  eval "$(pnpm completion zsh)"; compdef _pnpm pnpm
+fi
+
 # neovim
 if [ -f "$HOME/apps/nvim-linux-arm64.appimage" ]; then
   alias nvim="$HOME/apps/nvim-linux-arm64.appimage"
