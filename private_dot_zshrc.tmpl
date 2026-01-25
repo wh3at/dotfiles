@@ -101,7 +101,7 @@ alias python="python3"
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
 # pnpm completions
-f command -v pnpm &> /dev/null; then
+if command -v pnpm &> /dev/null; then
   eval "$(pnpm completion zsh)"; compdef _pnpm pnpm
 fi
 
