@@ -60,7 +60,7 @@ export OP_SERVICE_ACCOUNT_TOKEN="{{ .one_password.service_acc_token }}"
 
 if command -v op &> /dev/null; then
   eval "$(op completion zsh)"; compdef _op op
-if
+fi
 
 # Cargo
 if [ -f "$HOME/.cargo/env" ]; then
