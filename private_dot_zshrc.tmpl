@@ -54,6 +54,8 @@ if [ -f /home/linuxbrew/.linuxbrew/bin/brew ]; then
 fi
 export PATH="$PATH:$HOME/apps"
 export PATH="$PATH:$HOME/.remote-code/bin"
+export ANDROID_SDK_ROOT="$HOME/Android/Sdk"
+export ANDROID_NDK_HOME="$ANDROID_SDK_ROOT/ndk/27.3.13750724"
 
 # 1Password
 export OP_SERVICE_ACCOUNT_TOKEN="{{ .one_password.service_acc_token }}"
