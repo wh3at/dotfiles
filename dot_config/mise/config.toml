@@ -11,18 +11,16 @@ pnpm = "10.28"
 zellij = "latest"
 
 [tasks.pf]
-description = "SSH port-forward (ask interactively)"
-dir = "{{cwd}}"
-raw = true
-run = '''
-#!/usr/bin/env bash
-set -euo pipefail
+description = "SSH port-forward in background (ask interactively)"
+run = "~/.config/mise/scripts/pf-start.sh"
 
-read -rp "host: " host
-read -rp "remote port: " rport
-read -rp "local port [${rport}]: " lport
-lport="${lport:-$rport}"
+[tasks."pf:list"]
+description = "List active SSH port-forwards"
+run = "~/.config/mise/scripts/pf-list.sh"
 
-ssh -L "${lport}:localhost:${rport}" "${host}"
-'''
+[tasks."pf:stop"]
+description = "Stop SSH port-forward interactively"
+run = "~/.config/mise/scripts/pf-stop.sh"
+
+
 
