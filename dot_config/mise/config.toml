@@ -1,0 +1,28 @@
+[tools]
+chezmoi = "latest"
+node = "latest"
+"npm:@aku11i/phantom" = "latest"
+"npm:@openai/codex" = "latest"
+"npm:@shopify/cli" = "latest"
+"npm:agent-browser" = "latest"
+"npm:eas-cli" = "latest"
+"npm:repomix" = "latest"
+pnpm = "10.28"
+zellij = "latest"
+
+[tasks.pf]
+description = "SSH port-forward (ask interactively)"
+dir = "{{cwd}}"
+raw = true
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+read -rp "host: " host
+read -rp "remote port: " rport
+read -rp "local port [${rport}]: " lport
+lport="${lport:-$rport}"
+
+ssh -L "${lport}:localhost:${rport}" "${host}"
+'''
+
