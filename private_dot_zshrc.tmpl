@@ -107,6 +107,11 @@ if command -v pnpm &> /dev/null; then
   eval "$(pnpm completion zsh)";
 fi
 
+# jujutsu completions
+if command -v jj >/dev/null 2>&1; then
+  source <(COMPLETE=zsh jj)
+fi
+
 # neovim
 if [ -f "$HOME/apps/nvim-linux-arm64.appimage" ]; then
   alias nvim="$HOME/apps/nvim-linux-arm64.appimage"
