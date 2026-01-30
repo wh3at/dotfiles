@@ -22,5 +22,9 @@ run = "~/.config/mise/scripts/pf-list.sh"
 description = "Stop SSH port-forward interactively"
 run = "~/.config/mise/scripts/pf-stop.sh"
 
+[tasks.site2skill]
+description = "Convert website to Codex skill interactively"
+run = "~/.config/mise/scripts/site2skill.sh"
+
 
 
