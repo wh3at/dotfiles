@@ -2,6 +2,14 @@ if [ -f ~/.profile ]; then
     source ~/.profile
 fi
 
+# Load ~/.zprofile once from interactive shells that are not login shells
+if [[ -o interactive ]] && [[ ! -o login ]]; then
+  if [[ -z "${__ZPROFILE_LOADED-}" ]]; then
+    __ZPROFILE_LOADED=1
+    [[ -r ~/.zprofile ]] && source ~/.zprofile
+  fi
+fi
+
 # Lines configured by zsh-newuser-install
 HISTFILE=~/.histfile
 HISTSIZE=1000
@@ -39,9 +47,6 @@ zinit light zsh-users/zsh-autosuggestions
 ## シンタックスハイライト
 zinit light zdharma-continuum/fast-syntax-highlighting
 # End of Zinit's config
-
-# Mise activate
-eval "$(mise activate zsh)"
 
 # PATH
 export PATH="$HOME/.local/share/mise/shims:$PATH"
