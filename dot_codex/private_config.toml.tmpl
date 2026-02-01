@@ -17,12 +17,11 @@ collab = true
 collaboration_modes = true
 
 [mcp_servers.context7]
-command = "bunx"
-args = ["mcp-remote", "https://mcp.context7.com/mcp", "--transport", "http-only"]
+command = "npx"
+args = ["-y", "@upstash/context7-mcp"]
 
 [mcp_servers.deepwiki]
-command = "bunx"
-args = ["mcp-remote", "https://mcp.deepwiki.com/sse", "--transport", "sse-only"]
+url = "https://mcp.deepwiki.com/mcp"
 
 [notice]
 hide_rate_limit_model_nudge = true
