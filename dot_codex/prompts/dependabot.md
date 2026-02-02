@@ -75,8 +75,9 @@ pnpm install
 
 ### Step 4: Generate Analysis Report
 
-Present the analysis results in the following format:
+Present the analysis results in Japanese.
 
+<format>
 ## 🚨 Dependabot Advisory Analysis
 
 **Reference URL**: {{ $DEPENDABOT_URL }}
@@ -100,3 +101,4 @@ Present the analysis results in the following format:
 - [ ] For indirect dependencies, dependency source identified
 - [ ] Package actually exists in lock files (not stale cache)
 - [ ] Breaking changes reviewed
+</format>
