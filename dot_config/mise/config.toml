@@ -7,6 +7,7 @@ node = "latest"
 "npm:agent-browser" = "latest"
 "npm:eas-cli" = "latest"
 "npm:repomix" = "latest"
+"npm:takt" = "latest"
 pnpm = "10.28"
 zellij = "latest"
 
@@ -25,6 +26,4 @@ run = "~/.config/mise/scripts/pf-stop.sh"
 [tasks.site2skill]
 description = "Convert website to Codex skill interactively"
 run = "~/.config/mise/scripts/site2skill.sh"
-
-
 
