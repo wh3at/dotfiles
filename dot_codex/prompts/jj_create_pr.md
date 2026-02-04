@@ -1,6 +1,6 @@
 ---
 description: Create a GitHub PR (git or jj) with a behavior-focused PR body, then push safely
-argument-hint: 'VCS=<auto|git|jj> [HEAD=<branch_or_bookmark>] [BASE=<base_branch>] [REMOTE=<remote>] [REV=<revset>] [DRAFT=true|false] [PR_TITLE="<title>"]'
+argument-hint: '[HEAD=<branch_or_bookmark>] [BASE=<base_branch>] [REMOTE=<remote>] [REV=<revset>] [DRAFT=true|false] [PR_TITLE="<title>"]'
 ---
 
 You are helping me create a GitHub Pull Request using **gh CLI**.
@@ -9,7 +9,6 @@ Your job: collect info (log/diff), write a PR body focused on behavior changes i
 
 ## Read arguments (named args)
 Use the provided values when present:
-- VCS=$VCS (auto|git|jj). If empty, auto-detect.
 - HEAD=$HEAD (git branch name OR jj bookmark name). Optional.
 - BASE=$BASE (base branch name). Optional.
 - REMOTE=$REMOTE (default: origin). Optional.
@@ -37,14 +36,7 @@ Then probe:
 - (optional) jj root (if jj is installed / available)
 - (optional) jj status
 
-## 2) Decide VCS mode
-Decision logic:
-- If VCS is provided, obey it.
-- Else:
-  - If `jj root` succeeds AND `git branch --show-current` is empty (detached HEAD), choose jj.
-  - Otherwise choose git.
-
-## 3) Determine REMOTE and BASE branch
+## 2) Determine REMOTE and BASE branch
 REMOTE:
 - If REMOTE is provided, use it; else use `origin`.
 
@@ -56,18 +48,7 @@ BASE branch:
 
 Remember the resolved BASE branch name (e.g. main/master).
 
-## 4) Collect change info for PR description
-
-### 4-a) If git mode
-- Determine current branch:
-  `BRANCH=$(git branch --show-current)`
-  If BRANCH is empty, stop with guidance to checkout/create a branch.
-- If BRANCH == BASE, STOP (do not proceed).
-- Collect:
-  - git log <BASE>...HEAD --oneline
-  - git diff <BASE>...HEAD
-
-### 4-b) If jj mode
+## 3) Collect change info for PR description
 - Decide REV:
   - If REV is provided, use it.
   - Else use `@-` (common because working-copy commit itself may be empty after jj commit).
@@ -79,7 +60,7 @@ Remember the resolved BASE branch name (e.g. main/master).
   - jj log -r "trunk()..$REV" -G
   - jj diff --from trunk() --to "$REV"
 
-## 5) Write PR body (behavior-focused)
+## 4) Write PR body (behavior-focused)
 Analyze the diff and produce a PR body in EXACT format:
 
 ## Summary
@@ -97,18 +78,7 @@ Rules:
 - Be explicit about user-facing / API / performance / failure-mode changes.
 - If no behavior change, say so and focus on internal quality (maintainability, safety, observability).
 
-## 6) Prepare head ref + push
-
-### 6-a) git mode: push branch
-Planned push command template:
-`git push -u <REMOTE> <BRANCH>`
-
-Before running it:
-- show the command
-- ask for approval
-Then run it.
-
-### 6-b) jj mode: create/track/push bookmark (manual flow)
+## 5) Prepare head ref + push
 HEAD (bookmark name):
 - If HEAD is provided, use it.
 - If HEAD is empty, prefer auto-generated bookmark:
@@ -134,7 +104,7 @@ Before running any push:
 - ask for approval
 Then run them.
 
-## 7) Create PR with gh
+## 6) Create PR with gh
 Title:
 - If PR_TITLE is provided, use it.
 - Else generate a concise title based on the main behavior change.
@@ -146,8 +116,7 @@ Command template:
 `gh pr create --base "<BASE>" --head "<HEAD>" --title "<TITLE>" --body "<BODY>" [--draft]`
 
 Notes:
-- In git mode, HEAD should be the git branch name.
-- In jj mode, HEAD should be the bookmark name (maps to a git branch on the remote).
+- HEAD should be the bookmark name (maps to a git branch on the remote).
 
 If `gh` fails to detect the repo in a non-colocated jj repo:
 - Retry with GIT_DIR pointed at the backing git dir:
@@ -158,7 +127,7 @@ Before running gh pr create:
 - ask for approval
 Then run it.
 
-## 8) Final output
+## 7) Final output
 After creating the PR, print:
 - PR URL
 - BASE and HEAD used
