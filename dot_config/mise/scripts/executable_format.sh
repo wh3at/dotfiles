@@ -1,17 +1,23 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-read -rp "Target path: " target_path
-read -rp "Format type: " format_type
+text="$1"
 
-if [[ -z "$target_path" ]]; then
-    echo "Error: Target path cannot be empty" >&2
+if [[ -z "$text" ]]; then
+    echo "Error: Text cannot be empty" >&2
     exit 1
 fi
 
-if [[ -z "$format_type" ]]; then
-    echo "Error: Format type cannot be empty" >&2
-    exit 1
-fi
+opencode run --model zai-coding-plan/glm-4.7 "$(cat <<'PROMPT'
+以下のログをjsonlに整形して
 
-echo "Formatting '$target_path' with type '$format_type'..."
+# 削除対象
+- 行番号
+- jsonlで意味を持たない空白文字
+
+# ログ
+````
+$text
+````
+PROMPT
+)"
