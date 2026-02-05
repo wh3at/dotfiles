@@ -27,3 +27,7 @@ run = "~/.config/mise/scripts/pf-stop.sh"
 description = "Convert website to Codex skill interactively"
 run = "~/.config/mise/scripts/site2skill.sh"
 
+[tasks.format]
+description = "Run custom formatting script interactively"
+run = "~/.config/mise/scripts/format.sh"
+
