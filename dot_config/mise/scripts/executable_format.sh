@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-text="$1"
+read -rp "Text: " text
 
 if [[ -z "$text" ]]; then
     echo "Error: Text cannot be empty" >&2
