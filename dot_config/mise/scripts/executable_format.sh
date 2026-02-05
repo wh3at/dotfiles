@@ -1,7 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-read -rp "Text (Ctrl+D to end): " -d '' text
+echo "Enter text (type 'END' to finish):"
+text=""
+while IFS= read -r line; do
+    if [[ "$line" == "END" ]]; then
+        break
+    fi
+    text+="$line"$'\n'
+done
 
 if [[ -z "$text" ]]; then
     echo "Error: Text cannot be empty" >&2
