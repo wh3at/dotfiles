@@ -15,7 +15,7 @@ if [[ -z "$text" ]]; then
     exit 1
 fi
 
-opencode run --model zai-coding-plan/glm-4.7 "$(cat <<"PROMPT"
+opencode run --model zai-coding-plan/glm-4.7 <<PROMPT
 以下のログをjsonlに整形して
 
 # 削除対象
@@ -27,4 +27,3 @@ opencode run --model zai-coding-plan/glm-4.7 "$(cat <<"PROMPT"
 $text
 ````
 PROMPT
-)"
