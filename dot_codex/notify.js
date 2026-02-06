@@ -29,7 +29,7 @@ function main() {
     '--form-string',
     'user=uhsobvv2dtxv98mvhk853y2cssmman',
     '--form-string',
-    'title=Codex (kadou)',
+    'title=Codex',
     '--form-string',
     `message=${message}`,
     'https://api.pushover.net/1/messages.json',
