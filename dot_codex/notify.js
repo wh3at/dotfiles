@@ -1,5 +1,32 @@
 #!/usr/bin/env node
-const { spawn } = require('child_process');
+const { execFileSync, spawn } = require('child_process');
+
+function readSecretFromOp(reference) {
+  try {
+    const output = execFileSync('op', ['read', reference], {
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+      timeout: 3000,
+    });
+    return output.trim() || null;
+  } catch {
+    return null;
+  }
+}
+
+function resolveSecret(directEnvName, opRefEnvName) {
+  const directValue = process.env[directEnvName];
+  if (directValue) {
+    return directValue;
+  }
+
+  const opReference = process.env[opRefEnvName];
+  if (!opReference) {
+    return null;
+  }
+
+  return readSecretFromOp(opReference);
+}
 
 function main() {
   if (process.argv.length !== 3) {
@@ -17,6 +44,12 @@ function main() {
     return;
   }
 
+  const pushoverToken = resolveSecret('PUSHOVER_TOKEN', 'PUSHOVER_TOKEN_OP_REF');
+  const pushoverUser = resolveSecret('PUSHOVER_USER', 'PUSHOVER_USER_OP_REF');
+  if (!pushoverToken || !pushoverUser) {
+    return;
+  }
+
   const message = notification['last-assistant-message'] || 'Codex turn complete';
 
   const args = [
@@ -25,9 +58,9 @@ function main() {
     '-o',
     '/dev/null',
     '--form-string',
-    'token=ajsqinxvkig87mdjrcgmq7myi6nu8g',
+    `token=${pushoverToken}`,
     '--form-string',
-    'user=uhsobvv2dtxv98mvhk853y2cssmman',
+    `user=${pushoverUser}`,
     '--form-string',
     'title=Codex',
     '--form-string',
