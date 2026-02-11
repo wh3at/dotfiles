@@ -23,7 +23,7 @@ If any arg is missing, choose a safe default and proceed without asking unless a
 - Never use jj git push --all.
 - Never use --no-verify.
 - Warn and stop if trying to push directly to the base branch (main/master/etc).
-- Before executing any push or gh pr create, show the exact command(s) you intend to run and ask for my explicit approval.
+- Before executing push and gh pr create, show both exact commands and ask for my explicit approval once (single approval for both operations).
 
 ## 1) Preconditions
 Run:
@@ -78,7 +78,8 @@ Rules:
 - Be explicit about user-facing / API / performance / failure-mode changes.
 - If no behavior change, say so and focus on internal quality (maintainability, safety, observability).
 
-## 5) Prepare head ref + push
+## 5) Prepare and execute push + PR creation
+### 5a) Prepare head ref + push command
 HEAD (bookmark name):
 - If HEAD is provided, use it.
 - If HEAD is empty, prefer auto-generated bookmark:
@@ -95,16 +96,10 @@ If HEAD is provided, do the manual flow (safe + explicit):
    - `jj bookmark track "<HEAD>@<REMOTE>"`
    - `jj bookmark track "<HEAD>" --remote "<REMOTE>"`
    - `jj bookmark track "<HEAD>"`
-3) Push ONLY that bookmark
-   Planned push command:
+3) Prepare push command:
    `jj git push --bookmark "<HEAD>" --remote "<REMOTE>"`
 
-Before running any push:
-- show the exact command(s)
-- ask for approval
-Then run them.
-
-## 6) Create PR with gh
+### 5b) Prepare PR command with gh
 Title:
 - If PR_TITLE is provided, use it.
 - Else generate a concise title based on the main behavior change.
@@ -122,12 +117,13 @@ If `gh` fails to detect the repo in a non-colocated jj repo:
 - Retry with GIT_DIR pointed at the backing git dir:
   `GIT_DIR=.jj/repo/store/git gh pr create ...`
 
-Before running gh pr create:
-- show the exact command
-- ask for approval
-Then run it.
+### 5c) Execute both
+After preparing both commands:
+- Show both exact commands
+- Ask for approval once
+- Execute push first, then create PR
 
-## 7) Final output
+## 6) Final output
 After creating the PR, print:
 - PR URL
 - BASE and HEAD used
