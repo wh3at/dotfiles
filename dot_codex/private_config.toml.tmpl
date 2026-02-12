@@ -2,6 +2,8 @@ approval_policy = "never"
 sandbox_mode = "danger-full-access"
 web_search = "live"
 notify = ["node", "{{ .chezmoi.homeDir }}/.codex/notify.js"]
+memory_tool = true
+sqlite = true
 
 model = "gpt-5.2-codex"
 model_reasoning_effort = "high"
@@ -9,8 +11,6 @@ tool_output_token_limit = 25000
 exec_timeout_ms = 600000
 
 [features]
-memory_tool = true
-sqlite = true
 apply_patch_freeform = true
 unified_exec = true
 shell_snapshot = true
