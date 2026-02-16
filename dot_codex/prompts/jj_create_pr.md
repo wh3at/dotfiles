@@ -89,7 +89,7 @@ HEAD (bookmark name):
 
 If HEAD is provided, do the manual flow (safe + explicit):
 1) Ensure bookmark points at REV (create or update)
-   - Prefer: `jj bookmark set -r "$REV" "<HEAD>"`
+   - Prefer: `jj bookmark set -r "<REV>" "<HEAD>"`
    - If `set` is not available, use `jj bookmark create "<HEAD>" -r "$REV"` and if it fails because it exists, fall back to `jj bookmark move "<HEAD>" --to "$REV"`.
 2) Track it for remote push
    Try in this order (stop when one works):
