@@ -8,6 +8,7 @@ node = "latest"
 "npm:eas-cli" = "latest"
 "npm:repomix" = "latest"
 "npm:takt" = "latest"
+opencode = "latest"
 pnpm = "10.28"
 zellij = "latest"
 
