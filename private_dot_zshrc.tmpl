@@ -66,8 +66,6 @@ export ANDROID_NDK_HOME="$ANDROID_SDK_ROOT/ndk/27.3.13750724"
 export ANDROID_HOME="$ANDROID_SDK_ROOT"
 
 # 1Password
-export OP_SERVICE_ACCOUNT_TOKEN="{{ .one_password.service_acc_token }}"
-
 if command -v op &> /dev/null; then
   eval "$(op completion zsh)"; compdef _op op
 fi
@@ -87,6 +85,120 @@ function google() {
   gemini -p "指定したクエリを検索し、要約して。<query>$1</query>"
 }
 
+run_with_op_env() {
+  local env_file="$1"
+  shift
+
+  if ! command -v op >/dev/null 2>&1; then
+    echo "op CLI is required." >&2
+    return 1
+  fi
+
+  if [ -z "${OP_SERVICE_ACCOUNT_TOKEN-}" ]; then
+    echo "OP_SERVICE_ACCOUNT_TOKEN is not set. Load it from your external secret store first." >&2
+    return 1
+  fi
+
+  if [ ! -f "$env_file" ]; then
+    echo "Missing env file: $env_file" >&2
+    return 1
+  fi
+
+  op run --env-file "$env_file" -- "$@"
+}
+
+op_env_value() {
+  local env_file="$1"
+  local key="$2"
+  awk -F= -v key="$key" '
+    $0 ~ "^[[:space:]]*"key"=" {
+      val=substr($0, index($0, $2))
+      gsub(/^[[:space:]]+|[[:space:]]+$/, "", val)
+      print val
+      exit
+    }
+  ' "$env_file"
+}
+
+glm() {
+  local env_file="$HOME/.config/op/claude.env"
+  local -a cmd
+  cmd=(claude --dangerously-skip-permissions "$@")
+
+  # `op run` turns stdio into pipes, which breaks Claude interactive mode.
+  # For interactive no-arg runs, resolve token with `op read` and run directly.
+  if [ "$#" -eq 0 ] && [ -t 0 ] && [ -t 1 ]; then
+    local token_ref
+    local token
+
+    token_ref="$(op_env_value "$env_file" "ANTHROPIC_AUTH_TOKEN")"
+    if [ -z "$token_ref" ]; then
+      echo "glm: ANTHROPIC_AUTH_TOKEN is missing in $env_file." >&2
+      return 1
+    fi
+
+    token="$(op read "$token_ref")" || {
+      echo "glm: failed to resolve ANTHROPIC_AUTH_TOKEN from 1Password." >&2
+      return 1
+    }
+
+    ANTHROPIC_BASE_URL="{{ .z_ai.endpoint }}" ANTHROPIC_AUTH_TOKEN="$token" "${cmd[@]}"
+    return $?
+  fi
+
+  if [ "$#" -eq 0 ] && [ ! -t 0 ]; then
+    echo "glm: interactive mode requires a TTY. Use 'glm -p \"...\"' in non-interactive contexts." >&2
+    return 2
+  fi
+
+  ANTHROPIC_BASE_URL="{{ .z_ai.endpoint }}" run_with_op_env "$env_file" "${cmd[@]}"
+}
+
+glm_status() {
+  local env_file="$HOME/.config/op/claude.env"
+  local ok=0
+
+  if command -v op >/dev/null 2>&1; then
+    echo "[ok] op CLI is installed."
+  else
+    echo "[ng] op CLI is not installed."
+    ok=1
+  fi
+
+  if [ -n "${OP_SERVICE_ACCOUNT_TOKEN-}" ]; then
+    echo "[ok] OP_SERVICE_ACCOUNT_TOKEN is set."
+  else
+    echo "[ng] OP_SERVICE_ACCOUNT_TOKEN is not set."
+    ok=1
+  fi
+
+  if [ -f "$env_file" ]; then
+    echo "[ok] $env_file exists."
+    if grep -Eq "<[^>]+>" "$env_file"; then
+      echo "[ng] $env_file still contains placeholder segments like <item>/<field>."
+      ok=1
+    else
+      echo "[ok] $env_file has a concrete secret reference."
+      local token_ref
+      token_ref="$(awk -F= '/^ANTHROPIC_AUTH_TOKEN=/{print substr($0, index($0,$2)); exit}' "$env_file")"
+      if [ -z "$token_ref" ]; then
+        echo "[ng] ANTHROPIC_AUTH_TOKEN entry is missing in $env_file."
+        ok=1
+      elif op read "$token_ref" >/dev/null 2>&1; then
+        echo "[ok] ANTHROPIC_AUTH_TOKEN reference resolves in 1Password."
+      else
+        echo "[ng] ANTHROPIC_AUTH_TOKEN reference does not resolve: $token_ref"
+        ok=1
+      fi
+    fi
+  else
+    echo "[ng] Missing env file: $env_file"
+    ok=1
+  fi
+
+  return "$ok"
+}
+
 # Alias
 alias cl="clear"
 alias cx="codex"
@@ -96,7 +208,7 @@ alias ..="cd ../"
 alias ...="cd ../../"
 alias cc="claude"
 alias ccd="claude --dangerously-skip-permissions"
-alias glm="ANTHROPIC_BASE_URL='{{ .z_ai.endpoint }}' ANTHROPIC_AUTH_TOKEN='{{ .z_ai.api_key }}' claude --dangerously-skip-permissions"
+alias glms="glm_status"
 alias mr="mise run"
 alias phc="phantom create"
 alias phd="phantom delete"
