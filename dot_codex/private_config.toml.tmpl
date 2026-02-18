@@ -16,8 +16,8 @@ multi_agent = true
 collaboration_modes = true
 
 [mcp_servers.context7]
-command = "npx"
-args = ["-y", "@upstash/context7-mcp"]
+url = "https://mcp.context7.com/mcp"
+http_headers = { "CONTEXT7_API_KEY" = "op://CLI/context7-api-key/credential" }
 
 [mcp_servers.deepwiki]
 url = "https://mcp.deepwiki.com/mcp"
