@@ -38,4 +38,4 @@ run = "fcitx5 -r -d"
 
 [tasks."zellij:clients"]
 description = "現在のzellijセッションに接続しているプロセスを特定できる。1つ目はセッション本体。"
-run = "ps -ef | grep "zellij.*$ZELLIJ_SESSION_NAME" | grep -v grep"
+run = "ps -ef | grep \"zellij.*$ZELLIJ_SESSION_NAME\" | grep -v grep"
