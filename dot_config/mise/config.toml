@@ -34,4 +34,8 @@ run = "~/.config/mise/scripts/format.sh"
 
 [tasks."fcitx5:restart"]
 description = "Restart fcitx5 demon"
-run ="fcitx5 -r -d"
+run = "fcitx5 -r -d"
+
+[tasks."zellij:clients"]
+description = "現在のzellijセッションに接続しているプロセスを特定できる。1つ目はセッション本体。"
+run = "ps -ef | grep "zellij.*$ZELLIJ_SESSION_NAME" | grep -v grep"
