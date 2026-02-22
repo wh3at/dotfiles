@@ -12,7 +12,11 @@
 1. Put a valid 1Password secret reference in `~/.config/op/claude.env` (vault is `CLI`).
    `ANTHROPIC_AUTH_TOKEN=op://CLI/Zai Key OpenClaw/credential`
    Use field id (`credential`) in the path, not field label (`認証情報`).
-2. Make sure `OP_SERVICE_ACCOUNT_TOKEN` is injected from your external secret store.
+2. Store `OP_SERVICE_ACCOUNT_TOKEN` in OS keyring once (outside dotfiles):
+   ```sh
+   source ~/.zshrc
+   op_sa_set
+   ```
 3. Run `source ~/.zshrc`.
 4. Run `glms` and confirm all checks are `[ok]`.
 
