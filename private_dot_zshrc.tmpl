@@ -215,9 +215,35 @@ gog_op() {
   run_with_op_env "$env_file" gog "$@"
 }
 
+cx() {
+  local context7_ref="op://CLI/context7-api-key/credential"
+  local context7_key
+
+  if ! command -v op >/dev/null 2>&1; then
+    echo "cx: op CLI is required." >&2
+    return 1
+  fi
+
+  if [ -z "${OP_SERVICE_ACCOUNT_TOKEN-}" ]; then
+    echo "cx: OP_SERVICE_ACCOUNT_TOKEN is not set. Add export to ~/.config/op/service-account.env and source ~/.zshrc." >&2
+    return 1
+  fi
+
+  context7_key="$(op read "$context7_ref")" || {
+    echo "cx: failed to resolve CONTEXT7_API_KEY from 1Password." >&2
+    return 1
+  }
+
+  if [ -z "$context7_key" ]; then
+    echo "cx: CONTEXT7_API_KEY resolved to an empty value." >&2
+    return 1
+  fi
+
+  CONTEXT7_API_KEY="$context7_key" codex "$@"
+}
+
 # Alias
 alias cl="clear"
-alias cx="codex"
 alias zll="zellij"
 alias zla="zellij a"
 alias ..="cd ../"
