@@ -1,0 +1,8 @@
+#:schema https://docs.jj-vcs.dev/latest/config-schema.json
+
+[user]
+name = "wh3at"
+email = "69319864+wh3at@users.noreply.github.com"
+
+[ui]
+merge-editor = "vimdiff"
