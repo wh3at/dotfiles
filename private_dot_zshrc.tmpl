@@ -70,6 +70,11 @@ if command -v op &> /dev/null; then
   eval "$(op completion zsh)"; compdef _op op
 fi
 
+# Load OP service account token from a local-only file (not in chezmoi).
+if [ -f "$HOME/.config/op/service-account.env" ]; then
+  . "$HOME/.config/op/service-account.env"
+fi
+
 # Cargo
 if [ -f "$HOME/.cargo/env" ]; then
   . "$HOME/.cargo/env"
@@ -85,48 +90,6 @@ function google() {
   gemini -p "指定したクエリを検索し、要約して。<query>$1</query>"
 }
 
-load_op_service_account_token() {
-  if [ -n "${OP_SERVICE_ACCOUNT_TOKEN-}" ]; then
-    return 0
-  fi
-
-  if ! command -v secret-tool >/dev/null 2>&1; then
-    return 1
-  fi
-
-  local token
-  token="$(secret-tool lookup app op-cli key OP_SERVICE_ACCOUNT_TOKEN 2>/dev/null)" || return 1
-  if [ -z "$token" ]; then
-    return 1
-  fi
-
-  export OP_SERVICE_ACCOUNT_TOKEN="$token"
-}
-
-op_sa_set() {
-  if ! command -v secret-tool >/dev/null 2>&1; then
-    echo "secret-tool is required." >&2
-    return 1
-  fi
-
-  local token
-  read -r -s "?Enter OP service account token: " token
-  echo
-
-  if [ -z "$token" ]; then
-    echo "Token is empty." >&2
-    return 1
-  fi
-
-  printf '%s' "$token" | secret-tool store \
-    --label="1Password OP Service Account Token" \
-    app op-cli key OP_SERVICE_ACCOUNT_TOKEN >/dev/null || return 1
-
-  unset OP_SERVICE_ACCOUNT_TOKEN
-  load_op_service_account_token || true
-  echo "[ok] token stored in keyring."
-}
-
 run_with_op_env() {
   local env_file="$1"
   shift
@@ -137,11 +100,7 @@ run_with_op_env() {
   fi
 
   if [ -z "${OP_SERVICE_ACCOUNT_TOKEN-}" ]; then
-    load_op_service_account_token || true
-  fi
-
-  if [ -z "${OP_SERVICE_ACCOUNT_TOKEN-}" ]; then
-    echo "OP_SERVICE_ACCOUNT_TOKEN is not set. This bootstrap credential must come from outside 1Password (not op://)." >&2
+    echo "OP_SERVICE_ACCOUNT_TOKEN is not set. Add export to ~/.config/op/service-account.env and source ~/.zshrc." >&2
     return 1
   fi
 
@@ -214,13 +173,8 @@ glm_status() {
   if [ -n "${OP_SERVICE_ACCOUNT_TOKEN-}" ]; then
     echo "[ok] OP_SERVICE_ACCOUNT_TOKEN is set."
   else
-    load_op_service_account_token || true
-    if [ -n "${OP_SERVICE_ACCOUNT_TOKEN-}" ]; then
-      echo "[ok] OP_SERVICE_ACCOUNT_TOKEN is available via keyring."
-    else
-      echo "[ng] OP_SERVICE_ACCOUNT_TOKEN is not set."
-      ok=1
-    fi
+    echo "[ng] OP_SERVICE_ACCOUNT_TOKEN is not set (expected in ~/.config/op/service-account.env)."
+    ok=1
   fi
 
   if [ -f "$env_file" ]; then
