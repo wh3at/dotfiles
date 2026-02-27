@@ -1,23 +1,44 @@
 #!/usr/bin/env node
 const { execFileSync, spawn } = require('child_process');
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
+const crypto = require('crypto');
+
+const PASS_CLI_ENV = {
+  ...process.env,
+  PROTON_PASS_KEY_PROVIDER: process.env.PROTON_PASS_KEY_PROVIDER || 'fs',
+};
 
 function readSecret(reference) {
   if (!reference) return null;
 
-  try {
-    if (reference.startsWith('pass://')) {
-      const output = execFileSync('pass-cli', ['show', reference], {
-        encoding: 'utf8',
-        stdio: ['ignore', 'pipe', 'ignore'],
-        timeout: 3000,
-      });
-      return output.trim() || null;
-    }
-  } catch {
+  if (!reference.startsWith('pass://')) {
     return null;
   }
 
-  return null;
+  const tmpEnvFile = path.join(os.tmpdir(), `pass-cli-notify-${crypto.randomUUID()}.env`);
+
+  try {
+    fs.writeFileSync(tmpEnvFile, `__PASS_CLI_SECRET=${reference}\n`, { mode: 0o600 });
+    const output = execFileSync(
+      'pass-cli',
+      ['run', '--env-file', tmpEnvFile, '--', 'sh', '-c', 'printf %s "$__PASS_CLI_SECRET"'],
+      {
+        encoding: 'utf8',
+        env: PASS_CLI_ENV,
+        stdio: ['ignore', 'pipe', 'ignore'],
+        timeout: 3000,
+      }
+    );
+    return output.trim() || null;
+  } catch {
+    return null;
+  } finally {
+    try {
+      fs.unlinkSync(tmpEnvFile);
+    } catch {}
+  }
 }
 
 function main() {

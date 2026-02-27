@@ -3,18 +3,17 @@
 ## What changed for users
 
 - `glm/gog/cx/notify` resolve runtime secrets from Proton Pass (`pass://...`) only.
-- Runtime key material is loaded from `~/.config/proton-pass/key.env`.
+- Runtime provider override is loaded from `~/.config/proton-pass/key.env`.
 - Secret refs are stored in env files as `pass://...` paths (no plaintext secrets in dotfiles).
 
 ## One-time setup
 
-1. Create local-only key config for Proton Pass CLI:
+1. Create local-only provider config for Proton Pass CLI:
    ```sh
    umask 077
    mkdir -p ~/.config/proton-pass
    cat > ~/.config/proton-pass/key.env <<'EOF_KEY'
-   export PROTON_PASS_KEY_PROVIDER=env
-   export PROTON_PASS_ENCRYPTION_KEY=<set-a-random-32-byte-plus-secret>
+   export PROTON_PASS_KEY_PROVIDER=fs
    EOF_KEY
    chmod 600 ~/.config/proton-pass/key.env
    ```
@@ -52,7 +51,6 @@ pass-cli --version
 
 # 2) key provider configured?
 echo "${PROTON_PASS_KEY_PROVIDER:-unset}"
-echo "${PROTON_PASS_ENCRYPTION_KEY:+set}"
 
 # 3) env files exist?
 ls -l ~/.config/proton-pass/claude.env ~/.config/proton-pass/gog.env
@@ -69,7 +67,7 @@ secrets-status
 
 ```sh
 cd ~/.local/share/chezmoi
-rg -n --glob '!dot_claude/**' --glob '!*.md' "PROTON_PASS_ENCRYPTION_KEY=|ANTHROPIC_AUTH_TOKEN='|api_key\\s*=\\s*\""
+rg -n --glob '!dot_claude/**' --glob '!*.md' "ANTHROPIC_AUTH_TOKEN='|api_key\\s*=\\s*\""
 ```
 
-Keep `~/.config/proton-pass/key.env` out of git and rotate leaked keys immediately.
+Keep `~/.config/proton-pass/key.env` out of git.

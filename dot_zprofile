@@ -1,1 +1,9 @@
+# Ensure pass-cli uses a stable provider even when ~/.zshrc is not loaded.
+export PROTON_PASS_KEY_PROVIDER="${PROTON_PASS_KEY_PROVIDER:-fs}"
+
+# Optional local overrides.
+if [ -f "$HOME/.config/proton-pass/key.env" ]; then
+  . "$HOME/.config/proton-pass/key.env"
+fi
+
 eval "$(mise activate zsh)"

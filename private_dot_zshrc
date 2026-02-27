@@ -1,7 +1,73 @@
+if [ -f ~/.profile ]; then
+    source ~/.profile
+fi
+
+# Load ~/.zprofile once from interactive shells that are not login shells
+if [[ -o interactive ]] && [[ ! -o login ]]; then
+  if [[ -z "${__ZPROFILE_LOADED-}" ]]; then
+    __ZPROFILE_LOADED=1
+    [[ -r ~/.zprofile ]] && source ~/.zprofile
+  fi
+fi
+
+# Lines configured by zsh-newuser-install
+HISTFILE=~/.histfile
+HISTSIZE=1000
+SAVEHIST=1000
+bindkey -e
+# End of lines configured by zsh-newuser-install
+
+# The following lines were added by compinstall
+zstyle :compinstall filename '/home/ubuntu/.zshrc'
+
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall
+
+# Added by Zinit's installer
+if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
+    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
+    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
+        print -P "%F{33} %F{34}Installation successful.%f%b" || \
+        print -P "%F{160} The clone has failed.%f%b"
+fi
+
+source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+# End of Zinit's installer chunk
+
+# Zinit's config
+## プロンプトテーマ sindresorhus/pure
+zi ice pick"async.zsh" src"pure.zsh"
+zi light sindresorhus/pure
+## インタラクティブな補完
+zinit light zsh-users/zsh-autosuggestions
+## シンタックスハイライト
+zinit light zdharma-continuum/fast-syntax-highlighting
+# End of Zinit's config
+
+# PATH
+export PATH="$HOME/.local/share/mise/shims:$PATH"
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+export PNPM_HOME="$HOME/.local/share/pnpm"
+export PATH="$PNPM_HOME:$PATH"
+[[ ":$PATH:" != *":$PNPM_HOME:"* ]] && export PATH="$PATH:$PNPM_HOME"
+if [ -f /home/linuxbrew/.linuxbrew/bin/brew ]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+export PATH="$PATH:$HOME/apps"
+export PATH="$PATH:$HOME/.remote-code/bin"
+export PATH="$HOME/.local/bin:$PATH"
+export ANDROID_SDK_ROOT="$HOME/Android/Sdk"
+export ANDROID_NDK_HOME="$ANDROID_SDK_ROOT/ndk/27.3.13750724"
+export ANDROID_HOME="$ANDROID_SDK_ROOT"
 
 # Secret references (non-secret) for runtime resolution.
 export ANTHROPIC_AUTH_TOKEN_PASS_REF="pass://CLI/Zai Key OpenClaw/credential"
-export GOG_KEYRING_PASSWORD_PASS_REF="pass://CLI/GOG_KEYRING_PASSWORD/credential"
+export GOG_KEYRING_PASSWORD_PASS_REF="pass://CLI/GOG_KEYRING_PASSWORD/認証情報"
 export CONTEXT7_API_KEY_PASS_REF="pass://CLI/context7-api-key/credential"
 export PUSHOVER_TOKEN_PASS_REF="pass://CLI/pushover-codex/z6deozj7hxngryx3ldp3sk66wq"
 export PUSHOVER_USER_PASS_REF="pass://CLI/pushover-codex/qoludfuoi6sogbwgfcd3fibgdi"
@@ -13,7 +79,11 @@ export CONTEXT7_API_KEY_REF="$CONTEXT7_API_KEY_PASS_REF"
 export PUSHOVER_TOKEN_REF="$PUSHOVER_TOKEN_PASS_REF"
 export PUSHOVER_USER_REF="$PUSHOVER_USER_PASS_REF"
 
-# Load Proton Pass key material from a local-only file (not in chezmoi).
+# Proton Pass CLI storage backend.
+# Prefer filesystem key provider on Linux to avoid keyring/env drift.
+export PROTON_PASS_KEY_PROVIDER="${PROTON_PASS_KEY_PROVIDER:-fs}"
+
+# Optional local-only overrides (not in chezmoi templates).
 if [ -f "$HOME/.config/proton-pass/key.env" ]; then
   . "$HOME/.config/proton-pass/key.env"
 fi
@@ -75,8 +145,8 @@ require_pass_cli_runtime() {
     return 1
   fi
 
-  if [ "${PROTON_PASS_KEY_PROVIDER-}" = "env" ] && [ -z "${PROTON_PASS_ENCRYPTION_KEY-}" ]; then
-    echo "$caller: PROTON_PASS_ENCRYPTION_KEY must be set when PROTON_PASS_KEY_PROVIDER=env." >&2
+  if [ -z "${PROTON_PASS_KEY_PROVIDER-}" ]; then
+    echo "$caller: PROTON_PASS_KEY_PROVIDER is not set." >&2
     return 1
   fi
 }
@@ -85,6 +155,8 @@ resolve_secret_ref() {
   local ref="$1"
   local label="$2"
   local value
+  local tmp_env
+  local run_status=0
 
   if [ -z "$ref" ]; then
     echo "$label is empty." >&2
@@ -98,10 +170,20 @@ resolve_secret_ref() {
 
   require_pass_cli_runtime "resolve_secret_ref" || return 1
 
-  value="$(pass-cli show "$ref")" || {
-    echo "failed to resolve $label from Proton Pass." >&2
+  tmp_env="$(mktemp)" || {
+    echo "failed to create temporary env file for $label." >&2
     return 1
   }
+  chmod 600 "$tmp_env"
+  printf '__PASS_CLI_SECRET=%s\n' "$ref" > "$tmp_env"
+
+  value="$(pass-cli run --env-file "$tmp_env" -- sh -c 'printf %s "$__PASS_CLI_SECRET"')" || run_status=$?
+  rm -f "$tmp_env"
+
+  if [ "$run_status" -ne 0 ]; then
+    echo "failed to resolve $label from Proton Pass." >&2
+    return 1
+  fi
 
   if [ -z "$value" ]; then
     echo "$label resolved to an empty value." >&2
@@ -176,7 +258,7 @@ glm() {
     return 1
   }
 
-  ANTHROPIC_BASE_URL="{{ .z_ai.endpoint }}" ANTHROPIC_AUTH_TOKEN="$token" "${cmd[@]}"
+  ANTHROPIC_BASE_URL="https://api.z.ai/api/anthropic" ANTHROPIC_AUTH_TOKEN="$token" "${cmd[@]}"
 }
 
 status_secret_value() {
@@ -241,17 +323,10 @@ secrets_status_core() {
     ok=1
   fi
 
-  if [ "${PROTON_PASS_KEY_PROVIDER-}" = "env" ]; then
-    echo "[ok] PROTON_PASS_KEY_PROVIDER=env"
+  if [ "${PROTON_PASS_KEY_PROVIDER-}" = "fs" ]; then
+    echo "[ok] PROTON_PASS_KEY_PROVIDER=fs"
   else
-    echo "[ng] PROTON_PASS_KEY_PROVIDER should be 'env' (current: ${PROTON_PASS_KEY_PROVIDER:-unset})."
-    ok=1
-  fi
-
-  if [ -n "${PROTON_PASS_ENCRYPTION_KEY-}" ]; then
-    echo "[ok] PROTON_PASS_ENCRYPTION_KEY is set."
-  else
-    echo "[ng] PROTON_PASS_ENCRYPTION_KEY is not set (expected in ~/.config/proton-pass/key.env)."
+    echo "[ng] PROTON_PASS_KEY_PROVIDER should be 'fs' (current: ${PROTON_PASS_KEY_PROVIDER:-unset})."
     ok=1
   fi
 
@@ -273,7 +348,7 @@ secrets_status() {
     ok=1
   fi
 
-  if status_secret_value "$HOME/.config/proton-pass/gog.env" "GOG_KEYRING_PASSWORD" "GOG_KEYRING_PASSWORD" "$GOG_KEYRING_PASSWORD_PASS_REF"; then
+  if status_shared_ref "$GOG_KEYRING_PASSWORD_PASS_REF" "GOG_KEYRING_PASSWORD_REF"; then
     true
   else
     ok=1
@@ -301,7 +376,6 @@ secrets_status() {
 }
 
 gog_op() {
-  local pass_env_file="$HOME/.config/proton-pass/gog.env"
   local keyring_password
 
   if ! command -v gog >/dev/null 2>&1; then
@@ -309,7 +383,7 @@ gog_op() {
     return 1
   fi
 
-  keyring_password="$(resolve_secret_value "$pass_env_file" "GOG_KEYRING_PASSWORD" "GOG_KEYRING_PASSWORD" "$GOG_KEYRING_PASSWORD_PASS_REF")" || {
+  keyring_password="$(resolve_secret_ref "$GOG_KEYRING_PASSWORD_PASS_REF" "GOG_KEYRING_PASSWORD")" || {
     echo "gog: failed to resolve GOG_KEYRING_PASSWORD." >&2
     return 1
   }
@@ -347,3 +421,57 @@ alias phd="phantom delete"
 alias phs="phantom shell"
 alias python="python3"
 alias opencode="OPENCODE_EXPERIMENTAL_PLAN_MODE=true opencode"
+
+# bun completions
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+
+# pnpm completions
+if command -v pnpm &> /dev/null; then
+  eval "$(pnpm completion zsh)";
+fi
+
+# jujutsu completions
+if command -v jj >/dev/null 2>&1; then
+  source <(COMPLETE=zsh jj)
+fi
+
+# neovim
+if [ -f "$HOME/apps/nvim-linux-arm64.appimage" ]; then
+  alias nvim="$HOME/apps/nvim-linux-arm64.appimage"
+fi
+
+# Zellij custom
+zll_new_git_wt() {
+  # zellij 内でなければ終了
+  if [ -z "${ZELLIJ-}" ]; then
+    echo 'zj_new_tab: must be run inside zellij' >&2
+    return 1
+  fi
+
+  # ブランチ名を受け取る
+  local name="$1"
+
+  if [ -z "$name" ]; then
+    printf 'tab name: '
+    read -r name || return 1
+  fi
+
+  [ -z "$name" ] && return 1
+
+  phantom create "feature/$name"
+
+  # Layout の作業領域が2ペイン前提
+  local cwd="$PWD"
+  zellij action new-tab --name "$name" --layout main --cwd "$cwd"
+
+  zellij action write-chars "phantom shell feature/$name"
+  zellij action write 13
+
+  zellij action focus-next-pane
+  zellij action write-chars "phantom shell feature/$name"
+  zellij action write 13
+
+  zellij action focus-previous-pane
+  zellij action write-chars "codex"
+  zellij action write 13
+}
