@@ -1,28 +1,36 @@
-# Daily Cheat Sheet (chezmoi + 1Password SA)
+# Daily Cheat Sheet (chezmoi + Proton Pass CLI)
 
 ## What changed for users
 
-- `glm` no longer embeds API tokens in dotfiles.
-- `OP_SERVICE_ACCOUNT_TOKEN` is loaded from `~/.config/op/service-account.env`.
-- Secret refs are stored as `op://...` paths (no plaintext secrets in dotfiles).
-- `glm/gog/cx/notify` resolve secrets at runtime with `op read`.
-- `~/.zshrc` exports shared non-secret refs:
-  - `CONTEXT7_API_KEY_REF`
-  - `PUSHOVER_TOKEN_OP_REF`
-  - `PUSHOVER_USER_OP_REF`
+- `glm/gog/cx/notify` now resolve runtime secrets from Proton Pass (`pass://...`).
+- Runtime key material is loaded from `~/.config/proton-pass/key.env`.
+- Secret refs are stored in env files as `pass://...` paths (no plaintext secrets in dotfiles).
+- `PASS_MIGRATION_MODE` controls fallback behavior:
+  - `native` (default): prefer Proton Pass
+  - `legacy`: prefer 1Password fallback (`op://...`)
 
 ## One-time setup
 
-1. Put a valid 1Password secret reference in `~/.config/op/claude.env` (vault is `CLI`).
-   `ANTHROPIC_AUTH_TOKEN=op://CLI/Zai Key OpenClaw/credential`
-   Use field id (`credential`) in the path, not field label (`認証情報`).
-2. Create a local-only file for the service account token (outside dotfiles):
+1. Create local-only key config for Proton Pass CLI:
    ```sh
    umask 077
-   cat > ~/.config/op/service-account.env <<'EOF'
-   export OP_SERVICE_ACCOUNT_TOKEN=ops_xxx
-   EOF
-   chmod 600 ~/.config/op/service-account.env
+   mkdir -p ~/.config/proton-pass
+   cat > ~/.config/proton-pass/key.env <<'EOF_KEY'
+   export PROTON_PASS_KEY_PROVIDER=env
+   export PROTON_PASS_ENCRYPTION_KEY=<set-a-random-32-byte-plus-secret>
+   EOF_KEY
+   chmod 600 ~/.config/proton-pass/key.env
+   ```
+2. Put secret references in Proton Pass env files:
+   ```sh
+   cat > ~/.config/proton-pass/claude.env <<'EOF_CLAUDE'
+   ANTHROPIC_AUTH_TOKEN=pass://CLI/Zai Key OpenClaw/credential
+   EOF_CLAUDE
+
+   cat > ~/.config/proton-pass/gog.env <<'EOF_GOG'
+   GOG_KEYRING_PASSWORD=pass://CLI/GOG_KEYRING_PASSWORD/credential
+   EOF_GOG
+   chmod 600 ~/.config/proton-pass/claude.env ~/.config/proton-pass/gog.env
    ```
 3. Run `source ~/.zshrc`.
 4. Run `glms` and confirm all checks are `[ok]`.
@@ -33,31 +41,39 @@
 # preflight
 glms
 
-# normal usage (same entrypoint as before)
+# normal usage
 glm
 glm --help
 glm -p "..."
 ```
 
-## If `glm` fails
+## If commands fail
 
 ```sh
-# 1) token present?
-echo "${OP_SERVICE_ACCOUNT_TOKEN:+set}"
+# 1) pass available?
+pass --version
 
-# 2) op available?
-op --version
+# 2) key provider configured?
+echo "${PROTON_PASS_KEY_PROVIDER:-unset}"
+echo "${PROTON_PASS_ENCRYPTION_KEY:+set}"
 
-# 3) env file exists?
-ls -l ~/.config/op/claude.env
-
-# 4) service account file exists?
-ls -l ~/.config/op/service-account.env
+# 3) env files exist?
+ls -l ~/.config/proton-pass/claude.env ~/.config/proton-pass/gog.env
 ```
 
-If `glm/gog/cx` fail, run:
+Then run:
 
 ```sh
+source ~/.zshrc
+glms
+```
+
+## Legacy fallback (temporary)
+
+If you need to temporarily use `op://` references:
+
+```sh
+export PASS_MIGRATION_MODE=legacy
 source ~/.zshrc
 glms
 ```
@@ -66,7 +82,7 @@ glms
 
 ```sh
 cd ~/.local/share/chezmoi
-rg -n --glob '!dot_claude/**' --glob '!*.md' "service_acc_token|ops_[A-Za-z0-9]|ANTHROPIC_AUTH_TOKEN='|api_key\\s*=\\s*\"|OP_SERVICE_ACCOUNT_TOKEN=\""
+rg -n --glob '!dot_claude/**' --glob '!*.md' "PROTON_PASS_ENCRYPTION_KEY=|OP_SERVICE_ACCOUNT_TOKEN=|ops_[A-Za-z0-9]|ANTHROPIC_AUTH_TOKEN='|api_key\\s*=\\s*\""
 ```
 
-Keep `~/.config/op/service-account.env` out of git and rotate leaked tokens immediately.
+Keep `~/.config/proton-pass/key.env` out of git and rotate leaked keys immediately.
