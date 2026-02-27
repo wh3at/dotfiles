@@ -6,13 +6,14 @@ This repo keeps secret values out of templates and data files.
 
 - Do not store plaintext secrets in `.chezmoidata.toml` or `*.tmpl`.
 - Keep `OP_SERVICE_ACCOUNT_TOKEN` outside dotfiles (local-only env file).
-- Use `op run` for command-scoped injection of runtime secrets.
+- Keep secret values ephemeral: store only `op://` references in dotfiles and resolve values at runtime with `op read`.
 
 ## Current Runtime Flow
 
 - `.zshrc` sources `~/.config/op/service-account.env` for `OP_SERVICE_ACCOUNT_TOKEN`.
-- `glm` reads secret references from `~/.config/op/claude.env`.
-- `glm` runs `claude` through `op run --env-file`.
+- `.zshrc` exports shared refs (`CONTEXT7_API_KEY_REF`, `PUSHOVER_*_OP_REF`).
+- `glm`/`gog` read secret references from `~/.config/op/*.env`.
+- `glm`/`gog`/`cx`/`notify` resolve refs with `op read` at runtime.
 - `ANTHROPIC_BASE_URL` is non-secret template data.
 
 ## Required Rotation

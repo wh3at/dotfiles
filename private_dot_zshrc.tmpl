@@ -70,6 +70,11 @@ if command -v op &> /dev/null; then
   eval "$(op completion zsh)"; compdef _op op
 fi
 
+# 1Password secret references (non-secret) for runtime resolution.
+export CONTEXT7_API_KEY_REF="op://CLI/context7-api-key/credential"
+export PUSHOVER_TOKEN_OP_REF="op://CLI/pushover-codex/z6deozj7hxngryx3ldp3sk66wq"
+export PUSHOVER_USER_OP_REF="op://CLI/pushover-codex/qoludfuoi6sogbwgfcd3fibgdi"
+
 # Load OP service account token from a local-only file (not in chezmoi).
 if [ -f "$HOME/.config/op/service-account.env" ]; then
   . "$HOME/.config/op/service-account.env"
@@ -90,26 +95,40 @@ function google() {
   gemini -p "指定したクエリを検索し、要約して。<query>$1</query>"
 }
 
-run_with_op_env() {
-  local env_file="$1"
-  shift
-
+require_op_runtime() {
+  local caller="$1"
   if ! command -v op >/dev/null 2>&1; then
-    echo "op CLI is required." >&2
+    echo "$caller: op CLI is required." >&2
     return 1
   fi
 
   if [ -z "${OP_SERVICE_ACCOUNT_TOKEN-}" ]; then
-    echo "OP_SERVICE_ACCOUNT_TOKEN is not set. Add export to ~/.config/op/service-account.env and source ~/.zshrc." >&2
+    echo "$caller: OP_SERVICE_ACCOUNT_TOKEN is not set. Add export to ~/.config/op/service-account.env and source ~/.zshrc." >&2
+    return 1
+  fi
+}
+
+resolve_op_ref() {
+  local ref="$1"
+  local label="$2"
+  local value
+
+  if [ -z "$ref" ]; then
+    echo "$label is empty." >&2
     return 1
   fi
 
-  if [ ! -f "$env_file" ]; then
-    echo "Missing env file: $env_file" >&2
+  value="$(op read "$ref")" || {
+    echo "failed to resolve $label from 1Password." >&2
+    return 1
+  }
+
+  if [ -z "$value" ]; then
+    echo "$label resolved to an empty value." >&2
     return 1
   fi
 
-  op run --env-file "$env_file" -- "$@"
+  printf '%s' "$value"
 }
 
 op_env_value() {
@@ -125,43 +144,55 @@ op_env_value() {
   ' "$env_file"
 }
 
+resolve_op_env_secret() {
+  local env_file="$1"
+  local key="$2"
+  local label="$3"
+  local ref
+
+  if [ ! -f "$env_file" ]; then
+    echo "Missing env file: $env_file" >&2
+    return 1
+  fi
+
+  ref="$(op_env_value "$env_file" "$key")"
+  if [ -z "$ref" ]; then
+    echo "$label is missing in $env_file." >&2
+    return 1
+  fi
+
+  resolve_op_ref "$ref" "$label"
+}
+
 glm() {
   local env_file="$HOME/.config/op/claude.env"
   local -a cmd
+  local token
   cmd=(claude --dangerously-skip-permissions "$@")
-
-  # `op run` turns stdio into pipes, which breaks Claude interactive mode.
-  # For interactive no-arg runs, resolve token with `op read` and run directly.
-  if [ "$#" -eq 0 ] && [ -t 0 ] && [ -t 1 ]; then
-    local token_ref
-    local token
-
-    token_ref="$(op_env_value "$env_file" "ANTHROPIC_AUTH_TOKEN")"
-    if [ -z "$token_ref" ]; then
-      echo "glm: ANTHROPIC_AUTH_TOKEN is missing in $env_file." >&2
-      return 1
-    fi
-
-    token="$(op read "$token_ref")" || {
-      echo "glm: failed to resolve ANTHROPIC_AUTH_TOKEN from 1Password." >&2
-      return 1
-    }
-
-    ANTHROPIC_BASE_URL="{{ .z_ai.endpoint }}" ANTHROPIC_AUTH_TOKEN="$token" "${cmd[@]}"
-    return $?
-  fi
 
   if [ "$#" -eq 0 ] && [ ! -t 0 ]; then
     echo "glm: interactive mode requires a TTY. Use 'glm -p \"...\"' in non-interactive contexts." >&2
     return 2
   fi
 
-  ANTHROPIC_BASE_URL="{{ .z_ai.endpoint }}" run_with_op_env "$env_file" "${cmd[@]}"
+  require_op_runtime "glm" || return 1
+
+  token="$(resolve_op_env_secret "$env_file" "ANTHROPIC_AUTH_TOKEN" "ANTHROPIC_AUTH_TOKEN")" || {
+    echo "glm: failed to resolve ANTHROPIC_AUTH_TOKEN." >&2
+    return 1
+  }
+
+  ANTHROPIC_BASE_URL="{{ .z_ai.endpoint }}" ANTHROPIC_AUTH_TOKEN="$token" "${cmd[@]}"
 }
 
 glm_status() {
   local env_file="$HOME/.config/op/claude.env"
+  local gog_env_file="$HOME/.config/op/gog.env"
   local ok=0
+  local token_ref
+  local gog_ref
+  local ref_name
+  local ref_value
 
   if command -v op >/dev/null 2>&1; then
     echo "[ok] op CLI is installed."
@@ -184,7 +215,6 @@ glm_status() {
       ok=1
     else
       echo "[ok] $env_file has a concrete secret reference."
-      local token_ref
       token_ref="$(awk -F= '/^ANTHROPIC_AUTH_TOKEN=/{print substr($0, index($0,$2)); exit}' "$env_file")"
       if [ -z "$token_ref" ]; then
         echo "[ng] ANTHROPIC_AUTH_TOKEN entry is missing in $env_file."
@@ -201,43 +231,72 @@ glm_status() {
     ok=1
   fi
 
+  if [ -f "$gog_env_file" ]; then
+    echo "[ok] $gog_env_file exists."
+    gog_ref="$(awk -F= '/^GOG_KEYRING_PASSWORD=/{print substr($0, index($0,$2)); exit}' "$gog_env_file")"
+    if [ -z "$gog_ref" ]; then
+      echo "[ng] GOG_KEYRING_PASSWORD entry is missing in $gog_env_file."
+      ok=1
+    elif op read "$gog_ref" >/dev/null 2>&1; then
+      echo "[ok] GOG_KEYRING_PASSWORD reference resolves in 1Password."
+    else
+      echo "[ng] GOG_KEYRING_PASSWORD reference does not resolve: $gog_ref"
+      ok=1
+    fi
+  else
+    echo "[ng] Missing env file: $gog_env_file"
+    ok=1
+  fi
+
+  for ref_name in CONTEXT7_API_KEY_REF PUSHOVER_TOKEN_OP_REF PUSHOVER_USER_OP_REF; do
+    ref_value="${(P)ref_name}"
+    if [ -z "$ref_value" ]; then
+      echo "[ng] $ref_name is not set in ~/.zshrc."
+      ok=1
+    elif op read "$ref_value" >/dev/null 2>&1; then
+      echo "[ok] $ref_name resolves in 1Password."
+    else
+      echo "[ng] $ref_name does not resolve: $ref_value"
+      ok=1
+    fi
+  done
+
   return "$ok"
 }
 
 gog_op() {
   local env_file="$HOME/.config/op/gog.env"
+  local keyring_password
 
   if ! command -v gog >/dev/null 2>&1; then
     echo "gog CLI is required." >&2
     return 1
   fi
 
-  run_with_op_env "$env_file" gog "$@"
-}
+  require_op_runtime "gog" || return 1
 
-cx() {
-  local context7_ref="op://CLI/context7-api-key/credential"
-  local context7_key
-
-  if ! command -v op >/dev/null 2>&1; then
-    echo "cx: op CLI is required." >&2
-    return 1
-  fi
-
-  if [ -z "${OP_SERVICE_ACCOUNT_TOKEN-}" ]; then
-    echo "cx: OP_SERVICE_ACCOUNT_TOKEN is not set. Add export to ~/.config/op/service-account.env and source ~/.zshrc." >&2
-    return 1
-  fi
-
-  context7_key="$(op read "$context7_ref")" || {
-    echo "cx: failed to resolve CONTEXT7_API_KEY from 1Password." >&2
+  keyring_password="$(resolve_op_env_secret "$env_file" "GOG_KEYRING_PASSWORD" "GOG_KEYRING_PASSWORD")" || {
+    echo "gog: failed to resolve GOG_KEYRING_PASSWORD." >&2
     return 1
   }
 
-  if [ -z "$context7_key" ]; then
-    echo "cx: CONTEXT7_API_KEY resolved to an empty value." >&2
+  GOG_KEYRING_PASSWORD="$keyring_password" gog "$@"
+}
+
+cx() {
+  local context7_key
+
+  require_op_runtime "cx" || return 1
+
+  if [ -z "${CONTEXT7_API_KEY_REF-}" ]; then
+    echo "cx: CONTEXT7_API_KEY_REF is not set in ~/.zshrc." >&2
     return 1
   fi
+
+  context7_key="$(resolve_op_ref "$CONTEXT7_API_KEY_REF" "CONTEXT7_API_KEY_REF")" || {
+    echo "cx: failed to resolve CONTEXT7_API_KEY." >&2
+    return 1
+  }
 
   CONTEXT7_API_KEY="$context7_key" codex "$@"
 }

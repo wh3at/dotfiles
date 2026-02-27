@@ -3,9 +3,13 @@
 ## What changed for users
 
 - `glm` no longer embeds API tokens in dotfiles.
-- `glm` now uses `op run --env-file ~/.config/op/claude.env`.
 - `OP_SERVICE_ACCOUNT_TOKEN` is loaded from `~/.config/op/service-account.env`.
-- Secret refs live in `~/.config/op/claude.env` as `op://...`.
+- Secret refs are stored as `op://...` paths (no plaintext secrets in dotfiles).
+- `glm/gog/cx/notify` resolve secrets at runtime with `op read`.
+- `~/.zshrc` exports shared non-secret refs:
+  - `CONTEXT7_API_KEY_REF`
+  - `PUSHOVER_TOKEN_OP_REF`
+  - `PUSHOVER_USER_OP_REF`
 
 ## One-time setup
 
@@ -51,19 +55,11 @@ ls -l ~/.config/op/claude.env
 ls -l ~/.config/op/service-account.env
 ```
 
-If you see `Input must be provided ... when using --print`, run:
+If `glm/gog/cx` fail, run:
 
 ```sh
 source ~/.zshrc
-glm
-```
-
-Why: `op run` is non-TTY. `glm` now uses `op read` for no-arg interactive launch.
-
-If you're in a non-interactive context (pipe/script), use:
-
-```sh
-glm -p "your prompt"
+glms
 ```
 
 ## Security hygiene
