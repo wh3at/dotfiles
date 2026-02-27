@@ -455,23 +455,26 @@ glm_status() {
 
   if command -v pass >/dev/null 2>&1; then
     echo "[ok] pass CLI is installed."
-  else
-    echo "[ng] pass CLI is not installed."
-    ok=1
-  fi
+    if [ "${PROTON_PASS_KEY_PROVIDER-}" = "env" ]; then
+      echo "[ok] PROTON_PASS_KEY_PROVIDER=env"
+    else
+      echo "[ng] PROTON_PASS_KEY_PROVIDER should be 'env' (current: ${PROTON_PASS_KEY_PROVIDER:-unset})."
+      ok=1
+    fi
 
-  if [ "${PROTON_PASS_KEY_PROVIDER-}" = "env" ]; then
-    echo "[ok] PROTON_PASS_KEY_PROVIDER=env"
+    if [ -n "${PROTON_PASS_ENCRYPTION_KEY-}" ]; then
+      echo "[ok] PROTON_PASS_ENCRYPTION_KEY is set."
+    else
+      echo "[ng] PROTON_PASS_ENCRYPTION_KEY is not set (expected in ~/.config/proton-pass/key.env)."
+      ok=1
+    fi
   else
-    echo "[ng] PROTON_PASS_KEY_PROVIDER should be 'env' (current: ${PROTON_PASS_KEY_PROVIDER:-unset})."
-    ok=1
-  fi
-
-  if [ -n "${PROTON_PASS_ENCRYPTION_KEY-}" ]; then
-    echo "[ok] PROTON_PASS_ENCRYPTION_KEY is set."
-  else
-    echo "[ng] PROTON_PASS_ENCRYPTION_KEY is not set (expected in ~/.config/proton-pass/key.env)."
-    ok=1
+    if [ "$mode" = "legacy" ]; then
+      echo "[ok] pass CLI is not installed (legacy mode using op:// fallback)."
+    else
+      echo "[ng] pass CLI is not installed."
+      ok=1
+    fi
   fi
 
   if status_secret_value "$HOME/.config/proton-pass/claude.env" "$HOME/.config/op/claude.env" "ANTHROPIC_AUTH_TOKEN" "ANTHROPIC_AUTH_TOKEN" "$ANTHROPIC_AUTH_TOKEN_PASS_REF" "$ANTHROPIC_AUTH_TOKEN_OP_REF"; then
