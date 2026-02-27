@@ -68,7 +68,7 @@ export ANDROID_HOME="$ANDROID_SDK_ROOT"
 # Secret references (non-secret) for runtime resolution.
 export ANTHROPIC_AUTH_TOKEN_PASS_REF="pass://CLI/Zai Key OpenClaw/credential"
 export GOG_KEYRING_PASSWORD_PASS_REF="pass://CLI/GOG_KEYRING_PASSWORD/認証情報"
-export CONTEXT7_API_KEY_PASS_REF="pass://CLI/context7-api-key/APIキー"
+export CONTEXT7_API_KEY_PASS_REF="pass://CLI/context7-api-key/認証情報"
 export PUSHOVER_TOKEN_PASS_REF="pass://CLI/pushover-codex/z6deozj7hxngryx3ldp3sk66wq"
 export PUSHOVER_USER_PASS_REF="pass://CLI/pushover-codex/qoludfuoi6sogbwgfcd3fibgdi"
 
