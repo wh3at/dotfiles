@@ -6,16 +6,7 @@ function readSecret(reference) {
 
   try {
     if (reference.startsWith('pass://')) {
-      const output = execFileSync('pass', ['show', reference], {
-        encoding: 'utf8',
-        stdio: ['ignore', 'pipe', 'ignore'],
-        timeout: 3000,
-      });
-      return output.trim() || null;
-    }
-
-    if (reference.startsWith('op://')) {
-      const output = execFileSync('op', ['read', reference], {
+      const output = execFileSync('pass-cli', ['show', reference], {
         encoding: 'utf8',
         stdio: ['ignore', 'pipe', 'ignore'],
         timeout: 3000,
@@ -45,8 +36,8 @@ function main() {
     return;
   }
 
-  const pushoverTokenRef = process.env.PUSHOVER_TOKEN_PASS_REF || process.env.PUSHOVER_TOKEN_OP_REF;
-  const pushoverUserRef = process.env.PUSHOVER_USER_PASS_REF || process.env.PUSHOVER_USER_OP_REF;
+  const pushoverTokenRef = process.env.PUSHOVER_TOKEN_PASS_REF || process.env.PUSHOVER_TOKEN_REF;
+  const pushoverUserRef = process.env.PUSHOVER_USER_PASS_REF || process.env.PUSHOVER_USER_REF;
   const pushoverToken = readSecret(pushoverTokenRef);
   const pushoverUser = readSecret(pushoverUserRef);
   if (!pushoverToken || !pushoverUser) {

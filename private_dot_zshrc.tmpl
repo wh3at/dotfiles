@@ -1,94 +1,10 @@
-if [ -f ~/.profile ]; then
-    source ~/.profile
-fi
-
-# Load ~/.zprofile once from interactive shells that are not login shells
-if [[ -o interactive ]] && [[ ! -o login ]]; then
-  if [[ -z "${__ZPROFILE_LOADED-}" ]]; then
-    __ZPROFILE_LOADED=1
-    [[ -r ~/.zprofile ]] && source ~/.zprofile
-  fi
-fi
-
-# Lines configured by zsh-newuser-install
-HISTFILE=~/.histfile
-HISTSIZE=1000
-SAVEHIST=1000
-bindkey -e
-# End of lines configured by zsh-newuser-install
-
-# The following lines were added by compinstall
-zstyle :compinstall filename '/home/ubuntu/.zshrc'
-
-autoload -Uz compinit
-compinit
-# End of lines added by compinstall
-
-# Added by Zinit's installer
-if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
-    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
-    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
-    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
-        print -P "%F{33} %F{34}Installation successful.%f%b" || \
-        print -P "%F{160} The clone has failed.%f%b"
-fi
-
-source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
-# End of Zinit's installer chunk
-
-# Zinit's config
-## プロンプトテーマ sindresorhus/pure
-zi ice pick"async.zsh" src"pure.zsh"
-zi light sindresorhus/pure
-## インタラクティブな補完
-zinit light zsh-users/zsh-autosuggestions
-## シンタックスハイライト
-zinit light zdharma-continuum/fast-syntax-highlighting
-# End of Zinit's config
-
-# PATH
-export PATH="$HOME/.local/share/mise/shims:$PATH"
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-export PNPM_HOME="$HOME/.local/share/pnpm"
-export PATH="$PNPM_HOME:$PATH"
-[[ ":$PATH:" != *":$PNPM_HOME:"* ]] && export PATH="$PATH:$PNPM_HOME"
-if [ -f /home/linuxbrew/.linuxbrew/bin/brew ]; then
-  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-fi
-export PATH="$PATH:$HOME/apps"
-export PATH="$PATH:$HOME/.remote-code/bin"
-export PATH="$HOME/.local/bin:$PATH"
-export ANDROID_SDK_ROOT="$HOME/Android/Sdk"
-export ANDROID_NDK_HOME="$ANDROID_SDK_ROOT/ndk/27.3.13750724"
-export ANDROID_HOME="$ANDROID_SDK_ROOT"
-
-# Secret CLI completion (legacy fallback)
-if command -v op &> /dev/null; then
-  eval "$(op completion zsh)"; compdef _op op
-fi
 
 # Secret references (non-secret) for runtime resolution.
-# PASS_MIGRATION_MODE:
-# - native (default): prefer pass:// refs and ~/.config/proton-pass/*.env
-# - legacy: prefer op:// refs and ~/.config/op/*.env
-export PASS_MIGRATION_MODE="${PASS_MIGRATION_MODE:-native}"
-
-# Proton Pass references
 export ANTHROPIC_AUTH_TOKEN_PASS_REF="pass://CLI/Zai Key OpenClaw/credential"
 export GOG_KEYRING_PASSWORD_PASS_REF="pass://CLI/GOG_KEYRING_PASSWORD/credential"
 export CONTEXT7_API_KEY_PASS_REF="pass://CLI/context7-api-key/credential"
 export PUSHOVER_TOKEN_PASS_REF="pass://CLI/pushover-codex/z6deozj7hxngryx3ldp3sk66wq"
 export PUSHOVER_USER_PASS_REF="pass://CLI/pushover-codex/qoludfuoi6sogbwgfcd3fibgdi"
-
-# 1Password references (legacy fallback)
-export ANTHROPIC_AUTH_TOKEN_OP_REF="op://CLI/Zai Key OpenClaw/credential"
-export GOG_KEYRING_PASSWORD_OP_REF="op://CLI/GOG_KEYRING_PASSWORD/credential"
-export CONTEXT7_API_KEY_OP_REF="op://CLI/context7-api-key/credential"
-export PUSHOVER_TOKEN_OP_REF="op://CLI/pushover-codex/z6deozj7hxngryx3ldp3sk66wq"
-export PUSHOVER_USER_OP_REF="op://CLI/pushover-codex/qoludfuoi6sogbwgfcd3fibgdi"
 
 # Backward-compatible generic names used by scripts and wrappers.
 export ANTHROPIC_AUTH_TOKEN_REF="$ANTHROPIC_AUTH_TOKEN_PASS_REF"
@@ -100,11 +16,6 @@ export PUSHOVER_USER_REF="$PUSHOVER_USER_PASS_REF"
 # Load Proton Pass key material from a local-only file (not in chezmoi).
 if [ -f "$HOME/.config/proton-pass/key.env" ]; then
   . "$HOME/.config/proton-pass/key.env"
-fi
-
-# Legacy: load OP service account token from a local-only file (not in chezmoi).
-if [ -f "$HOME/.config/op/service-account.env" ]; then
-  . "$HOME/.config/op/service-account.env"
 fi
 
 # Cargo
@@ -122,47 +33,20 @@ function google() {
   gemini -p "指定したクエリを検索し、要約して。<query>$1</query>"
 }
 
-secret_migration_mode() {
-  if [ "${PASS_MIGRATION_MODE-}" = "legacy" ]; then
-    printf '%s' "legacy"
-  else
-    printf '%s' "native"
-  fi
-}
-
 secret_ref_cli() {
   local ref="$1"
   case "$ref" in
-    pass://*) printf '%s' "pass" ;;
-    op://*) printf '%s' "op" ;;
+    pass://*) printf '%s' "pass-cli" ;;
     *) printf '%s' "" ;;
   esac
 }
 
 select_secret_ref() {
   local pass_ref="$1"
-  local op_ref="$2"
-  local label="$3"
-  local mode
-  local primary
-  local secondary
+  local label="$2"
 
-  mode="$(secret_migration_mode)"
-  if [ "$mode" = "legacy" ]; then
-    primary="$op_ref"
-    secondary="$pass_ref"
-  else
-    primary="$pass_ref"
-    secondary="$op_ref"
-  fi
-
-  if [ -n "$primary" ]; then
-    printf '%s' "$primary"
-    return 0
-  fi
-
-  if [ -n "$secondary" ]; then
-    printf '%s' "$secondary"
+  if [ -n "$pass_ref" ]; then
+    printf '%s' "$pass_ref"
     return 0
   fi
 
@@ -172,49 +56,28 @@ select_secret_ref() {
 
 select_secret_env_file() {
   local pass_file="$1"
-  local op_file="$2"
-  local label="$3"
-  local mode
-  local primary
-  local secondary
+  local label="$2"
 
-  mode="$(secret_migration_mode)"
-  if [ "$mode" = "legacy" ]; then
-    primary="$op_file"
-    secondary="$pass_file"
-  else
-    primary="$pass_file"
-    secondary="$op_file"
-  fi
-
-  if [ -f "$primary" ]; then
-    printf '%s' "$primary"
+  if [ -f "$pass_file" ]; then
+    printf '%s' "$pass_file"
     return 0
   fi
 
-  if [ -f "$secondary" ]; then
-    printf '%s' "$secondary"
-    return 0
-  fi
-
-  echo "Missing env file for $label. Checked: $primary, $secondary" >&2
+  echo "Missing env file for $label. Checked: $pass_file" >&2
   return 1
 }
 
-require_secret_cli_runtime() {
+require_pass_cli_runtime() {
   local caller="$1"
-  local cli="$2"
 
-  if ! command -v "$cli" >/dev/null 2>&1; then
-    echo "$caller: $cli CLI is required." >&2
+  if ! command -v pass-cli >/dev/null 2>&1; then
+    echo "$caller: pass-cli is required." >&2
     return 1
   fi
 
-  if [ "$cli" = "pass" ]; then
-    if [ "${PROTON_PASS_KEY_PROVIDER-}" = "env" ] && [ -z "${PROTON_PASS_ENCRYPTION_KEY-}" ]; then
-      echo "$caller: PROTON_PASS_ENCRYPTION_KEY must be set when PROTON_PASS_KEY_PROVIDER=env." >&2
-      return 1
-    fi
+  if [ "${PROTON_PASS_KEY_PROVIDER-}" = "env" ] && [ -z "${PROTON_PASS_ENCRYPTION_KEY-}" ]; then
+    echo "$caller: PROTON_PASS_ENCRYPTION_KEY must be set when PROTON_PASS_KEY_PROVIDER=env." >&2
+    return 1
   fi
 }
 
@@ -222,32 +85,23 @@ resolve_secret_ref() {
   local ref="$1"
   local label="$2"
   local value
-  local cli
 
   if [ -z "$ref" ]; then
     echo "$label is empty." >&2
     return 1
   fi
 
-  cli="$(secret_ref_cli "$ref")"
-  if [ -z "$cli" ]; then
-    echo "$label must start with pass:// or op://" >&2
+  if [ "$(secret_ref_cli "$ref")" != "pass-cli" ]; then
+    echo "$label must start with pass://." >&2
     return 1
   fi
 
-  require_secret_cli_runtime "resolve_secret_ref" "$cli" || return 1
+  require_pass_cli_runtime "resolve_secret_ref" || return 1
 
-  if [ "$cli" = "pass" ]; then
-    value="$(pass show "$ref")" || {
-      echo "failed to resolve $label from Proton Pass." >&2
-      return 1
-    }
-  else
-    value="$(op read "$ref")" || {
-      echo "failed to resolve $label from 1Password." >&2
-      return 1
-    }
-  fi
+  value="$(pass-cli show "$ref")" || {
+    echo "failed to resolve $label from Proton Pass." >&2
+    return 1
+  }
 
   if [ -z "$value" ]; then
     echo "$label resolved to an empty value." >&2
@@ -292,46 +146,22 @@ resolve_secret_env_secret() {
 
 resolve_secret_value() {
   local pass_file="$1"
-  local op_file="$2"
-  local key="$3"
-  local label="$4"
-  local pass_ref="$5"
-  local op_ref="$6"
-  local mode
+  local key="$2"
+  local label="$3"
+  local pass_ref="$4"
   local env_file
-  local ref
 
-  mode="$(secret_migration_mode)"
-
-  if [ "$mode" = "legacy" ]; then
-    if [ -f "$op_file" ]; then
-      resolve_secret_env_secret "$op_file" "$key" "$label"
-      return $?
-    fi
-    if [ -n "$op_ref" ]; then
-      ref="$(select_secret_ref "$pass_ref" "$op_ref" "${label}_REF")" || return 1
-      resolve_secret_ref "$ref" "$label"
-      return $?
-    fi
-    if [ -f "$pass_file" ]; then
-      resolve_secret_env_secret "$pass_file" "$key" "$label"
-      return $?
-    fi
-  else
-    if [ -f "$pass_file" ] || [ -f "$op_file" ]; then
-      env_file="$(select_secret_env_file "$pass_file" "$op_file" "$label")" || return 1
-      resolve_secret_env_secret "$env_file" "$key" "$label"
-      return $?
-    fi
+  if [ -f "$pass_file" ]; then
+    env_file="$(select_secret_env_file "$pass_file" "$label")" || return 1
+    resolve_secret_env_secret "$env_file" "$key" "$label"
+    return $?
   fi
 
-  ref="$(select_secret_ref "$pass_ref" "$op_ref" "${label}_REF")" || return 1
-  resolve_secret_ref "$ref" "$label"
+  resolve_secret_ref "$(select_secret_ref "$pass_ref" "${label}_REF")" "$label"
 }
 
 glm() {
   local pass_env_file="$HOME/.config/proton-pass/claude.env"
-  local op_env_file="$HOME/.config/op/claude.env"
   local -a cmd
   local token
   cmd=(claude --dangerously-skip-permissions "$@")
@@ -341,7 +171,7 @@ glm() {
     return 2
   fi
 
-  token="$(resolve_secret_value "$pass_env_file" "$op_env_file" "ANTHROPIC_AUTH_TOKEN" "ANTHROPIC_AUTH_TOKEN" "$ANTHROPIC_AUTH_TOKEN_PASS_REF" "$ANTHROPIC_AUTH_TOKEN_OP_REF")" || {
+  token="$(resolve_secret_value "$pass_env_file" "ANTHROPIC_AUTH_TOKEN" "ANTHROPIC_AUTH_TOKEN" "$ANTHROPIC_AUTH_TOKEN_PASS_REF")" || {
     echo "glm: failed to resolve ANTHROPIC_AUTH_TOKEN." >&2
     return 1
   }
@@ -351,75 +181,31 @@ glm() {
 
 status_secret_value() {
   local pass_file="$1"
-  local op_file="$2"
-  local key="$3"
-  local label="$4"
-  local pass_ref="$5"
-  local op_ref="$6"
-  local mode
+  local key="$2"
+  local label="$3"
+  local pass_ref="$4"
   local env_file
   local ref
 
-  mode="$(secret_migration_mode)"
+  if [ -f "$pass_file" ]; then
+    env_file="$(select_secret_env_file "$pass_file" "$label")" || return 1
+    ref="$(env_file_value "$env_file" "$key")"
 
-  if [ "$mode" = "legacy" ]; then
-    if [ -f "$op_file" ]; then
-      ref="$(env_file_value "$op_file" "$key")"
-      if [ -z "$ref" ]; then
-        echo "[ng] $label is missing in $op_file."
-        return 1
-      fi
-      if resolve_secret_ref "$ref" "$label" >/dev/null 2>&1; then
-        echo "[ok] $label resolves from $op_file."
-        return 0
-      fi
-      echo "[ng] $label failed to resolve from $op_file ($ref)."
+    if [ -z "$ref" ]; then
+      echo "[ng] $label is missing in $env_file."
       return 1
     fi
 
-    if [ -n "$op_ref" ]; then
-      ref="$(select_secret_ref "$pass_ref" "$op_ref" "${label}_REF")" || return 1
-      if resolve_secret_ref "$ref" "$label" >/dev/null 2>&1; then
-        echo "[ok] $label resolves from shared ref ($ref)."
-        return 0
-      fi
-      echo "[ng] $label failed to resolve from shared ref ($ref)."
-      return 1
+    if resolve_secret_ref "$ref" "$label" >/dev/null 2>&1; then
+      echo "[ok] $label resolves from $env_file."
+      return 0
     fi
 
-    if [ -f "$pass_file" ]; then
-      ref="$(env_file_value "$pass_file" "$key")"
-      if [ -z "$ref" ]; then
-        echo "[ng] $label is missing in $pass_file."
-        return 1
-      fi
-      if resolve_secret_ref "$ref" "$label" >/dev/null 2>&1; then
-        echo "[ok] $label resolves from $pass_file."
-        return 0
-      fi
-      echo "[ng] $label failed to resolve from $pass_file ($ref)."
-      return 1
-    fi
-  else
-    if [ -f "$pass_file" ] || [ -f "$op_file" ]; then
-      env_file="$(select_secret_env_file "$pass_file" "$op_file" "$label")" || return 1
-      ref="$(env_file_value "$env_file" "$key")"
-      if [ -z "$ref" ]; then
-        echo "[ng] $label is missing in $env_file."
-        return 1
-      fi
-
-      if resolve_secret_ref "$ref" "$label" >/dev/null 2>&1; then
-        echo "[ok] $label resolves from $env_file."
-        return 0
-      fi
-
-      echo "[ng] $label failed to resolve from $env_file ($ref)."
-      return 1
-    fi
+    echo "[ng] $label failed to resolve from $env_file ($ref)."
+    return 1
   fi
 
-  ref="$(select_secret_ref "$pass_ref" "$op_ref" "${label}_REF")" || return 1
+  ref="$(select_secret_ref "$pass_ref" "${label}_REF")" || return 1
   if resolve_secret_ref "$ref" "$label" >/dev/null 2>&1; then
     echo "[ok] $label resolves from shared ref ($ref)."
     return 0
@@ -431,11 +217,10 @@ status_secret_value() {
 
 status_shared_ref() {
   local pass_ref="$1"
-  local op_ref="$2"
-  local label="$3"
+  local label="$2"
   local ref
 
-  ref="$(select_secret_ref "$pass_ref" "$op_ref" "$label")" || return 1
+  ref="$(select_secret_ref "$pass_ref" "$label")" || return 1
 
   if resolve_secret_ref "$ref" "$label" >/dev/null 2>&1; then
     echo "[ok] $label resolves ($ref)."
@@ -446,62 +231,67 @@ status_shared_ref() {
   return 1
 }
 
-glm_status() {
-  local mode
+secrets_status_core() {
   local ok=0
 
-  mode="$(secret_migration_mode)"
-  echo "[ok] PASS_MIGRATION_MODE=$mode"
-
-  if command -v pass >/dev/null 2>&1; then
-    echo "[ok] pass CLI is installed."
-    if [ "${PROTON_PASS_KEY_PROVIDER-}" = "env" ]; then
-      echo "[ok] PROTON_PASS_KEY_PROVIDER=env"
-    else
-      echo "[ng] PROTON_PASS_KEY_PROVIDER should be 'env' (current: ${PROTON_PASS_KEY_PROVIDER:-unset})."
-      ok=1
-    fi
-
-    if [ -n "${PROTON_PASS_ENCRYPTION_KEY-}" ]; then
-      echo "[ok] PROTON_PASS_ENCRYPTION_KEY is set."
-    else
-      echo "[ng] PROTON_PASS_ENCRYPTION_KEY is not set (expected in ~/.config/proton-pass/key.env)."
-      ok=1
-    fi
+  if command -v pass-cli >/dev/null 2>&1; then
+    echo "[ok] pass-cli is installed."
   else
-    if [ "$mode" = "legacy" ]; then
-      echo "[ok] pass CLI is not installed (legacy mode using op:// fallback)."
-    else
-      echo "[ng] pass CLI is not installed."
-      ok=1
-    fi
+    echo "[ng] pass-cli is not installed."
+    ok=1
   fi
 
-  if status_secret_value "$HOME/.config/proton-pass/claude.env" "$HOME/.config/op/claude.env" "ANTHROPIC_AUTH_TOKEN" "ANTHROPIC_AUTH_TOKEN" "$ANTHROPIC_AUTH_TOKEN_PASS_REF" "$ANTHROPIC_AUTH_TOKEN_OP_REF"; then
+  if [ "${PROTON_PASS_KEY_PROVIDER-}" = "env" ]; then
+    echo "[ok] PROTON_PASS_KEY_PROVIDER=env"
+  else
+    echo "[ng] PROTON_PASS_KEY_PROVIDER should be 'env' (current: ${PROTON_PASS_KEY_PROVIDER:-unset})."
+    ok=1
+  fi
+
+  if [ -n "${PROTON_PASS_ENCRYPTION_KEY-}" ]; then
+    echo "[ok] PROTON_PASS_ENCRYPTION_KEY is set."
+  else
+    echo "[ng] PROTON_PASS_ENCRYPTION_KEY is not set (expected in ~/.config/proton-pass/key.env)."
+    ok=1
+  fi
+
+  if status_secret_value "$HOME/.config/proton-pass/claude.env" "ANTHROPIC_AUTH_TOKEN" "ANTHROPIC_AUTH_TOKEN" "$ANTHROPIC_AUTH_TOKEN_PASS_REF"; then
     true
   else
     ok=1
   fi
 
-  if status_secret_value "$HOME/.config/proton-pass/gog.env" "$HOME/.config/op/gog.env" "GOG_KEYRING_PASSWORD" "GOG_KEYRING_PASSWORD" "$GOG_KEYRING_PASSWORD_PASS_REF" "$GOG_KEYRING_PASSWORD_OP_REF"; then
+  return "$ok"
+}
+
+secrets_status() {
+  local ok=0
+
+  if secrets_status_core; then
     true
   else
     ok=1
   fi
 
-  if status_shared_ref "$CONTEXT7_API_KEY_PASS_REF" "$CONTEXT7_API_KEY_OP_REF" "CONTEXT7_API_KEY_REF"; then
+  if status_secret_value "$HOME/.config/proton-pass/gog.env" "GOG_KEYRING_PASSWORD" "GOG_KEYRING_PASSWORD" "$GOG_KEYRING_PASSWORD_PASS_REF"; then
     true
   else
     ok=1
   fi
 
-  if status_shared_ref "$PUSHOVER_TOKEN_PASS_REF" "$PUSHOVER_TOKEN_OP_REF" "PUSHOVER_TOKEN_REF"; then
+  if status_shared_ref "$CONTEXT7_API_KEY_PASS_REF" "CONTEXT7_API_KEY_REF"; then
     true
   else
     ok=1
   fi
 
-  if status_shared_ref "$PUSHOVER_USER_PASS_REF" "$PUSHOVER_USER_OP_REF" "PUSHOVER_USER_REF"; then
+  if status_shared_ref "$PUSHOVER_TOKEN_PASS_REF" "PUSHOVER_TOKEN_REF"; then
+    true
+  else
+    ok=1
+  fi
+
+  if status_shared_ref "$PUSHOVER_USER_PASS_REF" "PUSHOVER_USER_REF"; then
     true
   else
     ok=1
@@ -512,7 +302,6 @@ glm_status() {
 
 gog_op() {
   local pass_env_file="$HOME/.config/proton-pass/gog.env"
-  local op_env_file="$HOME/.config/op/gog.env"
   local keyring_password
 
   if ! command -v gog >/dev/null 2>&1; then
@@ -520,7 +309,7 @@ gog_op() {
     return 1
   fi
 
-  keyring_password="$(resolve_secret_value "$pass_env_file" "$op_env_file" "GOG_KEYRING_PASSWORD" "GOG_KEYRING_PASSWORD" "$GOG_KEYRING_PASSWORD_PASS_REF" "$GOG_KEYRING_PASSWORD_OP_REF")" || {
+  keyring_password="$(resolve_secret_value "$pass_env_file" "GOG_KEYRING_PASSWORD" "GOG_KEYRING_PASSWORD" "$GOG_KEYRING_PASSWORD_PASS_REF")" || {
     echo "gog: failed to resolve GOG_KEYRING_PASSWORD." >&2
     return 1
   }
@@ -529,10 +318,10 @@ gog_op() {
 }
 
 cx() {
-  local context7_key
   local context7_ref
+  local context7_key
 
-  context7_ref="$(select_secret_ref "$CONTEXT7_API_KEY_PASS_REF" "$CONTEXT7_API_KEY_OP_REF" "CONTEXT7_API_KEY_REF")" || return 1
+  context7_ref="$(select_secret_ref "$CONTEXT7_API_KEY_PASS_REF" "CONTEXT7_API_KEY_REF")" || return 1
 
   context7_key="$(resolve_secret_ref "$context7_ref" "CONTEXT7_API_KEY_REF")" || {
     echo "cx: failed to resolve CONTEXT7_API_KEY." >&2
@@ -550,7 +339,7 @@ alias ..="cd ../"
 alias ...="cd ../../"
 alias cc="claude"
 alias ccd="claude --dangerously-skip-permissions"
-alias glms="glm_status"
+alias secrets-status="secrets_status"
 alias gog="gog_op"
 alias mr="mise run"
 alias phc="phantom create"

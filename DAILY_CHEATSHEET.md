@@ -2,12 +2,9 @@
 
 ## What changed for users
 
-- `glm/gog/cx/notify` now resolve runtime secrets from Proton Pass (`pass://...`).
+- `glm/gog/cx/notify` resolve runtime secrets from Proton Pass (`pass://...`) only.
 - Runtime key material is loaded from `~/.config/proton-pass/key.env`.
 - Secret refs are stored in env files as `pass://...` paths (no plaintext secrets in dotfiles).
-- `PASS_MIGRATION_MODE` controls fallback behavior:
-  - `native` (default): prefer Proton Pass
-  - `legacy`: prefer 1Password fallback (`op://...`)
 
 ## One-time setup
 
@@ -33,13 +30,13 @@
    chmod 600 ~/.config/proton-pass/claude.env ~/.config/proton-pass/gog.env
    ```
 3. Run `source ~/.zshrc`.
-4. Run `glms` and confirm all checks are `[ok]`.
+4. Run `secrets-status` and confirm checks are `[ok]`.
 
 ## Daily commands
 
 ```sh
-# preflight
-glms
+# full secret check
+secrets-status
 
 # normal usage
 glm
@@ -50,8 +47,8 @@ glm -p "..."
 ## If commands fail
 
 ```sh
-# 1) pass available?
-pass --version
+# 1) pass-cli available?
+pass-cli --version
 
 # 2) key provider configured?
 echo "${PROTON_PASS_KEY_PROVIDER:-unset}"
@@ -65,24 +62,14 @@ Then run:
 
 ```sh
 source ~/.zshrc
-glms
-```
-
-## Legacy fallback (temporary)
-
-If you need to temporarily use `op://` references:
-
-```sh
-export PASS_MIGRATION_MODE=legacy
-source ~/.zshrc
-glms
+secrets-status
 ```
 
 ## Security hygiene
 
 ```sh
 cd ~/.local/share/chezmoi
-rg -n --glob '!dot_claude/**' --glob '!*.md' "PROTON_PASS_ENCRYPTION_KEY=|OP_SERVICE_ACCOUNT_TOKEN=|ops_[A-Za-z0-9]|ANTHROPIC_AUTH_TOKEN='|api_key\\s*=\\s*\""
+rg -n --glob '!dot_claude/**' --glob '!*.md' "PROTON_PASS_ENCRYPTION_KEY=|ANTHROPIC_AUTH_TOKEN='|api_key\\s*=\\s*\""
 ```
 
 Keep `~/.config/proton-pass/key.env` out of git and rotate leaked keys immediately.
