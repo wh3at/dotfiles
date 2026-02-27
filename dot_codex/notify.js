@@ -14,20 +14,6 @@ function readSecretFromOp(reference) {
   }
 }
 
-function resolveSecret(directEnvName, opRefEnvName) {
-  const directValue = process.env[directEnvName];
-  if (directValue) {
-    return directValue;
-  }
-
-  const opReference = process.env[opRefEnvName];
-  if (!opReference) {
-    return null;
-  }
-
-  return readSecretFromOp(opReference);
-}
-
 function main() {
   if (process.argv.length !== 3) {
     return;
@@ -44,8 +30,10 @@ function main() {
     return;
   }
 
-  const pushoverToken = resolveSecret('PUSHOVER_TOKEN', 'PUSHOVER_TOKEN_OP_REF');
-  const pushoverUser = resolveSecret('PUSHOVER_USER', 'PUSHOVER_USER_OP_REF');
+  const pushoverTokenRef = process.env.PUSHOVER_TOKEN_OP_REF;
+  const pushoverUserRef = process.env.PUSHOVER_USER_OP_REF;
+  const pushoverToken = pushoverTokenRef ? readSecretFromOp(pushoverTokenRef) : null;
+  const pushoverUser = pushoverUserRef ? readSecretFromOp(pushoverUserRef) : null;
   if (!pushoverToken || !pushoverUser) {
     return;
   }
