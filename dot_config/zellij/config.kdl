@@ -337,7 +337,7 @@ advanced_mouse_actions false
 // (Requires restart)
 // Default: false
 // 
-mirror_session true
+mirror_session false
  
 // Choose what to do when zellij receives SIGTERM, SIGINT, SIGQUIT or SIGHUP
 // eg. when terminal window with an active zellij session is closed
