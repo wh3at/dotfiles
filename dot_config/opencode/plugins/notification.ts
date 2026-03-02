@@ -40,7 +40,7 @@ export const NotificationPlugin: Plugin = async ({ project, directory, client })
           message += `\n\n📝 変更ファイル:\n${fileList}${more}`
         }
       } catch {
-        message += `\n📊 セッション完了`
+        message = `セッション完了`
       }
 
       const truncatedMessage = message.length > MAX_PUSHOVER_MESSAGE
