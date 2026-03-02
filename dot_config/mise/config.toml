@@ -1,4 +1,5 @@
 [tools]
+bun = "1.3.6"
 chezmoi = "latest"
 node = "latest"
 "npm:@aku11i/phantom" = "latest"
@@ -41,3 +42,7 @@ run = "fcitx5 -r -d"
 [tasks."zellij:clients"]
 description = "現在のzellijセッションに接続しているプロセスを特定できる。1つ目はセッション本体。"
 run = "ps -ef | grep \"zellij.*$ZELLIJ_SESSION_NAME\" | grep -v grep"
+
+[tasks."hypr:bring-windows"]
+description = "画面外のウィンドウを表示領域内に戻す"
+run = "~/.config/mise/scripts/hypr-bring-windows.sh"
