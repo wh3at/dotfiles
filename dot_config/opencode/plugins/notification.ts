@@ -7,7 +7,7 @@ import { execFileSync } from "child_process"
 
 const MAX_PUSHOVER_MESSAGE = 1024
 
-export const NotificationPlugin: Plugin = async ({ project, directory }) => {
+export const NotificationPlugin: Plugin = async ({ project, directory, client }) => {
   return {
     event: async ({ event }) => {
       if (event.type !== "session.idle") return
@@ -16,10 +16,33 @@ export const NotificationPlugin: Plugin = async ({ project, directory }) => {
       const userValue = "pass://CLI/pushover-opencode/user"
 
       const projectName = project.name ?? directory.split("/").pop() ?? "Unknown"
-      const sessionId = event.properties.sessionID.slice(0, 8)
+      const sessionId = event.properties.sessionID
 
-      const title = `Session completed: ${projectName}`
-      const message = `Directory: ${directory}\nSession: ${sessionId}`
+      let title = `✅ ${projectName}`
+      let message = `📊 セッション完了`
+
+      try {
+        const session = await client.session.get({ sessionID: sessionId, directory })
+        const summary = session.summary
+        const changedFiles = summary?.diffs?.map(d => d.file) ?? []
+
+        title = `✅ ${session.title || projectName}`
+
+        if (summary) {
+          message = `📊 +${summary.additions} -${summary.deletions} 行 (${summary.files}ファイル)`
+        }
+
+        if (changedFiles.length > 0) {
+          const maxFiles = 10
+          const files = changedFiles.slice(0, maxFiles)
+          const fileList = files.map(f => `• ${f}`).join('\n')
+          const more = changedFiles.length > maxFiles ? `\n  ...他 ${changedFiles.length - maxFiles}件` : ''
+          message += `\n\n📝 変更ファイル:\n${fileList}${more}`
+        }
+      } catch {
+        message += `\n📊 セッション完了`
+      }
+
       const truncatedMessage = message.length > MAX_PUSHOVER_MESSAGE
         ? `${message.slice(0, MAX_PUSHOVER_MESSAGE - 1)}…`
         : message
