@@ -129,19 +129,6 @@ select_secret_ref() {
   return 1
 }
 
-select_secret_env_file() {
-  local pass_file="$1"
-  local label="$2"
-
-  if [ -f "$pass_file" ]; then
-    printf '%s' "$pass_file"
-    return 0
-  fi
-
-  echo "Missing env file for $label. Checked: $pass_file" >&2
-  return 1
-}
-
 require_pass_cli_runtime() {
   local caller="$1"
 
@@ -198,57 +185,7 @@ resolve_secret_ref() {
   printf '%s' "$value"
 }
 
-env_file_value() {
-  local env_file="$1"
-  local key="$2"
-  awk -F= -v key="$key" '
-    $0 ~ "^[[:space:]]*"key"=" {
-      val=substr($0, index($0, $2))
-      gsub(/^[[:space:]]+|[[:space:]]+$/, "", val)
-      print val
-      exit
-    }
-  ' "$env_file"
-}
-
-resolve_secret_env_secret() {
-  local env_file="$1"
-  local key="$2"
-  local label="$3"
-  local ref
-
-  if [ ! -f "$env_file" ]; then
-    echo "Missing env file: $env_file" >&2
-    return 1
-  fi
-
-  ref="$(env_file_value "$env_file" "$key")"
-  if [ -z "$ref" ]; then
-    echo "$label is missing in $env_file." >&2
-    return 1
-  fi
-
-  resolve_secret_ref "$ref" "$label"
-}
-
-resolve_secret_value() {
-  local pass_file="$1"
-  local key="$2"
-  local label="$3"
-  local pass_ref="$4"
-  local env_file
-
-  if [ -f "$pass_file" ]; then
-    env_file="$(select_secret_env_file "$pass_file" "$label")" || return 1
-    resolve_secret_env_secret "$env_file" "$key" "$label"
-    return $?
-  fi
-
-  resolve_secret_ref "$(select_secret_ref "$pass_ref" "${label}_REF")" "$label"
-}
-
 glm() {
-  local pass_env_file="$HOME/.config/proton-pass/claude.env"
   local -a cmd
   local token
   cmd=(claude --dangerously-skip-permissions "$@")
@@ -258,48 +195,12 @@ glm() {
     return 2
   fi
 
-  token="$(resolve_secret_value "$pass_env_file" "ANTHROPIC_AUTH_TOKEN" "ANTHROPIC_AUTH_TOKEN" "$ANTHROPIC_AUTH_TOKEN_PASS_REF")" || {
+  token="$(resolve_secret_ref "$(select_secret_ref "$ANTHROPIC_AUTH_TOKEN_PASS_REF" "ANTHROPIC_AUTH_TOKEN_REF")" "ANTHROPIC_AUTH_TOKEN")" || {
     echo "glm: failed to resolve ANTHROPIC_AUTH_TOKEN." >&2
     return 1
   }
 
   ANTHROPIC_BASE_URL="https://api.z.ai/api/anthropic" ANTHROPIC_AUTH_TOKEN="$token" "${cmd[@]}"
-}
-
-status_secret_value() {
-  local pass_file="$1"
-  local key="$2"
-  local label="$3"
-  local pass_ref="$4"
-  local env_file
-  local ref
-
-  if [ -f "$pass_file" ]; then
-    env_file="$(select_secret_env_file "$pass_file" "$label")" || return 1
-    ref="$(env_file_value "$env_file" "$key")"
-
-    if [ -z "$ref" ]; then
-      echo "[ng] $label is missing in $env_file."
-      return 1
-    fi
-
-    if resolve_secret_ref "$ref" "$label" >/dev/null 2>&1; then
-      echo "[ok] $label resolves from $env_file."
-      return 0
-    fi
-
-    echo "[ng] $label failed to resolve from $env_file ($ref)."
-    return 1
-  fi
-
-  ref="$(select_secret_ref "$pass_ref" "${label}_REF")" || return 1
-  if resolve_secret_ref "$ref" "$label" >/dev/null 2>&1; then
-    echo "[ok] $label resolves from shared ref ($ref)."
-    return 0
-  fi
-
-  echo "[ng] $label failed to resolve from shared ref ($ref)."
-  return 1
 }
 
 status_shared_ref() {
@@ -335,7 +236,7 @@ secrets_status_core() {
     ok=1
   fi
 
-  if status_secret_value "$HOME/.config/proton-pass/claude.env" "ANTHROPIC_AUTH_TOKEN" "ANTHROPIC_AUTH_TOKEN" "$ANTHROPIC_AUTH_TOKEN_PASS_REF"; then
+  if status_shared_ref "$ANTHROPIC_AUTH_TOKEN_PASS_REF" "ANTHROPIC_AUTH_TOKEN_REF"; then
     true
   else
     ok=1
