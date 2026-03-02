@@ -71,14 +71,12 @@ export ANDROID_NDK_HOME="$ANDROID_SDK_ROOT/ndk/27.3.13750724"
 export ANDROID_HOME="$ANDROID_SDK_ROOT"
 
 # Secret references (non-secret) for runtime resolution.
-export ANTHROPIC_AUTH_TOKEN_PASS_REF="pass://CLI/Zai Key OpenClaw/credential"
 export GOG_KEYRING_PASSWORD_PASS_REF="pass://CLI/GOG_KEYRING_PASSWORD/認証情報"
 export CONTEXT7_API_KEY_PASS_REF="pass://CLI/context7-api-key/APIキー"
 export PUSHOVER_TOKEN_PASS_REF="pass://CLI/pushover-codex/token"
 export PUSHOVER_USER_PASS_REF="pass://CLI/pushover-codex/user"
 
 # Backward-compatible generic names used by scripts and wrappers.
-export ANTHROPIC_AUTH_TOKEN_REF="$ANTHROPIC_AUTH_TOKEN_PASS_REF"
 export GOG_KEYRING_PASSWORD_REF="$GOG_KEYRING_PASSWORD_PASS_REF"
 export CONTEXT7_API_KEY_REF="$CONTEXT7_API_KEY_PASS_REF"
 export PUSHOVER_TOKEN_REF="$PUSHOVER_TOKEN_PASS_REF"
@@ -147,7 +145,6 @@ resolve_secret_ref() {
   local ref="$1"
   local label="$2"
   local value
-  local tmp_env
   local run_status=0
 
   if [ -z "$ref" ]; then
@@ -162,15 +159,7 @@ resolve_secret_ref() {
 
   require_pass_cli_runtime "resolve_secret_ref" || return 1
 
-  tmp_env="$(mktemp)" || {
-    echo "failed to create temporary env file for $label." >&2
-    return 1
-  }
-  chmod 600 "$tmp_env"
-  printf '__PASS_CLI_SECRET=%s\n' "$ref" > "$tmp_env"
-
-  value="$(pass-cli run --env-file "$tmp_env" -- sh -c 'printf %s "$__PASS_CLI_SECRET"')" || run_status=$?
-  rm -f "$tmp_env"
+  value="$(__PASS_CLI_SECRET="$ref" pass-cli run -- sh -c 'printf %s "$__PASS_CLI_SECRET"')" || run_status=$?
 
   if [ "$run_status" -ne 0 ]; then
     echo "failed to resolve $label from Proton Pass." >&2
@@ -190,15 +179,18 @@ glm() {
   local token
   cmd=(claude --dangerously-skip-permissions "$@")
 
-  if [ "$#" -eq 0 ] && [ ! -t 0 ]; then
-    echo "glm: interactive mode requires a TTY. Use 'glm -p \"...\"' in non-interactive contexts." >&2
-    return 2
-  fi
-
-  token="$(resolve_secret_ref "$(select_secret_ref "$ANTHROPIC_AUTH_TOKEN_PASS_REF" "ANTHROPIC_AUTH_TOKEN_REF")" "ANTHROPIC_AUTH_TOKEN")" || {
+  token="$(
+    ANTHROPIC_AUTH_TOKEN="pass://CLI/z-ai-api-key-claude-code/credential" \
+      pass-cli run --no-masking -- sh -c 'printf %s "$ANTHROPIC_AUTH_TOKEN"'
+  )" || {
     echo "glm: failed to resolve ANTHROPIC_AUTH_TOKEN." >&2
     return 1
   }
+
+  if [ -z "$token" ]; then
+    echo "glm: ANTHROPIC_AUTH_TOKEN resolved to an empty value." >&2
+    return 1
+  fi
 
   ANTHROPIC_BASE_URL="https://api.z.ai/api/anthropic" ANTHROPIC_AUTH_TOKEN="$token" "${cmd[@]}"
 }
@@ -233,12 +225,6 @@ secrets_status_core() {
     echo "[ok] PROTON_PASS_KEY_PROVIDER=fs"
   else
     echo "[ng] PROTON_PASS_KEY_PROVIDER should be 'fs' (current: ${PROTON_PASS_KEY_PROVIDER:-unset})."
-    ok=1
-  fi
-
-  if status_shared_ref "$ANTHROPIC_AUTH_TOKEN_PASS_REF" "ANTHROPIC_AUTH_TOKEN_REF"; then
-    true
-  else
     ok=1
   fi
 
