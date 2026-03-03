@@ -28,8 +28,63 @@ function getLastMessage(notification) {
     : message;
 }
 
+function getThreadId(notification) {
+  const threadId = notification['thread-id'] || notification.thread_id;
+  return typeof threadId === 'string' && threadId.trim().length > 0
+    ? threadId
+    : null;
+}
+
+function resolveStateDbPath(codexHome) {
+  try {
+    const entries = fs.readdirSync(codexHome);
+    const candidates = entries
+      .map((name) => {
+        const match = /^state_(\d+)\.sqlite$/.exec(name);
+        return match
+          ? { path: path.join(codexHome, name), version: Number(match[1]) }
+          : null;
+      })
+      .filter((entry) => entry && Number.isFinite(entry.version))
+      .sort((a, b) => b.version - a.version);
+
+    return candidates.length > 0 ? candidates[0].path : null;
+  } catch {
+    return null;
+  }
+}
+
+function isSubagentTurn(notification, codexHome) {
+  const threadId = getThreadId(notification);
+  if (!threadId) {
+    return false;
+  }
+
+  const dbPath = resolveStateDbPath(codexHome);
+  if (!dbPath) {
+    return false;
+  }
+
+  // SQL literal escape for single quotes.
+  const escapedThreadId = threadId.replace(/'/g, "''");
+  const query = `SELECT source FROM threads WHERE id='${escapedThreadId}' LIMIT 1;`;
+
+  try {
+    const source = execFileSync('sqlite3', [dbPath, query], {
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+      timeout: 1000,
+    }).trim();
+
+    return source.includes('"subagent"');
+  } catch {
+    return false;
+  }
+}
+
 function main() {
-  const logDir = path.join(process.env.HOME || os.homedir(), '.codex', 'log');
+  const codexHome = path.join(process.env.HOME || os.homedir(), '.codex');
+  const logDir = path.join(codexHome, 'log');
   try {
     fs.mkdirSync(logDir, { recursive: true });
   } catch {}
@@ -68,6 +123,18 @@ function main() {
   } catch {}
 
   if (!isTurnComplete(notification)) {
+    return;
+  }
+
+  if (isSubagentTurn(notification, codexHome)) {
+    try {
+      const threadId = getThreadId(notification) || 'unknown';
+      fs.appendFileSync(
+        path.join(logDir, 'notify-invocations.log'),
+        `${new Date().toISOString()} type=subagent-skip thread=${threadId}\n`,
+        { mode: 0o600 }
+      );
+    } catch {}
     return;
   }
 
