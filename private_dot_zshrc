@@ -313,6 +313,7 @@ alias phd="phantom delete"
 alias phs="phantom shell"
 alias python="python3"
 alias opencode="OPENCODE_EXPERIMENTAL_PLAN_MODE=true opencode"
+alias ch="chezmoi"
 alias jjsp="jj squash && jj git push"
 
 # bun completions
