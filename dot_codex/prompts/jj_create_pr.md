@@ -23,7 +23,7 @@ If any arg is missing, choose a safe default and proceed without asking unless a
 - Never use jj git push --all.
 - Never use --no-verify.
 - Warn and stop if trying to push directly to the base branch (main/master/etc).
-- Before executing push and gh pr create, show both exact commands and ask for my explicit approval once (single approval for both operations).
+- Before executing push and gh pr create, ask for my explicit approval once (single approval for both operations). For approval display readability, do not inline long `--title` / `--body` values; show them in abbreviated form (e.g., `<omitted>`), while keeping the actual execution command unchanged.
 
 ## 1) Preconditions
 Run:
@@ -119,7 +119,7 @@ If `gh` fails to detect the repo in a non-colocated jj repo:
 
 ### 5c) Execute both
 After preparing both commands:
-- Show both exact commands
+- Show both commands for approval, but abbreviate long `--title` / `--body` argument values in the displayed text (e.g., `<omitted>`).
 - Ask for approval once
 - Execute push first, then create PR
 
