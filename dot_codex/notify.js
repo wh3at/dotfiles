@@ -54,32 +54,71 @@ function resolveStateDbPath(codexHome) {
   }
 }
 
-function isSubagentTurn(notification, codexHome) {
+function readThreadMetadata(notification, codexHome) {
   const threadId = getThreadId(notification);
   if (!threadId) {
-    return false;
+    return null;
   }
 
   const dbPath = resolveStateDbPath(codexHome);
   if (!dbPath) {
-    return false;
+    return null;
   }
 
   // SQL literal escape for single quotes.
   const escapedThreadId = threadId.replace(/'/g, "''");
-  const query = `SELECT source FROM threads WHERE id='${escapedThreadId}' LIMIT 1;`;
+  const query = `SELECT source || char(31) || cwd FROM threads WHERE id='${escapedThreadId}' LIMIT 1;`;
 
   try {
-    const source = execFileSync('sqlite3', [dbPath, query], {
+    const row = execFileSync('sqlite3', [dbPath, query], {
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'ignore'],
       timeout: 1000,
     }).trim();
 
-    return source.includes('"subagent"');
+    if (!row) {
+      return null;
+    }
+
+    const [source = '', cwd = ''] = row.split('\x1f');
+    return { source, cwd };
   } catch {
-    return false;
+    return null;
   }
+}
+
+function getDirectoryNameFromPath(value) {
+  if (typeof value !== 'string') {
+    return null;
+  }
+
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return null;
+  }
+
+  const baseName = path.basename(trimmed);
+  if (!baseName || baseName === '/' || baseName === '.' || baseName === '..') {
+    return null;
+  }
+
+  return baseName;
+}
+
+function getNotificationTitle(notification, threadMetadata) {
+  const titleCandidate =
+    getDirectoryNameFromPath(threadMetadata && threadMetadata.cwd) ||
+    getDirectoryNameFromPath(notification.cwd) ||
+    getDirectoryNameFromPath(notification['project-root']) ||
+    getDirectoryNameFromPath(notification.project_root) ||
+    getDirectoryNameFromPath(notification.projectRoot) ||
+    getDirectoryNameFromPath(process.env.PWD) ||
+    'Codex';
+
+  const MAX_PUSHOVER_TITLE = 100;
+  return titleCandidate.length > MAX_PUSHOVER_TITLE
+    ? `${titleCandidate.slice(0, MAX_PUSHOVER_TITLE - 1)}…`
+    : titleCandidate;
 }
 
 function main() {
@@ -126,7 +165,9 @@ function main() {
     return;
   }
 
-  if (isSubagentTurn(notification, codexHome)) {
+  const threadMetadata = readThreadMetadata(notification, codexHome);
+
+  if (threadMetadata && threadMetadata.source.includes('"subagent"')) {
     try {
       const threadId = getThreadId(notification) || 'unknown';
       fs.appendFileSync(
@@ -153,6 +194,7 @@ function main() {
   }
 
   const message = getLastMessage(notification);
+  const title = getNotificationTitle(notification, threadMetadata);
   const tmpEnvFile = path.join(os.tmpdir(), `pass-cli-notify-${crypto.randomUUID()}.env`);
 
   try {
@@ -169,8 +211,9 @@ function main() {
       '--',
       'sh',
       '-c',
-      'curl -sS --fail -o /dev/null --form-string "token=$PUSHOVER_TOKEN" --form-string "user=$PUSHOVER_USER" --form-string "title=Codex" --form-string "message=$1" https://api.pushover.net/1/messages.json',
+      'curl -sS --fail -o /dev/null --form-string "token=$PUSHOVER_TOKEN" --form-string "user=$PUSHOVER_USER" --form-string "title=$1" --form-string "message=$2" https://api.pushover.net/1/messages.json',
       'sh',
+      title,
       message,
     ], {
       env: PASS_CLI_ENV,
