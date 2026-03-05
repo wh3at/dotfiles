@@ -88,7 +88,7 @@ translate = false
 # Initial prompt to provide context for transcription
 # Use this to hint at terminology, proper nouns, or formatting conventions.
 # Example: "Technical discussion about Rust, TypeScript, and Kubernetes."
-initial_prompt = "Technical words: CI,レイアウトシフト,OpenCode,Codex,SaaS,Convex"
+initial_prompt = "Technical words: CI,レイアウトシフト,OpenCode,Codex,SaaS"
 
 # --- Multi-model settings ---
 #
@@ -181,6 +181,8 @@ type_delay_ms = 0
 #   pre_output_command = "hyprctl dispatch submap voxtype_suppress"
 #   post_output_command = "hyprctl dispatch submap reset"
 # See troubleshooting docs for the required Hyprland submap configuration.
+pre_output_command = "/home/wh3at/.config/voxtype/scripts/ime-pre-output.sh"
+post_output_command = "/home/wh3at/.config/voxtype/scripts/ime-post-output.sh"
 
 # Post-processing command (optional)
 # Pipe transcribed text through an external command for cleanup before output.
