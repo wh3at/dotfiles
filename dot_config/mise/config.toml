@@ -31,6 +31,15 @@ run = "~/.config/mise/scripts/pf-stop.sh"
 description = "Convert website to Codex skill interactively"
 run = "~/.config/mise/scripts/site2skill.sh"
 
+[tasks."jj:workspace:new"]
+# Runs project-root jj-workspace-setup.sh in the new workspace when present.
+description = "Create workspace, open zellij tab, and run project-root jj-workspace-setup.sh when present"
+run = "~/.config/mise/scripts/jj-workspace-new.sh"
+
+[tasks."jj:workspace:clean"]
+description = "Delete merged workspace, remove directory, and close zellij tab"
+run = "~/.config/mise/scripts/jj-workspace-clean.sh"
+
 [tasks.format]
 description = "Run custom formatting script interactively"
 run = "~/.config/mise/scripts/format.sh"
