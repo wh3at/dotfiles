@@ -3,9 +3,6 @@
 set -euo pipefail
 
 workspace_name="${1:-}"
-if [ -z "${workspace_name}" ] && [ -n "${0:-}" ] && [ "${0:-}" != "bash" ] && [ "${0:-}" != "--" ]; then
-	workspace_name="${0}"
-fi
 
 if [ -z "${workspace_name}" ]; then
 	tty_state=""
