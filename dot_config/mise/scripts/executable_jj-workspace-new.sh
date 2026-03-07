@@ -55,7 +55,7 @@ workspace_parent="$(cd "${repo_root}/.." && pwd)"
 workspace_dir_abs="${workspace_parent}/${final_workspace_name}"
 jj workspace add "${workspace_dir_abs}" -r main
 
-setup_script="${workspace_dir_abs}/jj-workspace-setup.sh"
+setup_script="${repo_root}/jj-workspace-setup.sh"
 if [ -f "${setup_script}" ]; then
 	(
 		cd "${workspace_dir_abs}"
@@ -63,7 +63,7 @@ if [ -f "${setup_script}" ]; then
 			echo "error: workspace setup script is not executable: ${setup_script}" >&2
 			exit 1
 		fi
-		"${setup_script}"
+		JJ_DEFAULT_WORKSPACE_ROOT="${repo_root}" "${setup_script}"
 	)
 fi
 
