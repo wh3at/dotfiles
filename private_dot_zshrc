@@ -302,24 +302,11 @@ cx() {
   CONTEXT7_API_KEY="$context7_key" codex "$@"
 }
 
-# Alias
-alias cl="clear"
-alias zll="zellij"
-alias zla="zellij a"
-alias ..="cd ../"
-alias ...="cd ../../"
+
+# Aliases (kept due to command name conflicts)
 alias cc="claude"
-alias ccd="claude --dangerously-skip-permissions"
-alias secrets-status="secrets_status"
-alias gog="gog_op"
-alias mr="mise run"
-alias phc="phantom create"
-alias phd="phantom delete"
-alias phs="phantom shell"
 alias python="python3"
-alias opencode="OPENCODE_EXPERIMENTAL_PLAN_MODE=true opencode"
-alias ch="chezmoi"
-alias oc="opencode"
+alias gog="gog_op"
 
 # bun completions
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
