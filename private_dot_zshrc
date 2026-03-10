@@ -47,8 +47,13 @@ autoload -Uz _zinit
 ## プロンプトテーマ sindresorhus/pure
 zi ice pick"async.zsh" src"pure.zsh"
 zi light sindresorhus/pure
+## 略語展開
+zinit light olets/zsh-abbr
 ## インタラクティブな補完
 zinit light zsh-users/zsh-autosuggestions
+## autosuggestionsで略語展開を表示
+zinit light olets/zsh-autosuggestions-abbreviations-strategy
+ZSH_AUTOSUGGEST_STRATEGY=( abbreviations $ZSH_AUTOSUGGEST_STRATEGY )
 ## シンタックスハイライト
 zinit light zdharma-continuum/fast-syntax-highlighting
 # End of Zinit's config
@@ -315,7 +320,6 @@ alias python="python3"
 alias opencode="OPENCODE_EXPERIMENTAL_PLAN_MODE=true opencode"
 alias ch="chezmoi"
 alias oc="opencode"
-alias jjsp="jj squash && jj git push"
 
 # bun completions
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
@@ -372,6 +376,4 @@ zll_new_git_wt() {
 }
 
 # zoxide
-unalias zi 2>/dev/null
-unfunction zi 2>/dev/null
-eval "$(zoxide init zsh)"
+eval "$(zoxide init zsh --cmd z)"
