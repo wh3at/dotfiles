@@ -370,3 +370,8 @@ zll_new_git_wt() {
   zellij action write-chars "codex"
   zellij action write 13
 }
+
+# zoxide
+unalias zi 2>/dev/null
+unfunction zi 2>/dev/null
+eval "$(zoxide init zsh)"
