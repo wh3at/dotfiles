@@ -15,6 +15,7 @@ steer = true
 multi_agent = true
 collaboration_modes = true
 js_repl = true
+use_linux_sandbox_bwrap = true
 
 [mcp_servers.context7]
 url = "https://mcp.context7.com/mcp"
@@ -33,6 +34,9 @@ hide_rate_limit_model_nudge = true
 trust_level = "trusted"
 
 [projects."/home/wh3at/Work/kadou-delta-next"]
+trust_level = "trusted"
+
+[projects."/home/wh3at/Work/kadou-delta-next.KDN-356-improve-cost-ux"]
 trust_level = "trusted"
 
 [tui]
