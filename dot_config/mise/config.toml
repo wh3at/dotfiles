@@ -37,7 +37,7 @@ description = "Create workspace, open zellij tab, and run project-root jj-worksp
 run = "~/.config/mise/scripts/jj-workspace-new.sh"
 
 [tasks."jj:workspace:clean"]
-description = "Delete merged workspace, remove directory, and close zellij tab"
+description = "Delete merged workspace safely, remove directory, and close zellij tab"
 run = "~/.config/mise/scripts/jj-workspace-clean.sh"
 
 [tasks.format]
