@@ -45,3 +45,4 @@ theme = "dracula"
 
 [agents]
 max_threads = 10
+
