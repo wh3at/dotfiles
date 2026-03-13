@@ -19,6 +19,7 @@ use_linux_sandbox_bwrap = true
 
 [mcp_servers.context7]
 url = "https://mcp.context7.com/mcp"
+http_headers = { "CONTEXT7_API_KEY" = "ctx7sk-fa130a4c-e6b5-4a46-bca9-85f2b64fc2d3" }
 
 [mcp_servers.deepwiki]
 url = "https://mcp.deepwiki.com/mcp"
