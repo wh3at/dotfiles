@@ -3,9 +3,17 @@
   "theme": "dracula",
   "permission": "allow",
   "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "enabled": true
+    },
     "beds24-api": {
       "type": "local",
-      "command": ["node", "/home/wh3at/Work/beds24-api-v2-mcp/dist/server.js"],
+      "command": [
+        "node",
+        "/home/wh3at/Work/beds24-api-v2-mcp/dist/server.js"
+      ],
       "enabled": true
     }
   }
