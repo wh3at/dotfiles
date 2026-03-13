@@ -40,6 +40,9 @@ trust_level = "trusted"
 [projects."/home/wh3at/Work/kadou-delta-next.KDN-356-improve-cost-ux"]
 trust_level = "trusted"
 
+[projects."/home/wh3at/Work/forge"]
+trust_level = "trusted"
+
 [tui]
 status_line = ["model-with-reasoning", "context-remaining", "weekly-limit"]
 theme = "dracula"
