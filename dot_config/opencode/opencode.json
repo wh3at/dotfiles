@@ -1,6 +1,5 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "theme": "flexoki",
   "permission": "allow",
   "mcp": {
     "context7": {
@@ -10,10 +9,7 @@
     },
     "beds24-api": {
       "type": "local",
-      "command": [
-        "node",
-        "/home/wh3at/Work/beds24-api-v2-mcp/dist/server.js"
-      ],
+      "command": ["node", "/home/wh3at/Work/beds24-api-v2-mcp/dist/server.js"],
       "enabled": true
     }
   }
