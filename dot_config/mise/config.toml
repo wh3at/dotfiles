@@ -31,6 +31,10 @@ run = "~/.config/mise/scripts/pf-stop.sh"
 description = "Convert website to Codex skill interactively"
 run = "~/.config/mise/scripts/site2skill.sh"
 
+[tasks.context7-skill-wizard]
+description = "対話形式でAgent Skillsを作成"
+run = "npx ctx7 skills generate"
+
 [tasks."jj:workspace:new"]
 # Runs project-root jj-workspace-setup.sh in the new workspace when present.
 description = "Create workspace, open zellij tab, and run project-root jj-workspace-setup.sh when present"
