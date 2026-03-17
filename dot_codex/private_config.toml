@@ -43,6 +43,15 @@ trust_level = "trusted"
 [projects."/home/wh3at/Work/forge"]
 trust_level = "trusted"
 
+[projects."/home/wh3at/Work/kadou.KDN-459-price-change-99-month-990-year"]
+trust_level = "trusted"
+
+[projects."/home/wh3at/Work/kadou-delta-next.KDN-449-beds24-onboarding-ui-improvement"]
+trust_level = "trusted"
+
+[projects."/home/wh3at/Work/kadou-delta-next.KDN-375-license-notice"]
+trust_level = "trusted"
+
 [tui]
 status_line = ["model-with-reasoning", "context-remaining", "weekly-limit"]
 theme = "dracula"
