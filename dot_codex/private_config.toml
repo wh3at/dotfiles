@@ -55,6 +55,9 @@ trust_level = "trusted"
 [projects."/home/wh3at/Work/kadou-delta-next.KDN-461-local-github-actions-run-actrun-intro"]
 trust_level = "trusted"
 
+[projects."/home/wh3at/Work/AirportParkingMonitor.6-new-x-api"]
+trust_level = "trusted"
+
 [tui]
 status_line = ["model-with-reasoning", "context-remaining", "weekly-limit"]
 theme = "dracula"
