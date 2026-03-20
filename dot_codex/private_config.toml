@@ -58,6 +58,21 @@ trust_level = "trusted"
 [projects."/home/wh3at/Work/AirportParkingMonitor.6-new-x-api"]
 trust_level = "trusted"
 
+[projects."/home/wh3at/Work/kadou-delta-next.KDN-462-perf-clerk"]
+trust_level = "trusted"
+
+[projects."/home/wh3at/Work/life-os"]
+trust_level = "trusted"
+
+[projects."/home/wh3at/Work/kadou-delta-next.KDN-463-showcase"]
+trust_level = "trusted"
+
+[projects."/home/wh3at"]
+trust_level = "trusted"
+
+[projects."/home/wh3at/Work/kadou-delta-next.KDN-425-lp"]
+trust_level = "trusted"
+
 [tui]
 status_line = ["model-with-reasoning", "context-remaining", "weekly-limit"]
 theme = "dracula"
