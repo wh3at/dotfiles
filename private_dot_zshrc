@@ -80,12 +80,14 @@ export GOG_KEYRING_PASSWORD_PASS_REF="pass://CLI/GOG_KEYRING_PASSWORD/認証情�
 export CONTEXT7_API_KEY_PASS_REF="pass://CLI/context7-api-key/APIキー"
 export PUSHOVER_TOKEN_PASS_REF="pass://CLI/pushover-codex/token"
 export PUSHOVER_USER_PASS_REF="pass://CLI/pushover-codex/user"
+export LINEAR_API_KEY_PASS_REF="pass://CLI/linear-cli-api-key/APIキー"
 
 # Backward-compatible generic names used by scripts and wrappers.
 export GOG_KEYRING_PASSWORD_REF="$GOG_KEYRING_PASSWORD_PASS_REF"
 export CONTEXT7_API_KEY_REF="$CONTEXT7_API_KEY_PASS_REF"
 export PUSHOVER_TOKEN_REF="$PUSHOVER_TOKEN_PASS_REF"
 export PUSHOVER_USER_REF="$PUSHOVER_USER_PASS_REF"
+export LINEAR_API_KEY_REF="$LINEAR_API_KEY_PASS_REF"
 
 # Proton Pass CLI storage backend.
 # Prefer filesystem key provider on Linux to avoid keyring/env drift.
@@ -269,6 +271,12 @@ secrets_status() {
     ok=1
   fi
 
+  if status_shared_ref "$LINEAR_API_KEY_PASS_REF" "LINEAR_API_KEY_REF"; then
+    true
+  else
+    ok=1
+  fi
+
   return "$ok"
 }
 
@@ -302,11 +310,31 @@ cx() {
   CONTEXT7_API_KEY="$context7_key" codex "$@"
 }
 
+linear_cli() {
+  if ! command -v linear >/dev/null 2>&1; then
+    echo "linear CLI is required." >&2
+    return 1
+  fi
+
+  local linear_ref
+  local linear_key
+
+  linear_ref="$(select_secret_ref "$LINEAR_API_KEY_PASS_REF" "LINEAR_API_KEY_REF")" || return 1
+
+  linear_key="$(resolve_secret_ref "$linear_ref" "LINEAR_API_KEY_REF")" || {
+    echo "linear: failed to resolve LINEAR_API_KEY." >&2
+    return 1
+  }
+
+  LINEAR_API_KEY="$linear_key" linear "$@"
+}
+
 
 # Aliases (kept due to command name conflicts)
 alias cc="claude"
 alias python="python3"
 alias gog="gog_op"
+alias linear="linear_cli"
 
 # bun completions
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
