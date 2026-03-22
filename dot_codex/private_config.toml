@@ -73,6 +73,12 @@ trust_level = "trusted"
 [projects."/home/wh3at/Work/kadou-delta-next.KDN-425-lp"]
 trust_level = "trusted"
 
+[projects."/home/wh3at/Work/AirportParkingMonitor"]
+trust_level = "trusted"
+
+[projects."/home/wh3at/Work/kadou-delta-next.KDN-471-convex-db"]
+trust_level = "trusted"
+
 [tui]
 status_line = ["model-with-reasoning", "context-remaining", "weekly-limit"]
 theme = "dracula"
