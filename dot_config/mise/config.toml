@@ -60,3 +60,15 @@ run = "ps -ef | grep \"zellij.*$ZELLIJ_SESSION_NAME\" | grep -v grep"
 [tasks."hypr:bring-windows"]
 description = "画面外のウィンドウを表示領域内に戻す"
 run = "~/.config/mise/scripts/hypr-bring-windows.sh"
+
+[tasks."deer-flow:start"]
+description = "Start DeerFlow dev containers and expose them on Tailscale"
+run = "~/.config/mise/scripts/deer-flow-start.sh"
+
+[tasks."deer-flow:stop"]
+description = "Stop DeerFlow dev containers and remove the Tailscale serve rule"
+run = "~/.config/mise/scripts/deer-flow-stop.sh"
+
+[tasks."deer-flow:status"]
+description = "Show DeerFlow container, local health, and Tailscale serve status"
+run = "~/.config/mise/scripts/deer-flow-status.sh"
