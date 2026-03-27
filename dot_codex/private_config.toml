@@ -83,6 +83,36 @@ trust_level = "trusted"
 [projects."/home/wh3at/Work/deer-flow.setup"]
 trust_level = "trusted"
 
+[projects."/home/wh3at/Work"]
+trust_level = "trusted"
+
+[projects."/home/wh3at/uptime-kuma"]
+trust_level = "trusted"
+
+[projects."/home/wh3at/Work/kadou-delta-next.KDN-464-as-of"]
+trust_level = "trusted"
+
+[projects."/home/wh3at/Work/kadou-delta-next.KDN-474-user-gate-bypass"]
+trust_level = "trusted"
+
+[projects."/home/wh3at/Work/kadou-delta-next.dependabot-101"]
+trust_level = "trusted"
+
+[projects."/home/wh3at/Work/kadou-delta-next.KDN-472-chart-display-issue"]
+trust_level = "trusted"
+
+[projects."/home/wh3at/Work/kadou-delta-next.KDN-475-ogp-metadata-implementation"]
+trust_level = "trusted"
+
+[projects."/home/wh3at/Work/kadou-delta-next.KDN-477-google-analytics-integration"]
+trust_level = "trusted"
+
+[projects."/home/wh3at/Work/shopify-image-upload"]
+trust_level = "trusted"
+
+[projects."/home/wh3at/Work/shopify-image-upload.SIU-13-image-display-bug"]
+trust_level = "trusted"
+
 [tui]
 status_line = ["model-with-reasoning", "context-remaining", "weekly-limit"]
 theme = "dracula"
