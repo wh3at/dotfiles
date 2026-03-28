@@ -113,6 +113,12 @@ trust_level = "trusted"
 [projects."/home/wh3at/Work/shopify-image-upload.SIU-13-image-display-bug"]
 trust_level = "trusted"
 
+[projects."/home/wh3at/Work/forge.FRG-1-fix-reorder-sessions"]
+trust_level = "trusted"
+
+[projects."/home/wh3at/Work/forge.FRG-3-rigg"]
+trust_level = "trusted"
+
 [tui]
 status_line = ["model-with-reasoning", "context-remaining", "weekly-limit"]
 theme = "dracula"
