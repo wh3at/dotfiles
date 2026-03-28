@@ -129,5 +129,3 @@ theme = "dracula"
 [agents]
 max_threads = 10
 
-[otel]
-exporter = { "otlp-http" = { endpoint = "http://localhost:8787/otlp", protocol = "json" } }
