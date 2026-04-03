@@ -395,3 +395,4 @@ zll_new_git_wt() {
 
 # zoxide
 eval "$(zoxide init zsh --cmd z)"
+eval "$(direnv hook zsh)"
