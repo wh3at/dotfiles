@@ -93,7 +93,7 @@ export LINEAR_API_KEY_REF="$LINEAR_API_KEY_PASS_REF"
 # Prefer filesystem key provider on Linux to avoid keyring/env drift.
 export PROTON_PASS_KEY_PROVIDER="${PROTON_PASS_KEY_PROVIDER:-fs}"
 
-# Optional local-only overrides (not in chezmoi templates).
+# Optional local-only overrides (not in :wqchezmoi templates).
 if [ -f "$HOME/.config/proton-pass/key.env" ]; then
   . "$HOME/.config/proton-pass/key.env"
 fi
@@ -107,6 +107,9 @@ fi
 if command -v phantom &> /dev/null; then
   eval "$(phantom completion zsh)"
 fi
+
+# direnv
+eval "$(direnv hook zsh)"
 
 # Functions
 function google() {
