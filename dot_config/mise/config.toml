@@ -57,6 +57,10 @@ run = "fcitx5 -r -d"
 description = "現在のzellijセッションに接続しているプロセスを特定できる。1つ目はセッション本体。"
 run = "ps -ef | grep \"zellij.*$ZELLIJ_SESSION_NAME\" | grep -v grep"
 
+[tasks."port-lookup"]
+description = "プロセス名からPIDとlisten中のポートを対話形式で検索"
+run = "~/.config/mise/scripts/port-lookup.sh"
+
 [tasks."hypr:bring-windows"]
 description = "画面外のウィンドウを表示領域内に戻す"
 run = "~/.config/mise/scripts/hypr-bring-windows.sh"
