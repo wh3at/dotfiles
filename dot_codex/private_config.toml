@@ -10,7 +10,6 @@ exec_timeout_ms = 600000
 
 [features]
 unified_exec = true
-shell_snapshot = true
 steer = true
 multi_agent = true
 collaboration_modes = true
