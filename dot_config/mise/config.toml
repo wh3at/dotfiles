@@ -1,0 +1,57 @@
+[tools]
+bun = "1.3.6"
+chezmoi = "latest"
+node = "latest"
+"npm:@aku11i/phantom" = "latest"
+"npm:@openai/codex" = "latest"
+"npm:@shopify/cli" = "latest"
+"npm:agent-browser" = "latest"
+"npm:eas-cli" = "latest"
+"npm:repomix" = "latest"
+"npm:takt" = "latest"
+"npm:vercel" = "latest"
+opencode = "latest"
+php = "8.5"
+pnpm = "10.28"
+zellij = "latest"
+
+[tasks.pf]
+description = "SSH port-forward in background (ask interactively)"
+run = "~/.config/mise/scripts/pf-start.sh"
+
+[tasks."pf:list"]
+description = "List active SSH port-forwards"
+run = "~/.config/mise/scripts/pf-list.sh"
+
+[tasks."pf:stop"]
+description = "Stop SSH port-forward interactively"
+run = "~/.config/mise/scripts/pf-stop.sh"
+
+[tasks.site2skill]
+description = "Convert website to Codex skill interactively"
+run = "~/.config/mise/scripts/site2skill.sh"
+
+[tasks."jj:workspace:new"]
+# Runs project-root jj-workspace-setup.sh in the new workspace when present.
+description = "Create workspace, open zellij tab, and run project-root jj-workspace-setup.sh when present"
+run = "~/.config/mise/scripts/jj-workspace-new.sh"
+
+[tasks."jj:workspace:clean"]
+description = "Delete merged workspace safely, remove directory, and close zellij tab"
+run = "~/.config/mise/scripts/jj-workspace-clean.sh"
+
+[tasks.format]
+description = "Run custom formatting script interactively"
+run = "~/.config/mise/scripts/format.sh"
+
+[tasks."fcitx5:restart"]
+description = "Restart fcitx5 demon"
+run = "fcitx5 -r -d"
+
+[tasks."zellij:clients"]
+description = "現在のzellijセッションに接続しているプロセスを特定できる。1つ目はセッション本体。"
+run = "ps -ef | grep \"zellij.*$ZELLIJ_SESSION_NAME\" | grep -v grep"
+
+[tasks."hypr:bring-windows"]
+description = "画面外のウィンドウを表示領域内に戻す"
+run = "~/.config/mise/scripts/hypr-bring-windows.sh"

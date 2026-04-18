@@ -1,0 +1,64 @@
+approval_policy = "never"
+sandbox_mode = "danger-full-access"
+web_search = "live"
+notify = ["node", "/home/wh3at/.codex/notify.js"]
+
+model = "gpt-5.4"
+model_reasoning_effort = "medium"
+tool_output_token_limit = 25000
+exec_timeout_ms = 600000
+
+[features]
+unified_exec = true
+shell_snapshot = true
+steer = true
+multi_agent = true
+collaboration_modes = true
+js_repl = true
+use_linux_sandbox_bwrap = true
+
+[mcp_servers.context7]
+url = "https://mcp.context7.com/mcp"
+http_headers = { "CONTEXT7_API_KEY" = "***REMOVED***" }
+
+[mcp_servers.deepwiki]
+url = "https://mcp.deepwiki.com/mcp"
+
+[mcp_servers.linear]
+url = "https://mcp.linear.app/mcp"
+
+[notice]
+hide_rate_limit_model_nudge = true
+"hide_gpt-5.1-codex-max_migration_prompt" = true
+
+[projects."/home/wh3at/Work/buddy-made-simulator"]
+trust_level = "trusted"
+
+[projects."/home/wh3at/Work/kadou-delta-next"]
+trust_level = "trusted"
+
+[projects."/home/wh3at/Work/kadou-delta-next.KDN-356-improve-cost-ux"]
+trust_level = "trusted"
+
+[projects."/home/wh3at/Work/forge"]
+trust_level = "trusted"
+
+[projects."/home/wh3at/Work/kadou.KDN-459-price-change-99-month-990-year"]
+trust_level = "trusted"
+
+[projects."/home/wh3at/Work/kadou-delta-next.KDN-449-beds24-onboarding-ui-improvement"]
+trust_level = "trusted"
+
+[projects."/home/wh3at/Work/kadou-delta-next.KDN-375-license-notice"]
+trust_level = "trusted"
+
+[tui]
+status_line = ["model-with-reasoning", "context-remaining", "weekly-limit"]
+theme = "dracula"
+
+[agents]
+max_threads = 10
+
+[otel]
+endpoint = "http://localhost:8787/otlp/v1/logs"
+
