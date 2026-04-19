@@ -19,7 +19,7 @@ use_linux_sandbox_bwrap = true
 
 [mcp_servers.context7]
 url = "https://mcp.context7.com/mcp"
-http_headers = { "CONTEXT7_API_KEY" = "***REMOVED***" }
+http_headers = { "CONTEXT7_API_KEY" = "{{ pass://Context7/context7-api-key/token }}" }
 
 [mcp_servers.deepwiki]
 url = "https://mcp.deepwiki.com/mcp"
@@ -61,4 +61,3 @@ max_threads = 10
 
 [otel]
 endpoint = "http://localhost:8787/otlp/v1/logs"
-
