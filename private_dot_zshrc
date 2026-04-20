@@ -299,8 +299,15 @@ cx() {
     return 1
   }
 
-  CONTEXT7_API_KEY="$context7_key" codex "$@"
+  CONTEXT7_API_KEY="***" codex "$@"
 }
+
+# Context7 / Codex config - pass-cli inject
+_codex_tpl="$HOME/.codex/private_config.toml.template"
+_codex_out="$HOME/.codex/private_config.toml"
+if [ -f "$_codex_tpl" ] && command -v pass-cli >/dev/null 2>&1; then
+  pass-cli inject --in-file "$_codex_tpl" --out-file "$_codex_out" --force 2>/dev/null
+fi
 
 
 # Aliases (kept due to command name conflicts)
