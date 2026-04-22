@@ -75,17 +75,9 @@ export ANDROID_SDK_ROOT="$HOME/Android/Sdk"
 export ANDROID_NDK_HOME="$ANDROID_SDK_ROOT/ndk/27.3.13750724"
 export ANDROID_HOME="$ANDROID_SDK_ROOT"
 
-# Secret references (non-secret) for runtime resolution.
-export GOG_KEYRING_PASSWORD_PASS_REF="pass://CLI/GOG_KEYRING_PASSWORD/認証情報"
-export CONTEXT7_API_KEY_PASS_REF="pass://CLI/context7-api-key/APIキー"
+# Proton Pass CLI — secret reference paths for notify.js (pass-cli run --env-file).
 export PUSHOVER_TOKEN_PASS_REF="pass://CLI/pushover-codex/token"
 export PUSHOVER_USER_PASS_REF="pass://CLI/pushover-codex/user"
-
-# Backward-compatible generic names used by scripts and wrappers.
-export GOG_KEYRING_PASSWORD_REF="$GOG_KEYRING_PASSWORD_PASS_REF"
-export CONTEXT7_API_KEY_REF="$CONTEXT7_API_KEY_PASS_REF"
-export PUSHOVER_TOKEN_REF="$PUSHOVER_TOKEN_PASS_REF"
-export PUSHOVER_USER_REF="$PUSHOVER_USER_PASS_REF"
 
 # Proton Pass CLI storage backend.
 # Prefer filesystem key provider on Linux to avoid keyring/env drift.
@@ -111,165 +103,19 @@ function google() {
   gemini -p "指定したクエリを検索し、要約して。<query>$1</query>"
 }
 
-secret_ref_cli() {
-  local ref="$1"
-  case "$ref" in
-    pass://*) printf '%s' "pass-cli" ;;
-    *) printf '%s' "" ;;
-  esac
-}
-
-select_secret_ref() {
-  local pass_ref="$1"
-  local label="$2"
-
-  if [ -n "$pass_ref" ]; then
-    printf '%s' "$pass_ref"
-    return 0
-  fi
-
-  echo "$label has no configured secret reference." >&2
-  return 1
-}
-
-require_pass_cli_runtime() {
-  local caller="$1"
-
-  if ! command -v pass-cli >/dev/null 2>&1; then
-    echo "$caller: pass-cli is required." >&2
-    return 1
-  fi
-
-  if [ -z "${PROTON_PASS_KEY_PROVIDER-}" ]; then
-    echo "$caller: PROTON_PASS_KEY_PROVIDER is not set." >&2
-    return 1
-  fi
-}
-
-resolve_secret_ref() {
-  local ref="$1"
-  local label="$2"
-  local value
-  local run_status=0
-
-  if [ -z "$ref" ]; then
-    echo "$label is empty." >&2
-    return 1
-  fi
-
-  if [ "$(secret_ref_cli "$ref")" != "pass-cli" ]; then
-    echo "$label must start with pass://." >&2
-    return 1
-  fi
-
-  require_pass_cli_runtime "resolve_secret_ref" || return 1
-
-  value="$(__PASS_CLI_SECRET="$ref" pass-cli run -- sh -c 'printf %s "$__PASS_CLI_SECRET"')" || run_status=$?
-
-  if [ "$run_status" -ne 0 ]; then
-    echo "failed to resolve $label from Proton Pass." >&2
-    return 1
-  fi
-
-  if [ -z "$value" ]; then
-    echo "$label resolved to an empty value." >&2
-    return 1
-  fi
-
-  printf '%s' "$value"
-}
+# --- CLI wrappers with chezmoi protonPass template resolution ---
+# Secrets are resolved at chezmoi apply time via protonPass template function.
+# This avoids pass-cli run, which does not preserve TTY stdin for interactive CLIs.
 
 glm() {
-  local -a cmd
-  local token
-  cmd=(claude --dangerously-skip-permissions "$@")
-
-  token="$(
-    ANTHROPIC_AUTH_TOKEN="pass://CLI/z-ai-api-key-claude-code/credential" \
-      pass-cli run --no-masking -- sh -c 'printf %s "$ANTHROPIC_AUTH_TOKEN"'
-  )" || {
-    echo "glm: failed to resolve ANTHROPIC_AUTH_TOKEN." >&2
-    return 1
-  }
-
-  if [ -z "$token" ]; then
-    echo "glm: ANTHROPIC_AUTH_TOKEN resolved to an empty value." >&2
-    return 1
-  fi
-
-  ANTHROPIC_BASE_URL="https://api.z.ai/api/anthropic" ANTHROPIC_AUTH_TOKEN="$token" "${cmd[@]}"
+  ANTHROPIC_AUTH_TOKEN='{{ protonPass "pass://CLI/z-ai-api-key-claude-code/credential" | trim }}' \
+    ANTHROPIC_BASE_URL="https://api.z.ai/api/anthropic" \
+    claude --dangerously-skip-permissions "$@"
 }
 
-status_shared_ref() {
-  local pass_ref="$1"
-  local label="$2"
-  local ref
-
-  ref="$(select_secret_ref "$pass_ref" "$label")" || return 1
-
-  if resolve_secret_ref "$ref" "$label" >/dev/null 2>&1; then
-    echo "[ok] $label resolves ($ref)."
-    return 0
-  fi
-
-  echo "[ng] $label failed to resolve ($ref)."
-  return 1
-}
-
-secrets_status_core() {
-  local ok=0
-
-  if command -v pass-cli >/dev/null 2>&1; then
-    echo "[ok] pass-cli is installed."
-  else
-    echo "[ng] pass-cli is not installed."
-    ok=1
-  fi
-
-  if [ "${PROTON_PASS_KEY_PROVIDER-}" = "fs" ]; then
-    echo "[ok] PROTON_PASS_KEY_PROVIDER=fs"
-  else
-    echo "[ng] PROTON_PASS_KEY_PROVIDER should be 'fs' (current: ${PROTON_PASS_KEY_PROVIDER:-unset})."
-    ok=1
-  fi
-
-  return "$ok"
-}
-
-secrets_status() {
-  local ok=0
-
-  if secrets_status_core; then
-    true
-  else
-    ok=1
-  fi
-
-  if status_shared_ref "$GOG_KEYRING_PASSWORD_PASS_REF" "GOG_KEYRING_PASSWORD_REF"; then
-    true
-  else
-    ok=1
-  fi
-
-  if status_shared_ref "$CONTEXT7_API_KEY_PASS_REF" "CONTEXT7_API_KEY_REF"; then
-    true
-  else
-    ok=1
-  fi
-
-  if status_shared_ref "$PUSHOVER_TOKEN_PASS_REF" "PUSHOVER_TOKEN_REF"; then
-    true
-  else
-    ok=1
-  fi
-
-  if status_shared_ref "$PUSHOVER_USER_PASS_REF" "PUSHOVER_USER_REF"; then
-    true
-  else
-    ok=1
-  fi
-
-  return "$ok"
+cx() {
+  CONTEXT7_API_KEY='{{ protonPass "pass://CLI/context7-api-key/APIキー" | trim }}' \
+    codex "$@"
 }
 
 gog_op() {
@@ -279,27 +125,13 @@ gog_op() {
     echo "gog CLI is required." >&2
     return 1
   fi
-
-  keyring_password="$(resolve_secret_ref "$GOG_KEYRING_PASSWORD_PASS_REF" "GOG_KEYRING_PASSWORD")" || {
-    echo "gog: failed to resolve GOG_KEYRING_PASSWORD." >&2
-    return 1
-  }
-
-  GOG_KEYRING_PASSWORD="$keyring_password" gog "$@"
+  GOG_KEYRING_PASSWORD='{{ protonPass "pass://CLI/GOG_KEYRING_PASSWORD/認証情報" | trim }}' \
+    gog "$@"
 }
 
-cx() {
-  local context7_ref
-  local context7_key
-
-  context7_ref="$(select_secret_ref "$CONTEXT7_API_KEY_PASS_REF" "CONTEXT7_API_KEY_REF")" || return 1
-
-  context7_key="$(resolve_secret_ref "$context7_ref" "CONTEXT7_API_KEY_REF")" || {
-    echo "cx: failed to resolve CONTEXT7_API_KEY." >&2
-    return 1
-  }
-
-  CONTEXT7_API_KEY="***" codex "$@"
+linear() {
+  LINEAR_API_KEY='{{ protonPass "pass://CLI/linear-cli-api-key/APIキー" | trim }}' \
+    linear "$@"
 }
 
 # Context7 / Codex config - pass-cli inject
