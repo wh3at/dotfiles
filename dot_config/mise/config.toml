@@ -68,6 +68,14 @@ run = "~/.config/mise/scripts/deer-flow-stop.sh"
 description = "Show DeerFlow container, local health, and Tailscale serve status"
 run = "~/.config/mise/scripts/deer-flow-status.sh"
 
+[tasks."port:lookup"]
+description = "プロセス名からPIDとリスニングポートを検索"
+run = "~/.config/mise/scripts/port-lookup.sh"
+
+[tasks."port:check"]
+description = "ポート番号からリスニング状況を確認"
+run = "~/.config/mise/scripts/port-check.sh"
+
 [tasks."voxtype:restart"]
 description = "GPU有効化＋voxtypeデーモン再起動"
 run = "sudo voxtype setup gpu --enable && systemctl --user restart voxtype"
