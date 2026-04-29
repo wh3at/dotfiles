@@ -14,6 +14,7 @@ opencode = "latest"
 php = "8.5"
 pnpm = "10.28"
 zellij = "latest"
+zig = "0.14.0"
 
 [tasks.pf]
 description = "SSH port-forward in background (ask interactively)"
