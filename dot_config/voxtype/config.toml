@@ -10,6 +10,8 @@
 # Required for `voxtype record toggle` and `voxtype status` commands.
 state_file = "auto"
 
+engine = "sensevoice"
+
 [hotkey]
 # Key to hold for push-to-talk
 # Common choices: SCROLLLOCK, PAUSE, RIGHTALT, F13-F24
@@ -138,13 +140,11 @@ initial_prompt = "Technical words: CI,レイアウトシフト,OpenCode,Codex,Sa
 # Timeout for remote requests in seconds (default: 30)
 # remote_timeout_secs = 30
 
-# engine = "whisper"
-
 [sensevoice]
 model = "sensevoice-small"
 language = "ja"        # or "zh", "en", "ja", "ko", "yue"
 use_itn = true         # Inverse text normalization (adds punctuation)
-threads = 12
+# threads = 4
 
 [output]
 # Primary output mode: "type" or "clipboard"
@@ -207,7 +207,7 @@ on_recording_stop = false
 # Show notification with transcribed text after transcription completes
 on_transcription = true
 
-# [text]
+[text]
 # Text processing options (word replacements, spoken punctuation)
 #
 # Enable spoken punctuation conversion (e.g., say "period" to get ".")
@@ -215,6 +215,7 @@ spoken_punctuation = true
 #
 # Custom word replacements (case-insensitive)
 # replacements = { "vox type" = "voxtype" }
+replacements = { "ボックスタイプ" = "voxtype" }
 
 # [vad]
 # Voice Activity Detection - filters silence-only recordings
