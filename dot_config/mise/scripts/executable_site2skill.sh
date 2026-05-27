@@ -14,4 +14,4 @@ if [[ -z "$skill_name" ]]; then
     exit 1
 fi
 
-uvx --from git+https://github.com/laiso/site2skill site2skill "$url" "$skill_name"
+uvx --from "git+https://github.com/laiso/site2skill@legacy" site2skill "$url" "$skill_name"
