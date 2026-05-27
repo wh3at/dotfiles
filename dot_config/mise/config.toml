@@ -13,6 +13,7 @@ node = "24"
 opencode = "latest"
 php = "8.5"
 pnpm = "10.28"
+uv = "latest"
 zellij = "latest"
 zig = "0.14.0"
 
