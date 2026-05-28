@@ -210,4 +210,6 @@ if [ -f "$HOME/.local/share/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/.loc
 # The next line enables shell command completion for gcloud.
 if [ -f "$HOME/.local/share/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/.local/share/google-cloud-sdk/completion.zsh.inc"; fi
 
+# Keep mise-managed tools ahead of PATH entries added earlier in this file.
+eval "$(mise activate zsh)"
 eval "$(direnv hook zsh)"

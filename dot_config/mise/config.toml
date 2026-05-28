@@ -58,6 +58,10 @@ run = "ps -ef | grep \"zellij.*$ZELLIJ_SESSION_NAME\" | grep -v grep"
 description = "画面外のウィンドウを表示領域内に戻す"
 run = "~/.config/mise/scripts/hypr-bring-windows.sh"
 
+[tasks."hypr:fetch-window"]
+description = "他のワークスペースのウィンドウを選択して現在のワークスペースに移動"
+run = "~/.config/mise/scripts/hypr-fetch-window.sh"
+
 [tasks."deer-flow:start"]
 description = "Start DeerFlow dev containers and expose them on Tailscale"
 run = "~/.config/mise/scripts/deer-flow-start.sh"
