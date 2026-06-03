@@ -1,0 +1,30 @@
+Host gce-n8n
+    HostName 35.212.227.182
+    User darma_botting
+    IdentityFile ~/.ssh/i9-test-ssh-key
+    Port 22
+
+Host oracle
+    HostName 138.2.43.210
+    User ubuntu
+    IdentityFile ~/.ssh/ssh-key-2025-07-09.key
+    IdentitiesOnly yes
+    Port 22
+    ServerAliveInterval 15
+    ServerAliveCountMax 3
+    TCPKeepAlive yes
+    LocalForward 3232 localhost:3232 # nextjs
+    LocalForward 6006 localhost:6006 # storybook
+    LocalForward 3939 localhost:3939 # dev-docs
+    LocalForward 3838 localhost:3838 # user-docs
+    LocalForward 34505 localhost:34505 # vibe-kanban
+    LocalForward 3456 localhost:3456 # difit
+
+Host runner
+    HostName 192.168.0.83
+    User runner-user
+
+Host runner-vm
+    HostName 192.168.122.3
+    User runner
+    IdentityFile ~/.ssh/gha_runner_vm_ed25519
