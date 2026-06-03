@@ -1,0 +1,4 @@
+# Linear CLI Configuration
+{{- if lookPath "chezmoi-get-secret" }}
+api_key = "{{ output "chezmoi-get-secret" "linear-cli-api-key" "password" | trim }}"
+{{- end }}
