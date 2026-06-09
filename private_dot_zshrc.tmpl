@@ -118,7 +118,7 @@ glm() {
 
 cx() {
   CONTEXT7_API_KEY='{{ protonPass "pass://CLI/context7-api-key/APIキー" | trim }}' \
-    codex "$@" --yolo
+    codex --yolo "$@"
 }
 
 gog_op() {
