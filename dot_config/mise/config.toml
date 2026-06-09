@@ -17,6 +17,7 @@ pnpm = "10.28.0"
 stripe = "1.42.1"
 zellij = "latest"
 zig = "0.14.0"
+zoxide = "latest"
 
 [tasks.pf]
 description = "SSH port-forward in background (ask interactively)"
