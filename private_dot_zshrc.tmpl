@@ -99,6 +99,10 @@ if command -v phantom &> /dev/null; then
 fi
 
 # Functions
+function mkcd() {
+  mkdir -p "$1" && cd "$1"
+}
+
 function google() {
   gemini -p "指定したクエリを検索し、要約して。<query>$1</query>"
 }
@@ -110,6 +114,7 @@ function google() {
 glm() {
   ANTHROPIC_AUTH_TOKEN='{{ protonPass "pass://CLI/z-ai-api-key-claude-code/credential" | trim }}' \
     ANTHROPIC_BASE_URL="https://api.z.ai/api/anthropic" \
+    API_TIMEOUT_MS="3000000" \
     ANTHROPIC_DEFAULT_HAIKU_MODEL="glm-5-turbo" \
     ANTHROPIC_DEFAULT_SONNET_MODEL="glm-5-turbo" \
     ANTHROPIC_DEFAULT_OPUS_MODEL="glm-5.1" \
