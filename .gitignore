@@ -1,3 +1,6 @@
 .chezmoidata.toml
 dot_codex/private_config.toml
 
+# Vim swap files
+*.sw?
+
