@@ -222,3 +222,7 @@ if [ -f "$HOME/.local/share/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOM
 # Keep mise-managed tools ahead of PATH entries added earlier in this file.
 eval "$(mise activate zsh)"
 eval "$(direnv hook zsh)"
+
+# Default editor: nano (git commit, crontab, chezmoi fallback, etc.)
+export EDITOR=nano
+export VISUAL=nano
