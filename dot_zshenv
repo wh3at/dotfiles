@@ -1,3 +1,7 @@
+typeset -U path PATH
+path=("$HOME/.local/share/mise/shims" $path)
+export PATH
+
 if [ -f "$HOME/.cargo/env" ]; then
   . "$HOME/.cargo/env"
 fi
