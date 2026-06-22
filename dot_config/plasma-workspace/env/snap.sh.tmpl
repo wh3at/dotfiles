@@ -1,4 +1,9 @@
 # Expose Snap .desktop files to KRunner / application menu by adding
 # snapd's desktop dir to XDG_DATA_DIRS. Sourced by startplasma at login,
 # before plasmashell starts.
+{{- if and (eq .chezmoi.os "linux")
+          (eq .chezmoi.osRelease.id "ubuntu")
+          (lookPath "plasmashell")
+          (lookPath "snap") }}
 export XDG_DATA_DIRS="${XDG_DATA_DIRS}:/var/lib/snapd/desktop"
+{{- end }}
