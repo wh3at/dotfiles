@@ -1,4 +1,3 @@
 # Linear CLI Configuration
-{{- if lookPath "chezmoi-get-secret" }}
-api_key = "{{ output "chezmoi-get-secret" "linear-cli-api-key" "password" | trim }}"
-{{- end }}
+{{- $getSecret := joinPath .chezmoi.sourceDir "dot_local/bin/executable_chezmoi-get-secret" }}
+api_key = "{{ output "sh" $getSecret "linear-cli-api-key" "APIキー" | trim }}"

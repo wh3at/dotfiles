@@ -11,9 +11,8 @@ This repo keeps secret values out of templates and data files.
 ## Current Runtime Flow
 
 - `.zshrc`/`.zprofile` default `PROTON_PASS_KEY_PROVIDER=fs` for Proton Pass CLI runtime.
-- Interactive CLI wrappers (`glm`/`cx`/`gog_op`/`linear_cli`) resolve secrets at `chezmoi apply` time via `{{ protonPass "..." }}` templates (avoids `pass-cli run` TTY issue).
+- Interactive CLI wrappers (`glm`/`cx`/`gog_op`/`linear_cli`) resolve secrets at `chezmoi apply` time via `chezmoi-get-secret` and `pass-cli item view --vault-name --item-title --field` (avoids `pass-cli run` TTY issue).
 - `notify.js` resolves Pushover secrets at runtime via `pass-cli run --env-file` (file-based, no TTY).
-- `pass-cli inject` resolves codex config secrets at shell startup.
 - `ANTHROPIC_BASE_URL` is non-secret template data.
 
 ## Required Rotation

@@ -107,12 +107,13 @@ function google() {
   gemini -p "指定したクエリを検索し、要約して。<query>$1</query>"
 }
 
-# --- CLI wrappers with chezmoi protonPass template resolution ---
-# Secrets are resolved at chezmoi apply time via protonPass template function.
+{{- $getSecret := joinPath .chezmoi.sourceDir "dot_local/bin/executable_chezmoi-get-secret" }}
+# --- CLI wrappers with chezmoi-managed Proton Pass resolution ---
+# Secrets are resolved at chezmoi apply time via pass-cli field lookups.
 # This avoids pass-cli run, which does not preserve TTY stdin for interactive CLIs.
 
 glm() {
-  ANTHROPIC_AUTH_TOKEN='{{ protonPass "pass://CLI/z-ai-api-key-claude-code/credential" | trim }}' \
+  ANTHROPIC_AUTH_TOKEN='{{ output "sh" $getSecret "z-ai-api-key-claude-code" "credential" | trim }}' \
     ANTHROPIC_BASE_URL="https://api.z.ai/api/anthropic" \
     API_TIMEOUT_MS="3000000" \
     CLAUDE_CODE_AUTO_COMPACT_WINDOW="1000000" \
@@ -123,7 +124,7 @@ glm() {
 }
 
 cx() {
-  CONTEXT7_API_KEY='{{ protonPass "pass://CLI/context7-api-key/APIキー" | trim }}' \
+  CONTEXT7_API_KEY='{{ output "sh" $getSecret "context7-api-key" "APIキー" | trim }}' \
     codex --yolo "$@"
 }
 
@@ -134,22 +135,14 @@ gog_op() {
     echo "gog CLI is required." >&2
     return 1
   fi
-  GOG_KEYRING_PASSWORD='{{ protonPass "pass://CLI/GOG_KEYRING_PASSWORD/認証情報" | trim }}' \
+  GOG_KEYRING_PASSWORD='{{ output "sh" $getSecret "GOG_KEYRING_PASSWORD" "認証情報" | trim }}' \
     gog "$@"
 }
 
 linear() {
-  LINEAR_API_KEY='{{ protonPass "pass://CLI/linear-cli-api-key/APIキー" | trim }}' \
+  LINEAR_API_KEY='{{ output "sh" $getSecret "linear-cli-api-key" "APIキー" | trim }}' \
     linear "$@"
 }
-
-# Context7 / Codex config - pass-cli inject
-_codex_tpl="$HOME/.codex/private_config.toml.template"
-_codex_out="$HOME/.codex/private_config.toml"
-if [ -f "$_codex_tpl" ] && command -v pass-cli >/dev/null 2>&1; then
-  pass-cli inject --in-file "$_codex_tpl" --out-file "$_codex_out" --force 2>/dev/null
-fi
-
 
 # Aliases (kept due to command name conflicts)
 alias cc="claude"
