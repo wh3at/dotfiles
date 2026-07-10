@@ -97,3 +97,7 @@ run = "~/.config/mise/scripts/port-check.sh"
 [tasks."voxtype:restart"]
 description = "GPU有効化＋voxtypeデーモン再起動"
 run = "sudo voxtype setup gpu --enable && systemctl --user restart voxtype"
+
+[tasks."chezmoi:managed"]
+description = "chezmoiで管理されているファイルをファジー検索"
+run = "chezmoi managed | fzf"
