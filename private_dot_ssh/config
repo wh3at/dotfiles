@@ -28,3 +28,10 @@ Host runner-vm
     HostName 192.168.122.3
     User runner
     IdentityFile ~/.ssh/gha_runner_vm_ed25519
+
+Host nanokvm
+    HostName 192.168.0.219
+    User root
+    Port 22
+    PreferredAuthentications password
+    PubkeyAuthentication no

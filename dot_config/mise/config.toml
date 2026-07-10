@@ -1,4 +1,5 @@
 [tools]
+ast-grep = "0.43.0"
 bun = "1.3.6"
 chezmoi = "latest"
 dotnet = "10.0.201"
@@ -21,6 +22,12 @@ stripe = "1.42.1"
 zellij = "latest"
 zig = "0.14.0"
 zoxide = "latest"
+ffmpeg = "8.1.2"
+vhs = "0.11.0"
+"aqua:Aloxaf/silicon" = "0.5.2"
+herdr = "latest"
+"github:can1357/oh-my-pi" = "latest"
+fzf = "latest"
 
 [tasks.pf]
 description = "SSH port-forward in background (ask interactively)"
@@ -46,10 +53,6 @@ run = "~/.config/mise/scripts/jj-workspace-new.sh"
 [tasks."jj:workspace:clean"]
 description = "Delete merged workspace safely, remove directory, and close zellij tab"
 run = "~/.config/mise/scripts/jj-workspace-clean.sh"
-
-[tasks."chezmoi:managed"]
-description = "chezmoiで管理されているファイルをファジー検索"
-run = "chezmoi managed | fzf"
 
 [tasks.format]
 description = "Run custom formatting script interactively"
