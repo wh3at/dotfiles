@@ -8,5 +8,14 @@
     "npm:pi-subagents",
     "npm:pi-ask-user",
     "npm:@hypabolic/pi-hypa"
-  ]
+  ],
+  "subagents": {
+    "defaultModel": "zai/glm-5.2",
+    "agentOverrides": {
+      "reviewer": {
+        "model": "gpt-5.6-sol",
+        "thinking": "high"
+      }
+    }
+  }
 }
