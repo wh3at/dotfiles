@@ -7,7 +7,8 @@
     "git:github.com/EveryInc/compound-engineering-plugin",
     "npm:pi-subagents",
     "npm:pi-ask-user",
-    "npm:@hypabolic/pi-hypa"
+    "npm:@hypabolic/pi-hypa",
+    "npm:pi-web-access"
   ],
   "subagents": {
     "defaultModel": "zai/glm-5.2",
