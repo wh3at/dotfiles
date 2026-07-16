@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "0.80.6",
+  "lastChangelogVersion": "0.80.7",
   "theme": "dark",
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-5.6-sol",
@@ -9,7 +9,8 @@
     "npm:pi-subagents",
     "npm:pi-ask-user",
     "npm:@hypabolic/pi-hypa",
-    "npm:pi-web-access"
+    "npm:pi-web-access",
+    "npm:pi-hashline-edit"
   ],
   "subagents": {
     "defaultModel": "zai/glm-5.2",
@@ -32,5 +33,6 @@
         "thinking": "xhigh"
       }
     }
-  }
+  },
+  "collapseChangelog": true
 }
