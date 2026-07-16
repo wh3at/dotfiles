@@ -16,7 +16,8 @@
     "defaultModel": "zai/glm-5.2",
     "agentOverrides": {
       "scout": {
-        "model": "zai/glm-4.7"
+        "model": "zai/glm-4.7",
+        "fallbackModels": ["gpt-5.6-luna"]
       },
       "researcher": {
         "model": "zai/glm-4.7"
