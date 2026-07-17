@@ -20,19 +20,19 @@
       "scout": {
         "model": "zai/glm-4.7",
         "fallbackModels": [
-          "openai-codex/gpt-5.6-luna"
+          "openrouter/tencent/hy3:free"
         ]
       },
       "researcher": {
         "model": "zai/glm-4.7",
         "fallbackModels": [
-          "openai-codex/gpt-5.6-luna"
+          "openrouter/tencent/hy3:free"
         ]
       },
       "context-builder": {
         "model": "zai/glm-4.7",
         "fallbackModels": [
-          "openai-codex/gpt-5.6-luna"
+          "openrouter/tencent/hy3:free"
         ]
       },
       "delegate": {
