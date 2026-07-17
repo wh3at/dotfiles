@@ -37,17 +37,17 @@
       },
       "delegate": {
         "fallbackModels": [
-          "openrouter/tencent/hy3"
+          "openrouter/tencent/hy3:free"
         ]
       },
       "planner": {
         "fallbackModels": [
-          "openrouter/tencent/hy3"
+          "openrouter/tencent/hy3:free"
         ]
       },
       "worker": {
         "fallbackModels": [
-          "openrouter/tencent/hy3"
+          "openrouter/tencent/hy3:free"
         ]
       },
       "reviewer": {
