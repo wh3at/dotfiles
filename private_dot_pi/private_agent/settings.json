@@ -14,6 +14,11 @@
     "npm:@juicesharp/rpiv-todo",
     "git:github.com/championswimmer/pi-context-usage"
   ],
+  "retry": {
+    "enabled": true,
+    "maxRetries": 10,
+    "baseDelayMs": 3000
+  }
   "subagents": {
     "defaultModel": "zai/glm-5.2",
     "agentOverrides": {
