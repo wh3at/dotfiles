@@ -16,7 +16,7 @@
   ],
   "retry": {
     "enabled": true,
-    "maxRetries": 10,
+    "maxRetries": 5,
     "baseDelayMs": 3000
   },
   "subagents": {
