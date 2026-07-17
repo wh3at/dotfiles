@@ -18,7 +18,7 @@
     "enabled": true,
     "maxRetries": 10,
     "baseDelayMs": 3000
-  },
+  }
   "subagents": {
     "defaultModel": "zai/glm-5.2",
     "agentOverrides": {
