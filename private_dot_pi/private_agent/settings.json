@@ -20,7 +20,7 @@
     "baseDelayMs": 3000
   },
   "subagents": {
-    "defaultModel": "zai/glm-5.2",
+    "defaultModel": "openrouter/tencent/hy3:free",
     "agentOverrides": {
       "scout": {
         "model": "zai/glm-4.7",
