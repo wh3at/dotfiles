@@ -1,7 +1,7 @@
 {
   "turnBudget": {
-    "maxTurns": 100,
-    "graceTurns": 20
+    "maxTurns": 200,
+    "graceTurns": 40
   },
   "control": {
     "needsAttentionAfterMs": 120000
