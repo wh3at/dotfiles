@@ -139,11 +139,6 @@ gog_op() {
     gog "$@"
 }
 
-linear() {
-  LINEAR_API_KEY='{{ output "sh" $getSecret "linear-cli-api-key" "APIキー" | trim }}' \
-    linear "$@"
-}
-
 # Aliases (kept due to command name conflicts)
 alias cc="claude"
 alias python="python3"
