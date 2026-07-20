@@ -112,6 +112,8 @@ function google() {
 # Secrets are resolved at chezmoi apply time via pass-cli field lookups.
 # This avoids pass-cli run, which does not preserve TTY stdin for interactive CLIs.
 
+export LINEAR_API_KEY='{{ output "sh" $getSecret "linear-cli-api-key" "APIキー" | trim }}'
+
 glm() {
   ANTHROPIC_AUTH_TOKEN='{{ output "sh" $getSecret "z-ai-api-key-claude-code" "credential" | trim }}' \
     ANTHROPIC_BASE_URL="https://api.z.ai/api/anthropic" \
@@ -137,11 +139,6 @@ gog_op() {
   fi
   GOG_KEYRING_PASSWORD='{{ output "sh" $getSecret "GOG_KEYRING_PASSWORD" "認証情報" | trim }}' \
     gog "$@"
-}
-
-linear() {
-  LINEAR_API_KEY='{{ output "sh" $getSecret "linear-cli-api-key" "APIキー" | trim }}' \
-    linear "$@"
 }
 
 # Aliases (kept due to command name conflicts)
