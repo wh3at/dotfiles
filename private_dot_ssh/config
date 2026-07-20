@@ -24,10 +24,18 @@ Host runner
     HostName 192.168.0.83
     User runner-user
 
+Host i9
+    HostName kubuntu-i9
+    User wh3at
+
 Host runner-vm
     HostName 192.168.122.3
     User runner
     IdentityFile ~/.ssh/gha_runner_vm_ed25519
+
+Host hermes
+    HostName omarchy-openclaw.tail5ffd7e.ts.net
+    User claw
 
 Host nanokvm
     HostName 192.168.0.219
