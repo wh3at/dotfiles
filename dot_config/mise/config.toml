@@ -27,6 +27,7 @@ vhs = "0.11.0"
 "aqua:Aloxaf/silicon" = "0.5.2"
 herdr = "latest"
 "github:can1357/oh-my-pi" = "latest"
+uv = "0.11.19"
 
 [tasks.pf]
 description = "SSH port-forward in background (ask interactively)"
