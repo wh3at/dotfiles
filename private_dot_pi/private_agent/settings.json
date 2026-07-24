@@ -21,22 +21,22 @@
     "baseDelayMs": 3000
   },
   "subagents": {
-    "defaultModel": "zai/glm-5.2",
+    "defaultModel": "cursor/grok-4.5:high",
     "agentOverrides": {
       "scout": {
-        "model": "zai/glm-4.7",
+        "model": "corsor/grok-4.5:medium",
         "fallbackModels": [
           "gpt-5.6-luna:high"
         ]
       },
       "researcher": {
-        "model": "zai/glm-4.7",
+        "model": "cursor/grok-4.5:medium",
         "fallbackModels": [
           "gpt-5.6-luna:high"
         ]
       },
       "context-builder": {
-        "model": "zai/glm-4.7",
+        "model": "cursor/grok-4.5:medium",
         "fallbackModels": [
           "gpt-5.6-luna:high"
         ]
