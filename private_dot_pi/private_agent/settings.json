@@ -25,22 +25,19 @@
     "defaultModel": "cursor/grok-4.5:slow",
     "agentOverrides": {
       "scout": {
-        "model": "cursor/grok-4.5:slow",
-        "thinking": "medium",
+        "model": "cursor/composer-2.5:slow",
         "fallbackModels": [
           "gpt-5.6-luna:high"
         ]
       },
       "researcher": {
-        "model": "cursor/grok-4.5:slow",
-        "thinking": "medium",
+        "model": "cursor/composer-2.5:slow",
         "fallbackModels": [
           "gpt-5.6-luna:high"
         ]
       },
       "context-builder": {
-        "model": "cursor/grok-4.5:slow",
-        "thinking": "medium",
+        "model": "cursor/composer-2.5:slow",
         "fallbackModels": [
           "gpt-5.6-luna:high"
         ]
