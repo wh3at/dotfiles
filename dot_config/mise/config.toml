@@ -100,3 +100,6 @@ run = "sudo voxtype setup gpu --enable && systemctl --user restart voxtype"
 [tasks."chezmoi:managed"]
 description = "chezmoiで管理されているファイルをファジー検索"
 run = "chezmoi managed | fzf"
+
+[tasks."mcp:freecad"]
+run = "tunnel-client run --profile freecad"
