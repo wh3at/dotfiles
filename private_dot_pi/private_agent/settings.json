@@ -55,7 +55,7 @@
         ]
       },
       "worker": {
-        "model": "cursor/composer-2.5:slow",
+        "thinking": "medium",
         "fallbackModels": [
           "gpt-5.6-luna:xhigh"
         ]

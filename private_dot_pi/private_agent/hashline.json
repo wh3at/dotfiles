@@ -1,5 +1,5 @@
 {
   "hashLength": 3,
-  "grep": true,
+  "grep": false,
   "replaceText": false
 }
