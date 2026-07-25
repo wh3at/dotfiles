@@ -1,8 +1,8 @@
 {
-  "lastChangelogVersion": "0.81.1",
+  "lastChangelogVersion": "0.82.0",
   "theme": "dark",
-  "defaultProvider": "zai",
-  "defaultModel": "glm-5.2",
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-5.6-sol",
   "defaultThinkingLevel": "low",
   "packages": [
     "git:github.com/EveryInc/compound-engineering-plugin",
@@ -22,40 +22,49 @@
     "baseDelayMs": 3000
   },
   "subagents": {
-    "defaultModel": "cursor/grok-4.5:high",
+    "defaultModel": "cursor/grok-4.5:slow",
     "agentOverrides": {
       "scout": {
-        "model": "cursor/grok-4.5:medium",
+        "model": "cursor/grok-4.5:slow",
+        "thinking": "medium",
         "fallbackModels": [
           "gpt-5.6-luna:high"
         ]
       },
       "researcher": {
-        "model": "cursor/grok-4.5:medium",
+        "model": "cursor/grok-4.5:slow",
+        "thinking": "medium",
         "fallbackModels": [
           "gpt-5.6-luna:high"
         ]
       },
       "context-builder": {
-        "model": "cursor/grok-4.5:medium",
+        "model": "cursor/grok-4.5:slow",
+        "thinking": "medium",
         "fallbackModels": [
           "gpt-5.6-luna:high"
         ]
       },
       "delegate": {
+        "thinking": "high",
         "fallbackModels": [
           "gpt-5.6-luna:xhigh"
         ]
       },
       "planner": {
+        "thinking": "high",
         "fallbackModels": [
           "gpt-5.6-sol:low"
         ]
       },
       "worker": {
+        "thinking": "high",
         "fallbackModels": [
           "gpt-5.6-luna:xhigh"
         ]
+      },
+      "advisor": {
+        "thinking": "high"
       },
       "reviewer": {
         "model": "gpt-5.6-sol",
