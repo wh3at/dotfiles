@@ -6,6 +6,6 @@ When calling the `subagent` tool with `agent: "worker"`, omit `turnBudget`, `tim
 
 IMPORTANT: Do not write overly defensive code. Always prefer simplicity over pathological complexity.
 
-## UI
+## UI rules
 
 操作対象が明らかな場合、ラベルは動詞のみ
