@@ -15,7 +15,8 @@
     "npm:@juicesharp/rpiv-todo",
     "git:github.com/championswimmer/pi-context-usage",
     "git:github.com/algal/pi-openai-server-compaction",
-    "npm:pi-session-only-model"
+    "npm:pi-session-only-model",
+    "npm:@wh3at_dev/pi-status-line"
   ],
   "retry": {
     "enabled": true,
