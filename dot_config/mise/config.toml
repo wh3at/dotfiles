@@ -105,3 +105,7 @@ run = "chezmoi managed | fzf"
 
 [tasks."mcp:freecad"]
 run = "tunnel-client run --profile freecad"
+
+[tasks."mcp:konnect"]
+description = "Start Konnect MCP through OpenAI Secure MCP Tunnel"
+run = "~/.config/mise/scripts/mcp-konnect.sh"

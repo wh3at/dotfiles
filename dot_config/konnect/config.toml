@@ -1,0 +1,2 @@
+transport = "stdio"
+log_level = "info"
