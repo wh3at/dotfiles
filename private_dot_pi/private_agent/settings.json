@@ -24,46 +24,39 @@
     "baseDelayMs": 3000
   },
   "subagents": {
-    "defaultModel": "cursor/grok-4.5:slow",
+    "defaultModel": "opencode-go/deepseek-v4-flash:max",
     "agentOverrides": {
       "scout": {
-        "model": "cursor/composer-2.5:slow",
         "fallbackModels": [
           "gpt-5.6-luna:high"
         ]
       },
       "researcher": {
-        "model": "cursor/composer-2.5:slow",
         "fallbackModels": [
           "gpt-5.6-luna:high"
         ]
       },
       "context-builder": {
-        "model": "cursor/composer-2.5:slow",
         "fallbackModels": [
           "gpt-5.6-luna:high"
         ]
       },
       "delegate": {
-        "thinking": "high",
         "fallbackModels": [
           "gpt-5.6-luna:xhigh"
         ]
       },
       "planner": {
-        "thinking": "high",
+	"model": "gpt-5.6-sol",
+	"thinking": "medium"
         "fallbackModels": [
           "gpt-5.6-sol:low"
         ]
       },
       "worker": {
-        "model": "cursor/composer-2.5:slow",
         "fallbackModels": [
           "gpt-5.6-luna:xhigh"
         ]
-      },
-      "advisor": {
-        "thinking": "high"
       },
       "reviewer": {
         "model": "gpt-5.6-sol",
@@ -71,7 +64,7 @@
       },
       "oracle": {
         "model": "gpt-5.6-sol",
-        "thinking": "low"
+        "thinking": "medium"
       }
     }
   },
