@@ -1,5 +1,6 @@
 {
-  "control": {
-    "needsAttentionAfterMs": 120000
+  "turnBudget": {
+    "maxTurns": 70,
+    "graceTurns": 3
   }
 }
