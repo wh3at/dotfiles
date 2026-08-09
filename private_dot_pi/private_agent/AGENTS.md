@@ -6,6 +6,14 @@ When calling the `subagent` tool with `agent: "worker"`, omit `turnBudget`, `tim
 
 IMPORTANT: Do not write overly defensive code. Always prefer simplicity over pathological complexity.
 
+- Be concise, direct, and candid. Challenge weak assumptions and distinguish verified facts from uncertainty
+- Ground research in authoritative, current sources and link important evidence
+- Preserve the original goal and constraints; finish authorized work end to end and verify the actual result before claiming completion
+- Ask questions only when a decision is materially ambiguous, risky, or requires approval
+- Keep changes focused and simple. Avoid unrelated edits, unnecessary abstractions, and low-signal tests
+- Test observable behavior, review substantial changes, and validate user-facing work in the real interface when applicable
+- Report meaningful blockers, outcomes, and evidence without noisy progress
+
 ## UI rules
 
 操作対象が明らかな場合、ラベルは動詞のみ

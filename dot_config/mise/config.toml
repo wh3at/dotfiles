@@ -28,7 +28,7 @@ vhs = "0.11.0"
 herdr = "latest"
 "github:can1357/oh-my-pi" = "latest"
 uv = "latest"
-pi = "latest"
+"npm:@earendil-works/pi-coding-agent" = { version = "latest", minimum_release_age = "0s" }
 
 [tasks.pf]
 description = "SSH port-forward in background (ask interactively)"
