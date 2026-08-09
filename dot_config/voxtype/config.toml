@@ -147,10 +147,11 @@ use_itn = true         # Inverse text normalization (adds punctuation)
 # threads = 4
 
 [output]
-# Primary output mode: "type" or "clipboard"
-# - type: Simulates keyboard input at cursor position (requires ydotool)
-# - clipboard: Copies text to clipboard (requires wl-copy)
-mode = "clipboard"
+# Primary output mode: "type", "paste", or "clipboard"
+# - type: Simulates keyboard input at cursor position
+# - paste: Copies text and sends Ctrl+V at the cursor position
+# - clipboard: Copies text to clipboard without inserting it
+mode = "paste"
 
 # Fall back to clipboard if typing fails
 fallback_to_clipboard = true
