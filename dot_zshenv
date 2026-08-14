@@ -5,3 +5,8 @@ export PATH
 if [ -f "$HOME/.cargo/env" ]; then
   . "$HOME/.cargo/env"
 fi
+
+if [ -r "$HOME/.config/environment.d/60-partmode.conf" ]; then
+  . "$HOME/.config/environment.d/60-partmode.conf"
+  export PARTMODE_AGENT_KEY
+fi
