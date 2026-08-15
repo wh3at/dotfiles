@@ -4,6 +4,7 @@
 
 IMPORTANT: Do not write overly defensive code. Always prefer simplicity over pathological complexity.
 
+- YAGNI
 - Be concise, direct, and candid. Challenge weak assumptions and distinguish verified facts from uncertainty
 - Ground research in authoritative, current sources and link important evidence
 - Preserve the original goal and constraints; finish authorized work end to end and verify the actual result before claiming completion
