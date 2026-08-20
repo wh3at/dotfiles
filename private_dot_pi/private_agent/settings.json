@@ -1,9 +1,9 @@
 {
-  "lastChangelogVersion": "0.83.0",
+  "lastChangelogVersion": "0.84.2",
   "theme": "dark",
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-5.6-sol",
-  "defaultThinkingLevel": "low",
+  "defaultThinkingLevel": "medium",
   "packages": [
     "git:github.com/EveryInc/compound-engineering-plugin",
     "npm:pi-subagents",
@@ -16,7 +16,8 @@
     "git:github.com/championswimmer/pi-context-usage",
     "npm:pi-session-only-model",
     "npm:@wh3at_dev/pi-status-line",
-    "npm:@ogulcancelik/pi-codex-compaction"
+    "npm:@ogulcancelik/pi-codex-compaction",
+    "npm:pi-btw"
   ],
   "retry": {
     "enabled": true,
@@ -47,8 +48,8 @@
         ]
       },
       "planner": {
-	"model": "gpt-5.6-sol",
-	"thinking": "medium"
+        "model": "gpt-5.6-sol",
+        "thinking": "medium"
       },
       "worker": {
         "fallbackModels": [
@@ -66,4 +67,4 @@
     }
   },
   "collapseChangelog": true
-11;rgb:1e1e/1e1e/2e2e}
+}
