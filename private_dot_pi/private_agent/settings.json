@@ -25,7 +25,7 @@
     "baseDelayMs": 3000
   },
   "subagents": {
-    "defaultModel": "opencode-go/ox-alpha-free:high",
+    "defaultModel": "opencode-go/hy3:max",
     "agentOverrides": {
       "scout": {
         "fallbackModels": [
@@ -67,4 +67,4 @@
     }
   },
   "collapseChangelog": true
-}
+11;rgb:1e1e/1e1e/2e2e}
