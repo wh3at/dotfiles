@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "0.84.2",
+  "lastChangelogVersion": "0.84.3",
   "theme": "dark",
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-5.6-sol",
@@ -17,7 +17,8 @@
     "npm:pi-session-only-model",
     "npm:@wh3at_dev/pi-status-line",
     "npm:@ogulcancelik/pi-codex-compaction",
-    "npm:pi-btw"
+    "npm:pi-btw",
+    "npm:@ff-labs/pi-fff"
   ],
   "retry": {
     "enabled": true,
