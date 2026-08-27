@@ -25,7 +25,7 @@
     "baseDelayMs": 3000
   },
   "subagents": {
-    "defaultModel": "opencode-go/ox-alpha-free:high",
+    "defaultModel": "opencode-go/deepseek-v4-flash:high",
     "agentOverrides": {
       "scout": {
         "fallbackModels": [
