@@ -5,7 +5,6 @@
   "defaultModel": "gpt-5.6-sol",
   "defaultThinkingLevel": "medium",
   "packages": [
-    "git:github.com/EveryInc/compound-engineering-plugin",
     "npm:pi-subagents",
     "npm:pi-ask-user",
     "npm:pi-web-access",
@@ -24,7 +23,7 @@
     "baseDelayMs": 3000
   },
   "subagents": {
-    "defaultModel": "opencode-go/hy3:high",
+    "defaultModel": "opencode-go/deepseek-v4-flash:high",
     "agentOverrides": {
       "scout": {
         "fallbackModels": [
@@ -69,6 +68,8 @@
   "enabledModels": [
     "openai-codex/gpt-5.6-sol",
     "zai/glm-5.3-flash",
-    "opencode-go/hy3"
-  ]
+    "opencode-go/hy3",
+    "opencode-go/deepseek-v4-flash"
+  ],
+  "tuiMode": "fullscreen"
 }
