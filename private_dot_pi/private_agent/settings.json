@@ -5,11 +5,14 @@
   "defaultModel": "gpt-5.6-sol",
   "defaultThinkingLevel": "medium",
   "packages": [
+    "git:github.com/EveryInc/compound-engineering-plugin",
     "npm:pi-subagents",
+    "npm:pi-cursor-sdk",
     "npm:pi-ask-user",
     "npm:pi-web-access",
     "npm:pi-hashline-edit",
     "npm:pi-mcp-adapter",
+    "npm:@juicesharp/rpiv-todo",
     "git:github.com/championswimmer/pi-context-usage",
     "npm:pi-session-only-model",
     "npm:@wh3at_dev/pi-status-line",
@@ -23,7 +26,7 @@
     "baseDelayMs": 3000
   },
   "subagents": {
-    "defaultModel": "opencode-go/deepseek-v4-flash:high",
+    "defaultModel": "opencode-go/hy3:high",
     "agentOverrides": {
       "scout": {
         "fallbackModels": [
@@ -64,12 +67,5 @@
       }
     }
   },
-  "collapseChangelog": true,
-  "enabledModels": [
-    "openai-codex/gpt-5.6-sol",
-    "zai/glm-5.3-flash",
-    "opencode-go/hy3",
-    "opencode-go/deepseek-v4-flash"
-  ],
-  "tuiMode": "fullscreen"
+  "collapseChangelog": true
 }
