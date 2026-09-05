@@ -46,7 +46,7 @@
         ]
       },
       "planner": {
-        "model": "gpt-5.6-sol",
+        "model": "gpt-6-astra",
         "thinking": "medium"
       },
       "worker": {
@@ -55,11 +55,11 @@
         ]
       },
       "reviewer": {
-        "model": "gpt-5.6-sol",
-        "thinking": "low"
+        "model": "gpt-6-astra",
+        "thinking": "medium"
       },
       "oracle": {
-        "model": "gpt-5.6-sol",
+        "model": "gpt-6-astra",
         "thinking": "medium"
       }
     }
