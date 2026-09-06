@@ -5,7 +5,7 @@
   "defaultModel": "gpt-6-astra",
   "defaultThinkingLevel": "low",
   "packages": [
-    "npm:pi-subagents",
+    "git:github.com/nicobailon/pi-subagents@3e7f8f80f681705fffa0fd22e2c21c84093f61a1",
     "npm:pi-ask-user",
     "npm:pi-web-access",
     "npm:pi-hashline-edit",
