@@ -32,6 +32,7 @@
         ]
       },
       "researcher": {
+        "model": "opencode-go/deepseek-v4-flash",
         "fallbackModels": [
           "gpt-5.6-luna:high"
         ]
