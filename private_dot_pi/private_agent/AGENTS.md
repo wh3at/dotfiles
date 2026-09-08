@@ -1,3 +1,7 @@
+## Subagents
+
+親エージェントは自分で作業し、ユーザー・プロジェクト指示・適用スキルが委譲を明示的に求める場合のみサブエージェントを使う。
+
 ## Coding rules
 
 - Do not write overly defensive code. Always prefer simplicity over pathological complexity.
