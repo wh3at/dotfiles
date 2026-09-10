@@ -3,7 +3,7 @@
   "theme": "dark",
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-6-astra",
-  "defaultThinkingLevel": "low",
+  "defaultThinkingLevel": "medium",
   "packages": [
     "git:github.com/nicobailon/pi-subagents@3e7f8f80f681705fffa0fd22e2c21c84093f61a1",
     "npm:pi-web-access",
@@ -23,7 +23,7 @@
     "baseDelayMs": 3000
   },
   "subagents": {
-    "defaultModel": "openai-codex/gpt-5.6-sol:low",
+    "defaultModel": "openai-codex/gpt-5.6-luna:max",
     "agentOverrides": {
       "scout": {
         "model": "opencode-go/deepseek-v4-flash",
@@ -65,7 +65,7 @@
       },
       "oracle": {
         "model": "gpt-6-astra",
-        "thinking": "medium"
+        "thinking": "high"
       }
     }
   },
