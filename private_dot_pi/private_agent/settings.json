@@ -26,20 +26,20 @@
     "defaultModel": "opencode-go/deepseek-flash:high",
     "agentOverrides": {
       "scout": {
-        "model": "opencode-go/deepseek-v4-flash",
+        "model": "opencode-go/deepseek-flash",
         "thinking": "medium",
         "fallbackModels": [
           "gpt-5.6-luna:high"
         ]
       },
       "researcher": {
-        "model": "opencode-go/deepseek-v4-flash",
+        "model": "opencode-go/deepseek-flash",
         "fallbackModels": [
           "gpt-5.6-luna:high"
         ]
       },
       "context-builder": {
-        "model": "opencode-go/deepseek-v4-flash",
+        "model": "opencode-go/deepseek-flash",
         "thinking": "medium",
         "fallbackModels": [
           "gpt-5.6-luna:high"
