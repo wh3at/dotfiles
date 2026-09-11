@@ -23,23 +23,23 @@
     "baseDelayMs": 3000
   },
   "subagents": {
-    "defaultModel": "opencode-go/deepseek-flash:high",
+    "defaultModel": "opencode-go/deepseek-v4.1-flash:high",
     "agentOverrides": {
       "scout": {
-        "model": "opencode-go/deepseek-flash",
+        "model": "opencode-go/deepseek-v4.1-flash",
         "thinking": "high",
         "fallbackModels": [
           "gpt-5.6-luna:high"
         ]
       },
       "researcher": {
-        "model": "opencode-go/deepseek-flash",
+        "model": "opencode-go/deepseek-v4.1-flash",
         "fallbackModels": [
           "gpt-5.6-luna:high"
         ]
       },
       "context-builder": {
-        "model": "opencode-go/deepseek-flash",
+        "model": "opencode-go/deepseek-v4.1-flash",
         "fallbackModels": [
           "gpt-5.6-luna:high"
         ]
