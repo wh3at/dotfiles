@@ -15,7 +15,8 @@
     "npm:@ogulcancelik/pi-codex-compaction",
     "npm:pi-btw",
     "npm:@ff-labs/pi-fff",
-    "npm:@wh3at_dev/pi-zen"
+    "npm:@wh3at_dev/pi-zen",
+    "https://github.com/ayghri/i-have-adhd"
   ],
   "retry": {
     "enabled": true,
