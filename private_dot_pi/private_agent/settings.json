@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "0.85.1",
+  "lastChangelogVersion": "0.87.1",
   "theme": "dark",
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-6-sol",
@@ -16,7 +16,8 @@
     "npm:pi-btw",
     "npm:@ff-labs/pi-fff",
     "npm:@wh3at_dev/pi-zen",
-    "https://github.com/ayghri/i-have-adhd"
+    "https://github.com/ayghri/i-have-adhd",
+    "../../Work/pi-orca-dispatch"
   ],
   "retry": {
     "enabled": true,
