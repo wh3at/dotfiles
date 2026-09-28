@@ -18,6 +18,7 @@ When the user's prompt indicates a request for action, such as "can you...", "I 
 
 - Do not write overly defensive code. Always prefer simplicity over pathological complexity.
 - YAGNI
+- Never write code comments, including inline, block, and documentation comments. Express intent through names and structure.
 
 ## Local web previews
 
