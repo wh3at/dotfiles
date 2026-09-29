@@ -57,8 +57,8 @@
         ]
       },
       "reviewer": {
-        "model": "gpt-6-astra",
-        "thinking": "medium"
+        "model": "gpt-6.1-sol",
+        "thinking": "high"
       },
       "oracle": {
         "model": "gpt-6-astra",

@@ -22,6 +22,14 @@ if ! $ADB devices | grep -q "$DEV"; then
   fi
 fi
 
+if ! "$ADB" -s "$DEV" shell input keyevent KEYCODE_WAKEUP; then
+  echo "エミュレータの画面を起こせませんでした" >&2
+  exit 1
+fi
+
 echo "Gymverse を起動しています..."
-$ADB -s $DEV shell am start -n "$APP/.feature.splash.GymSplashActivity" > /dev/null 2>&1
+if ! "$ADB" -s "$DEV" shell am start -n "$APP/.feature.splash.GymSplashActivity"; then
+  echo "Gymverse を起動できませんでした" >&2
+  exit 1
+fi
 echo "完了"
