@@ -18,7 +18,7 @@
     "npm:@ff-labs/pi-fff",
     "npm:@wh3at_dev/pi-zen",
     "https://github.com/ayghri/i-have-adhd",
-    "../../Work/pi-orca-dispatch"
+    "npm:pi-orca-dispatch"
   ],
   "retry": {
     "enabled": true,
