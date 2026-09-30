@@ -30,6 +30,8 @@ herdr = "latest"
 uv = "latest"
 "npm:@earendil-works/pi-coding-agent" = { version = "latest", minimum_release_age = "0s" }
 "github:woodpecker-ci/woodpecker" = "3.17.0"
+# Cloudflare CLI is in beta; pin the verified release.
+"npm:cf" = "1.0.0-beta.5"
 "npm:wrangler" = "4"
 
 [tasks.pf]
