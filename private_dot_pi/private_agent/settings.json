@@ -4,6 +4,7 @@
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-6.1-sol",
   "defaultThinkingLevel": "medium",
+  "defaultTools": ["+codemode"],
   "packages": [
     "git:github.com/nicobailon/pi-subagents@3e7f8f80f681705fffa0fd22e2c21c84093f61a1",
     "npm:pi-web-access",
