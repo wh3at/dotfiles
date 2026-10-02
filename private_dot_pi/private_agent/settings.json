@@ -1,11 +1,13 @@
 {
-  "lastChangelogVersion": "0.87.1",
+  "lastChangelogVersion": "1.0.0",
   "theme": "dark",
   "tuiMode": "regular",
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-6.1-sol",
   "defaultThinkingLevel": "medium",
-  "defaultTools": ["+codemode"],
+  "defaultTools": [
+    "+codemode"
+  ],
   "packages": [
     "git:github.com/nicobailon/pi-subagents@main",
     "npm:pi-web-access",
@@ -45,5 +47,7 @@
     }
   },
   "collapseChangelog": true,
-  "extensions": ["-builtin:mcp"]
+  "extensions": [
+    "-builtin:mcp"
+  ]
 }
