@@ -44,5 +44,6 @@
       }
     }
   },
-  "collapseChangelog": true
+  "collapseChangelog": true,
+  "extensions": ["-builtin:mcp"]
 }
