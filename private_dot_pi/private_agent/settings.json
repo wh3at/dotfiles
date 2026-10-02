@@ -29,34 +29,9 @@
   "subagents": {
     "defaultModel": "opencode-go/deepseek-v4.1-flash:high",
     "agentOverrides": {
-      "scout": {
-        "fallbackModels": [
-          "gpt-6-luna:max"
-        ]
-      },
-      "researcher": {
-        "fallbackModels": [
-          "gpt-6-luna:max"
-        ]
-      },
-      "context-builder": {
-        "fallbackModels": [
-          "gpt-6-luna:max"
-        ]
-      },
-      "delegate": {
-        "fallbackModels": [
-          "gpt-6-luna:max"
-        ]
-      },
       "planner": {
         "model": "gpt-6-sol",
         "thinking": "xhigh"
-      },
-      "worker": {
-        "fallbackModels": [
-          "gpt-6-luna:max"
-        ]
       },
       "reviewer": {
         "model": "gpt-6.1-sol",
