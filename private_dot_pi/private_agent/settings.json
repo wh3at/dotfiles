@@ -6,7 +6,7 @@
   "defaultThinkingLevel": "medium",
   "defaultTools": ["+codemode"],
   "packages": [
-    "git:github.com/nicobailon/pi-subagents@3e7f8f80f681705fffa0fd22e2c21c84093f61a1",
+    "git:github.com/nicobailon/pi-subagents@main",
     "npm:pi-web-access",
     "npm:pi-hashline-edit",
     "npm:pi-mcp-adapter",
