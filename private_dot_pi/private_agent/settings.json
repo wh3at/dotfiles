@@ -20,7 +20,7 @@
     "npm:pi-btw",
     "npm:pi-command-queue",
     "npm:@ff-labs/pi-fff",
-    "npm:@wh3at_dev/pi-zen",
+    "/home/wh3at/Work/pi-zen",
     "https://github.com/ayghri/i-have-adhd",
     "npm:pi-orca-dispatch"
   ],
@@ -47,7 +47,9 @@
     }
   },
   "collapseChangelog": true,
+  "deviceId": "bdcff6de-9f07-4254-bdc9-9d9733b8a7e0",
   "extensions": [
-    "-builtin:mcp"
+    "-builtin:mcp",
+    "-builtin:codemode"
   ]
 }
