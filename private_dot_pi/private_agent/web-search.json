@@ -1,0 +1,17 @@
+{
+  "provider": "exa",
+  "webSearch": {
+    "allowedProviders": ["exa", "openai"]
+  },
+  "tools": {
+    "sourceCheck": { "enabled": false }
+  },
+  "fetch": {
+    "allowedModes": ["readable", "raw", "answer"]
+  },
+  "maxInlineContentChars": 30000,
+  "commands": {
+    "curator": { "enabled": false },
+    "google-account": { "enabled": false }
+  }
+}
