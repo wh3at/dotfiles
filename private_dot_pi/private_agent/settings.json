@@ -32,7 +32,10 @@
   "subagents": {
     "defaultModel": "opencode-go/deepseek-v4.1-flash:high",
     "agentOverrides": {
-      "worker":  
+      "worker": {
+        "model": "openai-codex/gpt-6.1-sol",
+        "thinking": "low"
+      },
       "planner": {
         "model": "gpt-6.1-sol",
         "thinking": "xhigh"
