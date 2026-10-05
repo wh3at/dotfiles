@@ -33,7 +33,7 @@
     "defaultModel": "opencode-go/deepseek-v4.1-flash:high",
     "agentOverrides": {
       "planner": {
-        "model": "gpt-6-sol",
+        "model": "gpt-6.1-sol",
         "thinking": "xhigh"
       },
       "reviewer": {
