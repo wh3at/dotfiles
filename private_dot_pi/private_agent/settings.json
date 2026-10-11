@@ -32,6 +32,10 @@
   "subagents": {
     "defaultModel": "opencode-go/deepseek-v4.1-flash:high",
     "agentOverrides": {
+      "scout": {
+        "model": "opencode-go/deepseek-v4-flash",
+        "thinking": "high"
+      },
       "worker": {
         "model": "openai-codex/gpt-6.1-sol",
         "thinking": "low"

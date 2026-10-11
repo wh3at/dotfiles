@@ -220,3 +220,16 @@ export UI_REEL_DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/152320211839
 # zoxide (loaded last per upstream guidance, after direnv/mise chpwd hooks)
 eval "$(zoxide init zsh --cmd z)"
 unalias zi 2>/dev/null  # restore zoxide interactive `zi` (zinit aliases `zi`; alias > function in zsh)
+
+mise() {
+  command mise "$@" || return
+  [[ "$1" == up || "$1" == upgrade ]] || return 0
+  [[ "$*" == *--dry-run* || " $* " == *" -n "* ]] && return 0
+
+  local codex_cli versions
+  codex_cli=$(command mise -C "$HOME" which codex) || return
+  versions=$("$codex_cli" app-server daemon version) || return
+  if jq -e '.cliVersion != .managedCodexVersion or .cliVersion != .appServerVersion' <<< "$versions" >/dev/null; then
+    "$codex_cli" app-server daemon update --from-cli --yes
+  fi
+}
