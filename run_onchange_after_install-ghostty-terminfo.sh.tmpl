@@ -1,0 +1,8 @@
+{{ if or (eq .chezmoi.os "linux") (eq .chezmoi.os "darwin") -}}
+#!/bin/sh
+set -eu
+
+tic -x -o "$HOME/.terminfo" - <<'GHOSTTY_TERMINFO'
+{{ template "ghostty.terminfo" . -}}
+GHOSTTY_TERMINFO
+{{ end -}}
