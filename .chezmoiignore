@@ -1,0 +1,9 @@
+
+# Keep this machine's reviewed GitHub CLI and Omarchy Neovim settings.
+.config/gh/config.yml
+.config/gh/hosts.yml
+.config/nvim/lua/config/options.lua
+.config/nvim/lua/plugins/all-themes.lua
+.config/nvim/lua/plugins/omarchy-theme-hotreload.lua
+.config/nvim/lua/plugins/theme.lua
+.config/nvim/plugin/after/transparency.lua

@@ -9,8 +9,11 @@
     },
     "beds24-api": {
       "type": "local",
-      "command": ["node", "/home/wh3at/.local/share/kadou-delta-next/mcp/beds24-api-v2-mcp/dist/server.js"],
-      "enabled": true
+      "command": [
+        "node",
+        "/home/wh3at/.local/share/kadou-delta-next/mcp/beds24-api-v2-mcp/dist/server.js"
+      ],
+      "enabled": false
     }
   }
 }

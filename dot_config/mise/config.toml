@@ -26,11 +26,12 @@ ffmpeg = "8.1.2"
 vhs = "0.11.0"
 "aqua:Aloxaf/silicon" = "0.5.2"
 herdr = "latest"
-"github:can1357/oh-my-pi" = "latest"
 uv = "latest"
 "npm:@earendil-works/pi-coding-agent" = { version = "latest", minimum_release_age = "0s" }
 "github:woodpecker-ci/woodpecker" = "3.17.0"
 "npm:wrangler" = "4"
+pi = "latest"
+codex = "latest"
 
 [tasks.pf]
 description = "SSH port-forward in background (ask interactively)"
@@ -115,3 +116,6 @@ run = "~/.config/mise/scripts/mcp-konnect.sh"
 [tasks."gymverse:start"]
 description = "Androidエミュレータを起動してGymverseを開く"
 run = "~/.config/mise/scripts/gymverse-start.sh"
+
+[settings.upgrade]
+auto_prune = false

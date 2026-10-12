@@ -1,8 +1,8 @@
 {
-  "lastChangelogVersion": "1.0.2",
+  "lastChangelogVersion": "1.1.0",
   "theme": "dark",
   "tuiMode": "regular",
-  "defaultProvider": "openai-codex",
+  "defaultProvider": "openai",
   "defaultModel": "gpt-6.1-sol",
   "defaultThinkingLevel": "medium",
   "defaultTools": [
@@ -20,9 +20,9 @@
     "npm:pi-btw",
     "npm:pi-command-queue",
     "npm:@ff-labs/pi-fff",
-    "/home/wh3at/Work/pi-zen",
     "https://github.com/ayghri/i-have-adhd",
-    "npm:pi-orca-dispatch"
+    "npm:pi-orca-dispatch",
+    "npm:@wh3at_dev/pi-zen"
   ],
   "retry": {
     "enabled": true,
@@ -37,7 +37,7 @@
         "thinking": "high"
       },
       "worker": {
-        "model": "openai-codex/gpt-6.1-sol",
+        "model": "openai/gpt-6.1-sol",
         "thinking": "low"
       },
       "planner": {
@@ -55,7 +55,7 @@
     }
   },
   "collapseChangelog": true,
-  "deviceId": "bdcff6de-9f07-4254-bdc9-9d9733b8a7e0",
+  "deviceId": "fc30dc3f-ae20-449e-91e7-35dfd098a15f",
   "extensions": [
     "-builtin:mcp",
     "-builtin:codemode"

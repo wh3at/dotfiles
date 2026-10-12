@@ -1,24 +1,37 @@
+# See https://git-scm.com/docs/git-config
+
 [alias]
 	co = checkout
 	br = branch
 	ci = commit
 	st = status
-[pull]
-	rebase = true
 [init]
 	defaultBranch = main
+[pull]
+	rebase = true 			 # Rebase (instead of merge) on pull
+[push]
+	autoSetupRemote = true   # Automatically set upstream branch on push
+[diff]
+	algorithm = histogram    # Clearer diffs on moved/edited lines
+	colorMoved = plain       # Highlight moved blocks in diffs
+	mnemonicPrefix = true    # More intuitive refs in diff output
+[commit]
+	verbose = true           # Include diff comment in commit message template
+[column]
+	ui = auto 			     # Output in columns when possible
+[branch]
+	sort = -committerdate    # Sort branches by most recent commit first
+[tag]
+	sort = -version:refname  # Sort version numbers as you would expect
+[rerere]
+	enabled = true           # Record and reuse conflict resolutions
+	autoupdate = true        # Apply stored conflict resolutions automatically
 [user]
 	name = wh3at
 	email = 69319864+wh3at@users.noreply.github.com
 [credential "https://github.com"]
 	helper = 
-	helper = !/usr/bin/gh auth git-credential
+	helper = !gh auth git-credential
 [credential "https://gist.github.com"]
 	helper = 
-	helper = !/usr/bin/gh auth git-credential
-[credential]
 	helper = !gh auth git-credential
-[coderabbit]
-	machineId = cli/048f007b7ded48f59c5717ee2084c9f0
-[safe]
-	directory = /home/wh3at/Work/kadou-delta-next.KDN-23-competitive-research/.
