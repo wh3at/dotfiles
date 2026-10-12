@@ -24,8 +24,8 @@ Host runner
     HostName 192.168.0.83
     User runner-user
 
-Host i9
-    HostName kubuntu-i9
+Host i7 omarchy-i7
+    HostName omarchy-i7
     User wh3at
 
 Host runner-vm
