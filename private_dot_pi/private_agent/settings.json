@@ -2,7 +2,7 @@
   "lastChangelogVersion": "1.1.0",
   "theme": "dark",
   "tuiMode": "regular",
-  "defaultProvider": "openai",
+  "defaultProvider": "openai-codex",
   "defaultModel": "gpt-6.1-sol",
   "defaultThinkingLevel": "medium",
   "defaultTools": [
@@ -37,11 +37,11 @@
         "thinking": "high"
       },
       "worker": {
-        "model": "openai/gpt-6.1-sol",
+        "model": "openai-codex/gpt-6.1-sol",
         "thinking": "low"
       },
       "planner": {
-        "model": "gpt-6.1-sol",
+        "model": "openai-codex/gpt-6.1-sol",
         "thinking": "xhigh"
       },
       "reviewer": {
