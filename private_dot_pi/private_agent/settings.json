@@ -33,7 +33,7 @@
     "defaultModel": "opencode-go/deepseek-v4.1-flash:high",
     "agentOverrides": {
       "scout": {
-        "model": "opencode-go/deepseek-v4-flash",
+        "model": "opencode-go/deepseek-v4.1-flash",
         "thinking": "high"
       },
       "worker": {
