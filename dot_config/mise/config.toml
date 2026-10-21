@@ -29,7 +29,6 @@ uv = "latest"
 "npm:@earendil-works/pi-coding-agent" = { version = "latest", minimum_release_age = "0s" }
 "github:woodpecker-ci/woodpecker" = "3.17.0"
 "npm:wrangler" = "4"
-pi = "latest"
 codex = "latest"
 claude = "latest"
 gemini = { version = "latest", allow_builds = ["@github/keytar", "node-pty"] }
