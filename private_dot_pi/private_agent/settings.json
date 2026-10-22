@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "1.3.0",
+  "lastChangelogVersion": "1.4.0",
   "theme": "dark",
   "tuiMode": "regular",
   "defaultProvider": "openai-codex",
@@ -22,7 +22,8 @@
     "npm:@ff-labs/pi-fff",
     "https://github.com/ayghri/i-have-adhd",
     "npm:pi-orca-dispatch",
-    "npm:@wh3at_dev/pi-zen"
+    "npm:@wh3at_dev/pi-zen",
+    "npm:pi-fast"
   ],
   "retry": {
     "enabled": true,
