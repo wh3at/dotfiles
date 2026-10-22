@@ -3,9 +3,6 @@
   "webSearch": {
     "allowedProviders": ["exa", "openai"]
   },
-  "tools": {
-    "sourceCheck": { "enabled": false }
-  },
   "fetch": {
     "allowedModes": ["readable", "raw", "answer"]
   },
