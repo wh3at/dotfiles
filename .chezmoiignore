@@ -1,6 +1,5 @@
 
-# Keep this machine's reviewed GitHub CLI and Omarchy Neovim settings.
-.config/gh/config.yml
+# Keep GitHub credentials and this machine's reviewed Omarchy Neovim settings.
 .config/gh/hosts.yml
 .config/nvim/lua/config/options.lua
 .config/nvim/lua/plugins/all-themes.lua
