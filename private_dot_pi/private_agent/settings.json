@@ -16,14 +16,14 @@
     "git:github.com/championswimmer/pi-context-usage",
     "npm:pi-session-only-model",
     "npm:@wh3at_dev/pi-status-line",
-    "npm:@ogulcancelik/pi-codex-compaction",
     "npm:pi-btw",
     "npm:pi-command-queue",
     "npm:@ff-labs/pi-fff",
     "https://github.com/ayghri/i-have-adhd",
     "npm:pi-orca-dispatch",
     "npm:@wh3at_dev/pi-zen",
-    "npm:pi-fast"
+    "npm:pi-fast",
+    "npm:pi-cached-compaction"
   ],
   "retry": {
     "enabled": true,
