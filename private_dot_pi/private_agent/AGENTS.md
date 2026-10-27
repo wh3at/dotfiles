@@ -14,10 +14,6 @@ When the user's prompt indicates a request for action, such as "can you...", "I 
 
 **Steering:** Treat new messages during active work as updates to the same task. Incorporate corrections and constraints while preserving the objective, completed work, and outstanding work, including across compaction. Answer questions and status requests briefly, then resume. Stop or replace the task only when the user clearly cancels it or requests an incompatible objective.
 
-## Subagents
-
-委譲についてユーザー・プロジェクト指示・適用スキルに指定がない場合は、親エージェントが作業する。
-
 ## Coding rules
 
 - Do not write overly defensive code. Always prefer simplicity over pathological complexity.
