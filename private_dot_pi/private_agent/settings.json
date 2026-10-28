@@ -34,12 +34,12 @@
     "defaultModel": "opencode-go/deepseek-v4.1-flash:high",
     "agentOverrides": {
       "scout": {
-        "model": "opencode-go/deepseek-v4.1-flash",
-        "thinking": "high"
+        "model": "openai-codex/gpt-6.1-terra",
+        "thinking": "low"
       },
       "worker": {
-        "model": "openai-codex/gpt-6.1-sol",
-        "thinking": "low"
+        "model": "openai-codex/gpt-6.1-terra",
+        "thinking": "xhigh"
       },
       "planner": {
         "model": "openai-codex/gpt-6.1-sol",
