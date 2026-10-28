@@ -60,5 +60,6 @@
   "extensions": [
     "-builtin:mcp",
     "-builtin:codemode"
-  ]
+  ],
+  "hideThinkingBlock": true
 }
