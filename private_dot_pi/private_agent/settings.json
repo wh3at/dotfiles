@@ -31,7 +31,7 @@
     "baseDelayMs": 3000
   },
   "subagents": {
-    "defaultModel": "opencode-go/deepseek-v4.1-flash:high",
+    "defaultModel": "openai-codex/gpt-6.1-terra:xhigh",
     "agentOverrides": {
       "scout": {
         "model": "openai-codex/gpt-6.1-terra",
