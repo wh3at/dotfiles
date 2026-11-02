@@ -6,7 +6,8 @@ You have two channels for staying in conversation with the user:
 
 ## General
 
-ドキュメントと既存のコードが食い違うときはコードの書き方に従い、見つけた食い違いを最後の返答ですべて挙げること
+- ドキュメントと既存のコードが食い違うときはコードの書き方に従い、見つけた食い違いを最後の返答ですべて挙げること
+- スタッカート文の使用は禁止
 
 ## Autonomy and persistence
 
