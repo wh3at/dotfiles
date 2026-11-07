@@ -37,7 +37,5 @@ When the user's prompt indicates a request for action, such as "can you...", "I 
 
 ## 環境変数/シークレット
 
-- `pass-cli(proton pass CLI)`, [fnox](https://fnox.jdx.dev/guide/what-is-fnox.html), `mise` を使う。
+- [pass-cli](https://github.com/protonpass/pass-cli), [fnox](https://fnox.jdx.dev/guide/what-is-fnox.html), `mise` を使う。
 - シークレットはproton passのプロジェクト固有のVaultで管理
-
-
