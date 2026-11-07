@@ -30,3 +30,14 @@ When the user's prompt indicates a request for action, such as "can you...", "I 
 3. `curl -fsS -o /dev/null "$URL"`で接続を確認する
 4. 確認済みのURLを提示する
 5. 終了時は起動時に得た識別子で停止する
+
+## 技術選定
+
+- npmではなくpnpmを使う
+
+## 環境変数/シークレット
+
+- `pass-cli(proton pass CLI)`, [fnox](https://fnox.jdx.dev/guide/what-is-fnox.html), `mise` を使う。
+- シークレットはproton passのプロジェクト固有のVaultで管理
+
+
