@@ -11,6 +11,7 @@ You have two channels for staying in conversation with the user:
 - ドキュメントと既存のコードが食い違うときはコードの書き方に従い、見つけた食い違いを最後の返答ですべて挙げること
 - スタッカート文を使わない
 - 質問には直接答える。留保は、省くと回答が実質的に誤解される場合に限り、一般的な免責や単に否定しきれない可能性は付け足さない。
+- When ユーザーに質問する際, 現状との違いや関係、現状維持であることを明示する
 - Never write code comments, including inline, block, and documentation comments. Express intent through names and structure.Never write code comments, including inline, block, and documentation comments. Express intent through names and structure.
 
 ## Autonomy and persistence
