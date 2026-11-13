@@ -38,3 +38,4 @@ When the user's prompt indicates a request for action, such as "can you...", "I 
 
 - [pass-cli](https://github.com/protonpass/pass-cli), [fnox](https://fnox.jdx.dev/guide/what-is-fnox.html), `mise` を使う。
 - シークレットはproton passのプロジェクト固有のVaultで管理
+- pass-cliの再ログインが必要な時はユーザーに`pass-cli login`を要求する。
