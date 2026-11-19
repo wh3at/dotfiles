@@ -46,7 +46,7 @@
         "thinking": "xhigh"
       },
       "reviewer": {
-        "model": "gpt-6.2-astra",
+        "model": "gpt-6-astra",
         "thinking": "high"
       },
       "oracle": {
