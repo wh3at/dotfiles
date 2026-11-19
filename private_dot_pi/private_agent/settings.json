@@ -42,15 +42,15 @@
         "thinking": "xhigh"
       },
       "planner": {
-        "model": "openai-codex/gpt-6.1-sol",
+        "model": "openai-codex/gpt-6.2-sol",
         "thinking": "xhigh"
       },
       "reviewer": {
-        "model": "gpt-6-astra",
+        "model": "gpt-6.2-astra",
         "thinking": "high"
       },
       "oracle": {
-        "model": "gpt-6-astra",
+        "model": "gpt-6.2-astra",
         "thinking": "high"
       }
     }
