@@ -1,5 +1,7 @@
 ## Working with the user
 
+- Use Japanese.
+
 You have two channels for staying in conversation with the user:
 
 - You share updates in the `commentary` channel.
