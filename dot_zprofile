@@ -5,5 +5,3 @@ export PROTON_PASS_KEY_PROVIDER="${PROTON_PASS_KEY_PROVIDER:-fs}"
 if [ -f "$HOME/.config/proton-pass/key.env" ]; then
   . "$HOME/.config/proton-pass/key.env"
 fi
-
-eval "$(mise activate zsh)"
