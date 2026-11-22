@@ -1,33 +1,40 @@
 [tools]
-ast-grep = "0.43.0"
-bun = "1.3.6"
+ast-grep = "0"
+bun = "1"
 chezmoi = "latest"
-dotnet = "10.0.201"
+dotnet = "10.0"
 fzf = "latest"
-gh = "latest"
-node = "24"
-"npm:@openai/codex" = "latest"
+node = "lts"
+"npm:@aku11i/phantom" = "latest"
 "npm:@shopify/cli" = "latest"
 "npm:agent-browser" = "latest"
 "npm:eas-cli" = "latest"
 "npm:repomix" = "latest"
 "npm:takt" = "latest"
 "npm:vercel" = "latest"
-opencode = "latest"
-pnpm = "10.28"
+pnpm = "10"
 python = "latest"
-stripe = "1.42.1"
+stripe = "1"
 zellij = "latest"
-zig = "0.16.0"
+zig = "0.16"
 zoxide = "latest"
-ffmpeg = "8.1.2"
-vhs = "0.11.0"
+ffmpeg = "8"
+vhs = "0.12"
 "aqua:Aloxaf/silicon" = "0.5.2"
 herdr = "latest"
 uv = "latest"
-"npm:@earendil-works/pi-coding-agent" = { version = "latest", minimum_release_age = "0s" }
-"github:woodpecker-ci/woodpecker" = "3.17.0"
+"github:woodpecker-ci/woodpecker" = "3.20.1"
 "npm:wrangler" = "4"
+
+[tools."http:dagger"]
+version = "latest"
+url = 'https://dl.dagger.io/dagger/releases/{{ version }}/dagger_v{{ version }}_{{ os(macos="darwin") }}_{{ arch(x64="amd64") }}.tar.gz'
+checksum_url = 'https://dl.dagger.io/dagger/releases/{{ version }}/checksums.txt'
+version_list_url = 'https://github.com/dagger/dagger/tags.atom'
+version_regex = 'v(\d+\.\d+\.\d+-beta\.\d+)'
+prerelease = true
+version_order = "semver"
+version_date_expr = 'map(split(body, "<entry>"), { [trimPrefix(split(split(split(#, "<title>")[1], "</title>")[0], ":")[0], "v"), split(split(#, "<updated>")[1], "</updated>")[0]] })'
 
 [tasks.pf]
 description = "SSH port-forward in background (ask interactively)"
