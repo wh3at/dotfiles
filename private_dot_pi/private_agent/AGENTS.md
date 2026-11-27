@@ -35,6 +35,7 @@ When the user's prompt indicates a request for action, such as "can you...", "I 
 ## 技術選定
 
 - npmではなくpnpmを使う
+- 汎用の仕組みを追加・置換する前に、標準機能・導入済みライブラリ・既存の共通実装で要件を満たせるか確認する。自作や依存の追加を選ぶ場合は、既存の手段では満たせない要件を示す。
 
 ## 環境変数/シークレット
 
